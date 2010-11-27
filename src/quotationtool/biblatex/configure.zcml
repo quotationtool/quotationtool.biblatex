@@ -1,0 +1,19 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="quotationtool">
+
+  <utility
+      component=".interfaces.EntryTypeVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.EntryTypes"
+      />
+
+  <utility
+      factory=".entrytypes.Book"
+      name="quotationtool.biblatex.entrytypes.Book"
+      permission="zope.public"
+      />
+  
+  
+
+</configure>

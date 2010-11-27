@@ -1,0 +1,13 @@
+**********************
+quotationtool.biblatex
+**********************
+
+The ``quotationtool.biblatex'' package provides a database for storing
+a BibLaTeX bibliography. It is based on the Blue Bream (aka Zope3)
+application server and can be used as both: a standalone http server
+that keeps your biliographic information, or a set of libraries that
+can be used to write your own biblatex app (be it for the web or be it
+for your desktop).
+
+Read INSTALL for installing an running the http server.
+
