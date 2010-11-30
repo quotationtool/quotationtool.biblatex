@@ -1,0 +1,15 @@
+%% latex template file for generating formatted entries.
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,${language}]{babel}
+\usepackage[babel]{csquotes}
+\usepackage[citestyle=${citestyle},bibstyle=${bibstyle}]{biblatex}
+\bibliography{${bibliography}}
+\begin{document}
+
+${citetag}\cite{${key}}${citetag}
+
+${bibtag}\printbibliography ${bibtag}
+
+\end{document}

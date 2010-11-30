@@ -1,0 +1,33 @@
+>>> from quotationtool.biblatex import generator
+>>> import os
+>>> g = generator.EntryGenerator(object())
+
+Let's see if a tex file is created. Set some internal values of the
+generator for that perpose. There is also a bib file latex/biblio.bib
+
+>>> g.bibliography = os.path.join(os.path.dirname(generator.__file__), 'latex', 'biblio')
+>>> g.key = 'Adelung1811'
+>>> g.language = 'ngerman'
+>>> g.citestyle = 'verbose'
+>>> g.bibstyle = 'verbose'
+>>> g.createTexFile()
+>>> f = open(os.path.join(g.texdir, g.texfile))
+>>> f.read()
+'%%...
+>>> f.close()
+
+Now let's see if we can run latex 
+
+>>> g._tex(g.latex_command, 1)
+>>> os.path.isfile(os.path.join(g.texdir, g.texfile[:-4]+'.dvi'))
+True
+
+>>> g._bibtex()
+>>> g._tex(g.latex_command, 5)
+>>> g._tex(g.htlatex_command, 1)
+
+
+
+
+
+

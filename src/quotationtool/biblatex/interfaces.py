@@ -5,6 +5,9 @@ import zope.component
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IVocabularyFactory
 from zope.component.interfaces import IFactory
+from zope.app.container.interfaces import IContainer, IContained
+from zope.app.container.constraints import contains, containers
+from zope.interface.common.interfaces import IException
 
 from i18n import _
 import field, ientry
@@ -126,7 +129,7 @@ class RequiredNotPresent(zope.interface.Invalid):
         return self.general_msg + u" " + self.args    
 
 
-class IBiblatexEntry(zope.interface.Interface, ientry.IEntry):
+class IBiblatexEntry(IContained, ientry.IEntry):
     """ An entry in the biblatex database. 
     Bibtex field definitions are inherited from IEntry
 
@@ -193,6 +196,15 @@ class IBiblatexEntry(zope.interface.Interface, ientry.IEntry):
 
     """
 
+    __name__ = zope.schema.TextLine(
+        title = _('ibiblatexentrytype-name-title',
+                  u"BibTeX key"),
+        description = _('ibiblatexentrytype-name-desc',
+                        u"The unique key of the entry in the BibTeX database."),
+        required = True,
+        readonly = True,
+        )
+
     entry_type = zope.schema.Choice(
         title = _('ibiblatexentrytype-entrytype-title',
                   u"Type"),
@@ -220,3 +232,137 @@ class IBiblatexEntry(zope.interface.Interface, ientry.IEntry):
             if not one_present:
                 raise RequiredNotPresent(_type.required_fields_desc)
     
+
+class IFormatted(zope.interface.Interface):
+    """ An adapter to be called on IBiblatexEntry objects like
+    IFormatted(entry). The methods return the formatted
+    citation and bibliography strings."""
+
+    def getCitation(language = None, style = None):
+        """ Returns the formatted cite string for the context entry.
+        style gives the style. If style is None, default style is
+        used."""
+
+    def getBibliographicEntry(language = None, style = None):
+        """ Returns the formatted bibliography entry (by bibdriver)
+        string for the context entry.  style gives the style. If style
+        is None, default style is used."""
+
+
+class IFormattedEntryGenerator(zope.interface.Interface):
+    """ Interface for a utility that generates formatted strings for a
+    biblatex entry."""
+
+    def generate(key, language = None, bibstyle = None, citestyle = None):
+        """ This method generates the entry by creating a tex-file
+        then calling latex, biber and htlatex. After that it parses
+        the output for the foramtted cite and bibliography entry.
+
+        @key: the bibtex key of the entry.
+        
+        @cite_style: the citation style. default style is used if value
+        is None.
+
+        @bib_style: the bibliography style. default style is used if value
+        is None."""
+
+    def getBibliographicEntry():
+        """ Returns the formatted bibliography string. generate() must be
+        called before caling this method. """
+
+    def getCitation():
+        """ Returns the formatted citation string. generate() must be
+        called before caling this method. """
+
+
+class IFormattingEntryException(IException):
+    """ This kind of exception should be raised if the
+    IFormattedEntryGenerator.generate() fails for some reason. """
+
+
+class FormattingEntryException(Exception):
+    """ Raised if IFormattedEntryGenerator.generate() fails."""
+
+    zope.interface.implements(IFormattingEntryException)
+
+    def __init__(self, key = None):
+        self.key = key
+
+    def __repr__(self):
+        return _('biblatex-formattingentry-exception',
+                 u"Failed to generate formatted output for entry %{name}."
+                 % unicode(self.key))
+
+
+class IFormattedBibliographicEntry(IContained):
+    """ A content object that stores a formatted bibliographic entry
+    for a biblatex entry."""
+
+    containers('.IFormattedBibliographicEntryContainer')
+
+    __name__ = zope.interface.Attribute(
+        """Bibliography Style. There should be a bbx file with this
+        name on the kpse path."""
+        )
+
+    formatted = zope.schema.Text(
+        title = u"Formatted",
+        description = u"The formatted bibliographic entry.",
+        required = True,
+        default = None,
+        readonly = True,
+        )
+
+
+class IFormattedBibliographicEntryContainer(IContainer):
+    """ A container that for formatted bibliographic entries of a
+    biblatex entry. The keys map the bibliographic styles (bbx
+    files)."""
+
+    contains('.IFormattedBibliographicEntry')
+
+
+class IFormattedCitation(IContained):
+    """ A content object that stores a formatted citation string for a
+    biblatex entry."""
+
+    containers('.IFormattedCitationContainer')
+
+    __name__ = zope.interface.Attribute(
+        """Citation Style. There should be a cbx file with this name
+        on the kpse path."""
+        )
+
+    formatted = zope.schema.Text(
+        title = u"Formatted",
+        description = u"The formatted citation string.",
+        required = True,
+        default = None,
+        readonly = True,
+        )
+
+
+class IFormattedCitationContainer(IContainer):
+    """ A container for formatted citation strings for biblatex
+    entry. The keys map the citation styles (cbx files)."""
+
+    contains('.IFormattedCitation')
+
+
+class ILocalizedFormattedEntry(IContained):
+
+    containers('.ILocalizedFormattedEntryContainer')
+
+    __name__ = zope.interface.Attribute(
+        """The language as latex style value.""")
+
+    bibliographic_entries = zope.interface.Attribute(
+        """This is a IFormattedBibliographicEntryContainer.""")
+
+    citations = zope.interface.Attribute(
+        """This is a IFormattedCitationContainer.""")
+
+
+class ILocalizedFormattedEntryContainer(IContainer):
+
+    contains('.ILocalizedFormattedEntry')

@@ -49,6 +49,7 @@ setup(
         'zope.component',
         'zope.schema',
         'zope.i18nmessageid',
+        'zope.app.container',
         ],
     extras_require = dict(
         test = [
