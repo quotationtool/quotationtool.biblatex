@@ -205,6 +205,27 @@ class IBiblatexEntry(IContained, ientry.IEntry):
         readonly = True,
         )
 
+    def getField(field):
+        """ Returns the value of the field named 'field' in the
+        BibTeX/BibLaTeX style. This is usefull because some fields are
+        sored in a more pythonic way, which differs from the BibTeX
+        style, especially names.
+
+        @field: The name of the field to be returned.
+
+        """ 
+
+    def getBibtex():
+        """ Returns the entry in the BibTeX style, like
+
+        @Book{Kant1790,
+          author         = {Kant, Immanuel},
+          title          = {Kritik der Urteilskraft},
+          ...
+          }
+
+        """
+
     entry_type = zope.schema.Choice(
         title = _('ibiblatexentrytype-entrytype-title',
                   u"Type"),
@@ -238,27 +259,33 @@ class IFormatted(zope.interface.Interface):
     IFormatted(entry). The methods return the formatted
     citation and bibliography strings."""
 
+    def getBibliographicEntry(language = None, style = None):
+        """ Returns the formatted bibliography entry (by bibdriver)
+        string for the context entry.  style gives the style. If style
+        is None, default style is used."""
+
     def getCitation(language = None, style = None):
         """ Returns the formatted cite string for the context entry.
         style gives the style. If style is None, default style is
         used."""
 
-    def getBibliographicEntry(language = None, style = None):
-        """ Returns the formatted bibliography entry (by bibdriver)
-        string for the context entry.  style gives the style. If style
-        is None, default style is used."""
+    def getCitationAgain(language = None, style = None):
+        """ Returns the formatted string for a repeated citation
+        (short) for the context entry.  style gives the style. If
+        style is None, default style is used."""
 
 
 class IFormattedEntryGenerator(zope.interface.Interface):
     """ Interface for a utility that generates formatted strings for a
     biblatex entry."""
 
-    def generate(key, language = None, bibstyle = None, citestyle = None):
+    def generate(entry, language = None, bibstyle = None, citestyle = None):
         """ This method generates the entry by creating a tex-file
         then calling latex, biber and htlatex. After that it parses
         the output for the foramtted cite and bibliography entry.
 
-        @key: the bibtex key of the entry.
+        @entry: the bibtex entry. This should be an object that
+        implements IBiblatexEntry.
         
         @cite_style: the citation style. default style is used if value
         is None.
@@ -273,6 +300,10 @@ class IFormattedEntryGenerator(zope.interface.Interface):
     def getCitation():
         """ Returns the formatted citation string. generate() must be
         called before caling this method. """
+
+    def getCitationAgain():
+        """ Returns the formatted string for repeated
+        Citation. generate() must be called before caling this method."""
 
 
 class IFormattingEntryException(IException):

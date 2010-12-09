@@ -13,7 +13,13 @@
       name="quotationtool.biblatex.entrytypes.Book"
       permission="zope.public"
       />
-  
+
+  <utility
+      factory=".generator.EntryGenerator"
+      name="quotationtool.biblatex.generator.EntryGenerator"
+      provides=".interfaces.IFormattedEntryGenerator"
+      permission="zope.public"
+      />
   
 
 </configure>

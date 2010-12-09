@@ -3,7 +3,7 @@
 
 (tempo-define-template "biblatexproperty"
 '((p "Attribute: " attribute) 
-  " = FieldProperty(IBiblatexEntry['" 
+  " = FieldProperty(IEntry['" 
   (s attribute) "'])" > n > r)
 "fpr"
 "Insert biblatex fieldproperty.")

@@ -3,9 +3,10 @@ import unittest
 import zope.testing
 from zope.testing import doctest
 
+from quotationtool.biblatex.tests import common
 
 def setUp(test):
-    pass
+    common.setupEntryTypesVocabulary(test)
 
 def tearDown(test):
     pass

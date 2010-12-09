@@ -1,14 +1,24 @@
 %% latex template file for generating formatted entries.
+\RequirePackage{filecontents}
+\begin{filecontents*}{entries.bib}
+
+${bibtex}
+
+\end{filecontents*}
+
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+${tex4ht}
 \usepackage[T1]{fontenc}
 \usepackage[english,${language}]{babel}
 \usepackage[babel]{csquotes}
 \usepackage[citestyle=${citestyle},bibstyle=${bibstyle}]{biblatex}
-\bibliography{${bibliography}}
+\bibliography{entries}
 \begin{document}
 
 ${citetag}\cite{${key}}${citetag}
+
+${citeagaintag}\cite{${key}}${citeagaintag}
 
 ${bibtag}\printbibliography ${bibtag}
 

@@ -2,32 +2,96 @@
 >>> import os
 >>> g = generator.EntryGenerator(object())
 
+>>> from quotationtool.biblatex.biblatexentry import BiblatexEntry
+
+>>> mybook = BiblatexEntry()
+>>> mybook.__name__ = 'Adelung1811'
+>>> mybook.entry_type = 'quotationtool.biblatex.entrytypes.Book'
+>>> mybook.author = [u"Adelung, Johann Christoph"]
+>>> mybook.gender = u"sm"
+>>> mybook.title = u'Grammatisch-kritisches W\\"{o}rterbuch der Hochdeutschen Mundart, mit best\\"{a}ndiger Vergleichung der \\"{u}brigen Mundarten, besonders aber der Oberdeutschen'
+>>> mybook.titleaddon = u'Mit D.~W. Soltau s Beytr\\"{a}gen, revidirt und berichtiget von Franz Xaver Sch\\"{o}nberger Doctor der freyen K\\"{u}nsten und Philosophie, \\"{o}ffentl. ordentl. Professor der Beredsamkeit und Griechischen Sprache, Subdirector des k.~k. Convictes'
+>>> mybook.location = u"Wien"
+>>> mybook.publilsher = u"Bauer"
+>>> mybook.date = u"1811"
+>>> mybook.volumes = u"4"
+>>> mybook.pagination = 'column'
+>>> mybook.url = u"http://mdz.bib-bvb.de/digbib/lexika/adelung/"
+>>> mybook.urldate = u"2007-10-28"
+>>> mybook.hyphenation = 'ngerman'
+>>> mybook.keywords = u"QU"
+
+Internals
+---------
+
+If you are not interested in internals, goto Usage section.
+
 Let's see if a tex file is created. Set some internal values of the
 generator for that perpose. There is also a bib file latex/biblio.bib
 
->>> g.bibliography = os.path.join(os.path.dirname(generator.__file__), 'latex', 'biblio')
->>> g.key = 'Adelung1811'
+>>> g.entry = mybook
 >>> g.language = 'ngerman'
 >>> g.citestyle = 'verbose'
 >>> g.bibstyle = 'verbose'
->>> g.createTexFile()
+>>> g._createTexFile()
 >>> f = open(os.path.join(g.texdir, g.texfile))
 >>> f.read()
 '%%...
 >>> f.close()
 
+
 Now let's see if we can run latex 
 
->>> g._tex(g.latex_command, 1)
+>>> g._tex('latex')
 >>> os.path.isfile(os.path.join(g.texdir, g.texfile[:-4]+'.dvi'))
 True
 
->>> g._bibtex()
->>> g._tex(g.latex_command, 5)
->>> g._tex(g.htlatex_command, 1)
+>>> g._tex('bibtex')
+>>> g._tex('latex')
 
 
+Unfortunately tex4ht does not work this way:
+
+>>> g._tex('tex4ht')
+Traceback (most recent call last):
+...
+Exception: tex4ht failed! _tex('tex4ht')
+Output file not generated
+----------------------------
+tex4ht.c ...
+tex4ht -cunihtf 
+  -utf8 
+  -f/...
+...
+--- error --- Illegal storage address
+
+What happens here?
+
+So we have to use the method based on popen2
+
+>>> g._tex4ht()
+>>> os.path.isfile(os.path.join(g.texdir, g.texfile[:-4]+'.html'))
+True
 
 
+Now let's parse the html file
 
+
+Usage
+-----
+
+>>> g.getCitation()
+Traceback (most recent call last):
+...
+Exception: generate() must be called before
+
+>>> g.generate(mybook, 'ngerman', 'verbose', 'verbose')
+>>> g.getCitation()
+u'Johann Christoph Adelung...'
+
+>>> g.getBibliographicEntry()
+u'...'
+
+>>> g.getCitationAgain()
+u'...'
 
