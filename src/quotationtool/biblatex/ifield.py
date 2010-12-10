@@ -35,6 +35,9 @@ class IBiblatexField(zope.interface.Interface):
 # fields and that they are marked with specific interfaces: so we can
 # register our own widgets easily.
 
+class IEntryKey(IBiblatexField):
+    pass
+
 class IName(IBiblatexField):
     pass
 
@@ -57,4 +60,10 @@ class IKey(IBiblatexField):
     pass
 
 class ISpecial(IBiblatexField):
+    pass
+
+class ICode(IBiblatexField):
+    pass
+
+class IKeyValueList(IBiblatexField):
     pass

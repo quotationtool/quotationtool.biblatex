@@ -57,5 +57,6 @@ setup(
             'zope.testrunner',
             ],
         ),
-    entry_points = """[console_scripts]""",
+    entry_points = {
+        'console_scripts': ['generateCode = quotationtool.biblatex.code_generator:generate',]},
     )

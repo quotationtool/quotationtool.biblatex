@@ -196,9 +196,11 @@ class IBiblatexEntry(IContained, ientry.IEntry):
 
     """
 
-    __name__ = zope.schema.TextLine(
+    containers('.IBibliography')
+
+    __name__ = field.EntryKey(
         title = _('ibiblatexentrytype-name-title',
-                  u"BibTeX key"),
+                  u"BibTeX Entry Key"),
         description = _('ibiblatexentrytype-name-desc',
                         u"The unique key of the entry in the BibTeX database."),
         required = True,
@@ -252,7 +254,89 @@ class IBiblatexEntry(IContained, ientry.IEntry):
                     one_present = True
             if not one_present:
                 raise RequiredNotPresent(_type.required_fields_desc)
+
+
+class IBibliography(IContainer):
+    """ A bibliography is a container for IBiblatexEntry objects."""
     
+    contains('.IBiblatexEntry')
+
+
+class IBibliographyConfiguration(zope.interface.Interface):
+    """ Stores some configuration values. """
+    
+    cite_style = zope.schema.TextLine(
+        title = _('',
+                  u"Citation Style"),
+        description = _('',
+                      u"The default citation style. There must be a cbx file which LaTeX can find."),
+        required = True,
+        default = u"verbose",
+        )
+
+    bib_style = zope.schema.TextLine(
+        title = _('',
+                  u"Bibliography Style"),
+    description = _('',
+                    u"The default bibliography style. There must be a bbx file which LaTeX can find."),
+        required = True,
+        default = u"verbose",
+        )
+
+    language = zope.schema.Choice(
+        title = _('',
+                  u"Language"),
+        description = _('',
+                        u"The default language of the bibliography"),
+        required = True,
+        vocabulary = 'quotationtool.biblatex.Hyphenation',
+        default = 'english',
+        )
+
+    bib_styles = zope.schema.Tuple(
+        title = _('',
+                  u"Available Bibliograhy Styles"),
+        description = _('',
+                        u"All the Bibliography Styles that the users will be able to use. There must be bbx files that LaTeX can find."),
+        value_type = zope.schema.TextLine(
+            title= _('',
+                     u"Style"),
+            required = True,
+            ),
+        required = True,
+        default = (u"verbose",),
+        )
+
+    cite_styles = zope.schema.Tuple(
+        title = _('',
+                  u"Available Citation Styles"),
+        description = _('',
+                        u"All the Citation Styles that the users will be able to use. There must be cbx files that LaTeX can find."),
+        value_type = zope.schema.TextLine(
+            title= _('',
+                     u"Style"),
+            required = True,
+            ),
+        required = True,
+        default = (u"verbose",),
+        )
+
+    languages = zope.schema.Tuple(
+        title = _('',
+                  u"Available Languages"),
+        description = _('',
+                        u"All languages in that the formatted bibliography entries will be available to the user."),
+        required = True,
+        value_type = zope.schema.Choice(
+            title = _('',
+                      u"Language"),
+            required = True,
+            vocabulary = 'quotationtool.biblatex.Hyphenation',
+            default = 'english',
+            ),
+        default = ('english',),
+        )
+
 
 class IFormatted(zope.interface.Interface):
     """ An adapter to be called on IBiblatexEntry objects like
@@ -380,6 +464,33 @@ class IFormattedCitationContainer(IContainer):
     contains('.IFormattedCitation')
 
 
+class IFormattedCitationAgain(IContained):
+    """ A content object that stores a formatted string for a repeated
+    citation of a biblatex entry."""
+
+    containers('.IFormattedCitationAgainContainer')
+
+    __name__ = zope.interface.Attribute(
+        """Citation Style. There should be a cbx file with this name
+        on the kpse path."""
+        )
+
+    formatted = zope.schema.Text(
+        title = u"Formatted",
+        description = u"The formatted string for a repeated.",
+        required = True,
+        default = None,
+        readonly = True,
+        )
+
+
+class IFormattedCitationAgainContainer(IContainer):
+    """ A container for formatted citation strings for biblatex
+    entry. The keys map the citation styles (cbx files)."""
+
+    contains('.IFormattedCitation')
+
+
 class ILocalizedFormattedEntry(IContained):
 
     containers('.ILocalizedFormattedEntryContainer')
@@ -392,6 +503,9 @@ class ILocalizedFormattedEntry(IContained):
 
     citations = zope.interface.Attribute(
         """This is a IFormattedCitationContainer.""")
+
+    citations_again = zope.interface.Attribute(
+        """This is a IFormattedCitationAgainContainer.""")
 
 
 class ILocalizedFormattedEntryContainer(IContainer):

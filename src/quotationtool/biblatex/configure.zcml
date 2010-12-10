@@ -2,6 +2,50 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="quotationtool">
 
+  <adapter
+      for=".interfaces.IBibliography"
+      provides="zope.app.container.interfaces.INameChooser"
+      factory=".namechooser.BiblatexEntryNameChooser"
+      />
+  
+  <utility
+      component=".field.PaginationVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.Pagination"
+      />
+
+  <utility
+      component=".field.EditorRoleVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.EditorRoles"
+      />
+
+  <utility
+      component=".field.PubstateVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.Pubstate"
+      />
+
+  <utility
+      component=".field.TypeVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.Type"
+      />
+
+  <utility
+      component=".field.GenderVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.Gender"
+      />
+
+  <utility
+      component=".field.AuthorTypeVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.AuthorTypes"
+      />
+
+  <!-- todo: language und hyphenation vocabularies -->
+
   <utility
       component=".interfaces.EntryTypeVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"

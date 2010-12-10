@@ -34,6 +34,7 @@ class BiblatexEntry(Persistent, EntryMixin):
         WrongType: (u'Horkheimer, Max', <type 'list'>, 'author')
 
         >>> mybook.author = [u"Horkheimer, Max", u"Adorno, Theodor W."]
+        >>> mybook.hyphenation = None
         >>> mybook.title = u"Dialektik der Aufkl\\"{a}rung"
         >>> mybook.date = u"1944"
         >>> mybook.date = u"1944/13"

@@ -12,7 +12,8 @@
 '((p "Attribute: " attribute)
   " = field."(p "Schema: ")"(" > n 
   > r "title = _('zblx-"(s attribute)"-tit', u'"(p "Title: ")"')," > n
-  > r "description = _('zblx-"(s attribute)"-desc', u'''"(p "Description: ")"''')," > n
+;;  > r "description = _('zblx-"(s attribute)"-desc', u'''"(p "Description: ")"''')," > n
+  > r "description = _('zblx-"(s attribute)"-desc', u'''TODO''')," > n
   > r "required = False," > n
   > r ")" > n > n > r)
 "fld"
