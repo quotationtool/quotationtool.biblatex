@@ -50,6 +50,9 @@ setup(
         'zope.schema',
         'zope.i18nmessageid',
         'zope.app.container',
+        'zc.sourcefactory',
+        'z3c.form == 2.3.4',
+        'lxml >= 2.1.1',
         ],
     extras_require = dict(
         test = [
