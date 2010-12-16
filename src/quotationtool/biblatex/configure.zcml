@@ -47,22 +47,15 @@
   <!-- todo: language und hyphenation vocabularies -->
 
   <utility
-      component=".interfaces.EntryTypeVocabulary"
+      component=".entrytypes.EntryTypeVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.EntryTypes"
-      />
-
-  <utility
-      factory=".entrytypes.Book"
-      name="quotationtool.biblatex.entrytypes.Book"
-      permission="zope.public"
       />
 
   <utility
       factory=".generator.EntryGenerator"
       name="quotationtool.biblatex.generator.EntryGenerator"
       provides=".interfaces.IFormattedEntryGenerator"
-      permission="zope.public"
       />
   
 

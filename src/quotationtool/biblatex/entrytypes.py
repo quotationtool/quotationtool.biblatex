@@ -3,24 +3,69 @@ import os
 from zope.interface import implements
 from zope.component.factory import Factory
 import zope.schema
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.fieldproperty import FieldProperty
 
-
-import interfaces
+from interfaces import IEntryTypesConfiguration, IBiblatexEntryType
 from i18n import _
 
 
 def _fields(flds):
-    return flds.split()
+    """
 
+    For a string like:
 
-map = lambda x: x.token
+        >>> fields = u"maintitle mainsubtitle  maintitleaddon "
 
-#EntryTypeTokens = ValueMappingSource(EntryTypesConfiguration, map) 
+    We want to get a list of ascii strings.
+
+        >>> from quotationtool.biblatex.entrytypes import _fields
+        >>> _fields(fields)
+        ['maintitle', 'mainsubtitle', 'maintitleaddon']
+        
+        >>> _fields(u'')
+        []
+
+    """
+
+    return [str(fld) for fld in flds.split()]
+
+def _requiredFields(flds):
+    """
+
+    For a string like:
+
+        >>> fields = u"(author editor) (title) (date )"
+
+    we want to get a list of lists. Fields that are alternatively
+    required--i.e. one of which must be given--are grouped together in
+    an inner list. In this example we want a list containing three
+    list, the first one ['author', 'editor'] the second ['title'] the
+    third ['date'].
+
+        >>> from quotationtool.biblatex.entrytypes import _requiredFields
+        >>> _requiredFields(fields)
+        [['author', 'editor'], ['title'], ['date']]
+
+        >>> _requiredFields(u'')
+        []
+
+    """
+    l = []
+    part = u''
+    for char in flds:
+        if char not in (u'(', u')'):
+            part += char
+        if char == u')':
+            l.append(str(part))
+            part = u''
+    return [alt.split() for alt in l]
+
 
     
 
 class EntryTypesConfiguration(object):
-    """
+    """A utility that parses a entry types configuration.
 
         >>> from quotationtool.biblatex.entrytypes import EntryTypesConfiguration
         >>> class MyEntryTypesConfiguration(EntryTypesConfiguration):
@@ -28,43 +73,25 @@ class EntryTypesConfiguration(object):
         ...         print u'parsing'
         ...         super(MyEntryTypesConfiguration, self)._parse()
         ... 
-        >>> source = MyEntryTypesConfiguration()
+        >>> conf = MyEntryTypesConfiguration()
         parsing
-        >>> 'Book' in source
+        >>> len(conf.entry_types) > 0
+        True
+        >>> 'Book' in conf.entry_types.keys()
+        True
+        >>> 'subtitle' in conf.entry_types['Book'].optional
         True
 
-        >>> source.getQueriables()
-        [...(u'Book', <quotationtool.biblatex.entrytypes.BiblatexEntryType object at ...)...]
-
-        >>> len(source) > 0
-        True
-
-        >>> [type for type in source]
-        [...<quotationtool.biblatex.entrytypes.BiblatexEntryType object at ...>...]
-
-
-        >>> from zope.schema import Choice
-        >>> entry_type = Choice(
-        ...     title = u"Entry Types",
-        ...     source = source,
-        ...     )
-        
-        >>> entry_type.vocabulary
-        <...MyEntryTypesConfiguration object at ...>
-
-        >>> entry_type.validate('fail')
-        Traceback (most recent call last):
-        ...
-        ConstraintNotSatisfied: fail
-
-        >>> entry_type.validate(u'Book')
-        >>> entry_type.validate('Book')
-
-        
+        >>> from quotationtool.biblatex.interfaces import IBiblatexEntryType
+        >>> from zope.schema import getValidationErrors
+        >>> getValidationErrors(IBiblatexEntryType, conf.entry_types['Book'])
+        []
 
     """
 
-    implements(zope.schema.interfaces.ISource)
+    implements(IEntryTypesConfiguration,
+               zope.schema.interfaces.IBaseVocabulary,
+               )
 
     file = os.path.join(os.path.dirname(__file__), "entrytypes.ini")
 
@@ -83,127 +110,138 @@ class EntryTypesConfiguration(object):
             entrytype.description = _(
                 'zblx-' + name + '-desc',
                 unicode(config.get(name, 'description')))
-            entrytype.required_desc = _(
+            entrytype.required_description = _(
                 'zblx-' + name + '-required',
                 unicode(config.get(name, 'required-description')))
             entrytype.example = _(
                 'zblx-' + name + '-example',
                 unicode(config.get(name, 'example')))
-            entrytype.roles = config.get(name, 'roles')
-            entrytype.publicationFacts = _fields(config.get(name, 'publicationFacts'))
+            entrytype.required = _requiredFields(config.get(name, 'required'))
+            entrytype.optional = _fields(config.get(name, 'optional'))
+            entrytype.general = _fields(config.get(name, 'general'))
+            entrytype.roles = _fields(config.get(name, 'roles'))
+            entrytype.publication_facts = _fields(config.get(name, 'publication-facts'))
             entrytype.shortening = _fields(config.get(name, 'shortening'))
             entrytype.sorting = _fields(config.get(name, 'sorting'))
             entrytype.linking = _fields(config.get(name, 'linking'))
             entrytype.compat = _fields(config.get(name, 'compat'))
-            self.entry_types[name] = entrytype
+            self.entry_types[str(name)] = entrytype
 
     def __init__(self):
         self._parse()
 
-    def __contains__(self, token):
-        return self.entry_types.has_key(token)
+    def register(self):
+        """
 
-    def getQueriables(self):
-        return [(unicode(key), value) for key, value in self.entry_types.items()]
+            >>> from quotationtool.biblatex.entrytypes import EntryTypesConfiguration
+            >>> from quotationtool.biblatex.interfaces import IBiblatexEntryType
+            >>> from zope.component import getUtilitiesFor
+            >>> conf = EntryTypesConfiguration()
+            >>> conf.register()
+            >>> list(getUtilitiesFor(IBiblatexEntryType))
+            [...(u'Book', <quotationtool.biblatex.entrytypes.BiblatexEntryType object at 0x...>)...]
+
+        """
+        for name, entrytype in self.entry_types.items():
+            ut = zope.component.queryUtility(
+                IBiblatexEntryType, name, None)
+            if ut is None:
+                zope.component.provideUtility(
+                    entrytype, IBiblatexEntryType, name)
+
+    def __contains__(self, value):
+        return self.entry_types.has_key(value)
+
+    def getTerm(self, value):
+        if self.entry_types.has_key(value):
+            return self.entry_types[value]
+        else:
+            raise LookupError(value)
+
+
+def EntryTypeVocabulary(context):
+    """
+    
+    To make use of the vocabulary we must first register the
+    configuration utility.
+
+
+        >>> from quotationtool.biblatex.interfaces import IBiblatexEntryType
+        >>> len(list(zope.component.getUtilitiesFor(IBiblatexEntryType))) > 0
+        False
+        >>> from quotationtool.biblatex.entrytypes import EntryTypesConfiguration
+        >>> from quotationtool.biblatex.interfaces import IEntryTypesConfiguration
+        >>> import zope.component
+        >>> conf = EntryTypesConfiguration()
+        >>> zope.component.provideUtility(conf, IEntryTypesConfiguration, '')
+        >>> len(list(zope.component.getUtilitiesFor(IBiblatexEntryType))) > 0
+        False
         
-    def __len__(self):
-        return len(self.entry_types)
+        
+        
+    Now let's play with the vocabulary!
 
-    def __iter__(self):
-        return iter(self.entry_types.values())
+        >>> from quotationtool.biblatex.entrytypes import EntryTypeVocabulary
+        >>> voc = EntryTypeVocabulary(object())
+        >>> voc
+        <zope.schema.vocabulary.SimpleVocabulary object at ...>
+        >>> len(voc) > 0
+        True
+        >>> voc.by_token
+        {...'Book': <quotationtool.biblatex.entrytypes.BiblatexEntryType object at 0x...>...}
+        >>> voc.by_token['Book']
+        <quotationtool.biblatex.entrytypes.BiblatexEntryType object at 0x...>
+        >>> voc.getTerm('Book').value
+        'Book'
+        >>> voc.getTerm('Book').token
+        'Book'
+        >>> voc.getTerm('Book').title
+        u'zblx-Book-title'
+
+    Since the terms of this vocabulary are biblatex entry type
+    objects, all these fields are there, too:
+        
+        >>> voc.getTerm('Book').required
+        [...]
+        
+    """
+    
+    terms = []
+    if len(list(zope.component.getUtilitiesFor(IBiblatexEntryType))) == 0:
+        conf = zope.component.getUtility(
+            IEntryTypesConfiguration, '')
+        conf.register()
+    terms = [ut for name, ut in zope.component.getUtilitiesFor(IBiblatexEntryType)]
+    return SimpleVocabulary(terms)
+
+zope.interface.alsoProvides(
+    EntryTypeVocabulary, 
+    zope.schema.interfaces.IVocabularyFactory)
+    
+
 
 class BiblatexEntryType(object):
 
-    implements(interfaces.IBiblatexEntryType,
+    implements(IBiblatexEntryType, 
                zope.schema.interfaces.ITitledTokenizedTerm)
 
-    name = token = None
+    name = value = token = None
     title = None
 
     def __init__(self, name):
-        self.name = self.token = name
+        self.name = self.value = self.token = str(name)
 
-
-class TypeMixin(object):
-    
-    def getRolesFields(self):
-        return [
-            "translator", "annotator", "commentator",
-            "introduction", "foreword", "afterword", 
-            "editortype", "editora", "editoratype", 
-            "editorb", "editorbtype", "editorc", "editorctype",
-            "authortype", "nameaddon",
-            ]
-
-    def getPublicationFactsFields(self):
-        return [
-            "note", "addendum", "pubstate",
-            "language", "hyphenation",
-            "origdate", "origlanguage", 
-            "origlocation", "origpublisher",
-            "origtitle",
-            "pagination", "bookpagination",
-            ]
-
-    def getShorteningFields(self):
-        return [
-            "shortauthor", "shorteditor", "shorttitle",
-            "shorthand", "shorthandintro",
-            "gender",
-            ]
-
-    def getSortingFields(self):
-        return [
-            "presort", "sortkey", "key", 
-            "sortname", "sortname", 
-            "sorttitle", "indexsorttitle",
-            ]
-
-    def getLinkingFields(self):
-        return [
-            "doi", 
-            "eprint", "eprinttype",
-            "url", "urldate",
-            "citeseerurl",
-            "crossref", "xref", "entryset",
-            "library",
-            ]
-
-    def getBibtexCompatFields(self):
-        return [
-            "address", "annote", 
-            #"journal", # in article type only 
-            "key", "pdf", "school",
-            ]
-
-
-class Book(TypeMixin):
-    """Descriptive class of book entry type.
-
-        >>> from quotationtool.biblatex import entrytypes
-        >>> book = entrytypes.Book()
-        >>> book.name
-        'Book'
-        >>> book.title
-        u'zblx-book-title'
-
-        >>> book.getRequiredFields()
-        [['author'], ['title'], ['date']]
-
-        >>> import zope.schema
-        >>> from quotationtool.biblatex import interfaces   
-        >>> zope.schema.getValidationErrors(interfaces.IBiblatexEntryType, book)
-        []
-
-    """
-    implements(interfaces.IBiblatexEntryType)
-
-    name = str("Book")
-    title = _('zblx-book-title', "Book")
-    description = _('zblx-book-desc', u"A book with one or more authors where the authors share credit for the work as a whole.")
-    example = _('zblx-book-example', u"TODO")
-    required_fields_desc = _('zblx-book-reqdesc', u"AUTHOR, TITLE and DATE have to be given.")
-
-    def getRequiredFields(self):
-        return [["author"], ["title"], ["date"]]
-
+    name = FieldProperty(IBiblatexEntryType['name'])
+    title = FieldProperty(IBiblatexEntryType['title'])
+    description = FieldProperty(IBiblatexEntryType['description'])
+    example = FieldProperty(IBiblatexEntryType['example'])
+    required_description = FieldProperty(IBiblatexEntryType['required_description'])
+    required = FieldProperty(IBiblatexEntryType['required'])
+    optional = FieldProperty(IBiblatexEntryType['optional'])
+    general = FieldProperty(IBiblatexEntryType['general'])
+    roles = FieldProperty(IBiblatexEntryType['roles'])
+    shortening = FieldProperty(IBiblatexEntryType['shortening'])
+    sorting = FieldProperty(IBiblatexEntryType['sorting'])
+    publication_facts = FieldProperty(IBiblatexEntryType['publication_facts'])
+    linking = FieldProperty(IBiblatexEntryType['linking'])
+    compat = FieldProperty(IBiblatexEntryType['compat'])

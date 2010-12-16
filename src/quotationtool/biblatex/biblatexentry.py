@@ -26,8 +26,7 @@ class BiblatexEntry(Persistent, EntryMixin):
     Test a few fields:
 
         >>> mybook.__name__ = u"HorkheimerEtAl1944"
-        >>> mybook.entry_type = 'quotationtool.biblatex.entrytypes.Book'
-
+        >>> mybook.entry_type = 'Book'
         >>> mybook.author = u"Horkheimer, Max"
         Traceback (most recent call last):
         ...
@@ -75,15 +74,8 @@ class BiblatexEntry(Persistent, EntryMixin):
             if value is not None:
                 fields += field_template.substitute(
                     {'name': key, 'value': value})
-        type = getattr(
-            self, 'entry_type', 
-            interfaces.IBiblatexEntry['entry_type'].default)
-        for name, fac in zope.component.getFactoriesFor(interfaces.IBiblatexEntryType):
-            if name == type:
-                entry_type = fac()
-                break
         return entry_template.substitute(
-            {'type': entry_type.name,
+            {'type': getattr(self, 'entry_type'),
              'key': self.__name__,
              'fields': fields,
              })

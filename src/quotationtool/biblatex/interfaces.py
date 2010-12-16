@@ -2,8 +2,6 @@ import re
 import zope.interface
 import zope.schema
 import zope.component
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from zope.schema.interfaces import IVocabularyFactory
 from zope.component.interfaces import IFactory
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains, containers
@@ -11,6 +9,16 @@ from zope.interface.common.interfaces import IException
 
 from i18n import _
 import field, ientry
+
+
+class IEntryTypesConfiguration(zope.interface.Interface):
+    """ A utility that parses a configuration file with entry type
+    definitions and registers a utility for each entry type."""
+
+    entry_types = zope.interface.Attribute("""A dictionary holding the entry type objects.""")
+
+    def register():
+        """ Register the utilities."""
 
 
 class IBiblatexEntryType(zope.interface.Interface):
@@ -39,86 +47,88 @@ class IBiblatexEntryType(zope.interface.Interface):
         required = False, # True ? force giving examples? how would we format it? by hardcoding?
         )
 
-    required_fields_desc = zope.schema.TextLine(
+    required_description = zope.schema.TextLine(
         title = u"Description of Required Fields",
         description = u"A hint for the user which fields are required. It will be shown on errors when not all required fields are present.",
         required = True,
         )
     
-    def getRequiredFields():
-        """ Returns a list of lists. Each contained list is a set of
-        alternatively required fields. E.g. for the booklet entry type
-        [['author', 'editor'], ['title'], ['date'],] should be
-        returned because ether author or editor is required."""
-
-    def getShorteningFields():
-        """ Returns a list of fields that have to do with shortening."""
-
-    def getSortingFields():
-        """ Returns a list of fields that have to do with shorting the bibliography."""
-
-    def getPublicationFacts():
-        """ Returns a list of fields that have to do the publication."""
-
-    def getLinkingFields():
-        """ Returns a list of fields that hold various kinds of links to the publication."""
-
-    def getBibtexCompatFields():
-        """ Returns a list of fields needed for downgrading compatibility to BibTeX."""
-
-
-def EntryTypeVocabulary(context):
-    """
-
-
-        >>> from quotationtool.biblatex.interfaces import IBiblatexEntryType
-        >>> from quotationtool.biblatex import entrytypes
-        >>> import zope.component
-
-    Create a factory for books and register it.
-
-        >>> book = zope.component.factory.Factory(entrytypes.Book, 'book', 'make a book')
-        >>> gsm = zope.component.getGlobalSiteManager()
-        >>> from zope.component.interfaces import IFactory
-        >>> gsm.registerUtility(book, IFactory, 'quotationtool.biblatex.entrytypes.Book')
-        >>> len([fac for name, fac in zope.component.getFactoriesFor(IBiblatexEntryType)])
-        1
-
-    Now let's play with the vocabulary!
-
-        >>> from quotationtool.biblatex.interfaces import EntryTypeVocabulary
-        >>> voc = EntryTypeVocabulary(object())
-        >>> voc
-        <zope.schema.vocabulary.SimpleVocabulary object at ...>
-        >>> len(voc)
-        1
-        >>> voc.by_token
-        {'Book': <zope.schema.vocabulary.SimpleTerm object at ...>}
-        >>> voc.by_token['Book']
-        <zope.schema.vocabulary.SimpleTerm object at ...>
-        >>> voc.by_token['Book'].token
-        'Book'
-        >>> voc.by_token['Book'].title
-        u'zblx-book-title'
-        >>> voc.by_token['Book'].value
-        u'quotationtool.biblatex.entrytypes.Book'
-        
-    In one attribute we would like:
-        <quotationtool.biblatex.entrytypes.Book object at ...>
-
-
-    """
+    required = zope.schema.List(
+        title = u"Required fields",
+        description = u"Fields required for this entry type.",
+        value_type = zope.schema.List(
+            title = u"Alternative required fields",
+            description = u"required is a list of lists. Each contained list is a set of alternatively required fields. E.g. for the booklet entry type [['author', 'editor'], ['title'], ['date'],] should be given because ether author or editor is required.",
+            value_type = zope.schema.ASCII(title = u"Field Name"),
+            ),
+        required = True,
+        default = [],
+        )
     
-    terms = []
-    for name, factory in zope.component.getFactoriesFor(IBiblatexEntryType):
-        # we use the factory name as term value, so we can easily query the factory with it
-        terms.append(SimpleTerm(name, 
-                                token = factory().name, 
-                                title = factory().title))
-    return SimpleVocabulary(terms)
+    optional = zope.schema.List(
+        title = u"Optional Fields",
+        description = u"Optional field specific for this entry type.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
 
-zope.interface.alsoProvides(EntryTypeVocabulary, IVocabularyFactory)
-    
+    general = zope.schema.List(
+        title = u"General Fields",
+        description = u"General fields common to all entry types, e.g. xref.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
+    roles = zope.schema.List(
+        title = u"Roles Fields",
+        description = u"Fields for different roles like introductor, translator etc.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
+    shortening = zope.schema.List(
+        title = u"Shortening Fields",
+        description = u"Fields that have to do with shortening, e.g. in citations or shorthand.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
+    sorting = zope.schema.List(
+        title = u"Sorting fields",
+        description = u"Fields that have to do with sorting the bibliography.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
+    publication_facts = zope.schema.List(
+        title = u"Publication Facts",
+        description = u"Fields that have to do the publication.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
+    linking = zope.schema.List(
+        title = u"Linking fields",
+        description = u"Fields that hold various kinds of links to the publication.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
+    compat = zope.schema.List(
+        title = u"BibTeX compatibiliy fields",
+        description = u"Fields needed for downgrading compatibility to BibTeX.",
+        required = True,
+        value_type = zope.schema.ASCII(title = u"Field Name"),
+        default = [],
+        )
+
 
 class RequiredNotPresent(zope.interface.Invalid):
     """ Error because not all required fields present."""
@@ -133,33 +143,15 @@ class IBiblatexEntry(IContained, ientry.IEntry):
     """ An entry in the biblatex database. 
     Bibtex field definitions are inherited from IEntry
 
-        >>> from quotationtool.biblatex.interfaces import IBiblatexEntryType
-        >>> from quotationtool.biblatex import entrytypes
-        >>> import zope.component
-
-    First we want to test the entry_type field. So we have to create a
-    factory for books and register it. Then register the vocabulary.
-
-        >>> book = zope.component.factory.Factory(entrytypes.Book, 'book', 'make a book')
-        >>> gsm = zope.component.getGlobalSiteManager()
-        >>> from zope.component.interfaces import IFactory
-        >>> gsm.registerUtility(book, IFactory, 'quotationtool.biblatex.entrytypes.Book')
-        >>> len([fac for name, fac in zope.component.getFactoriesFor(IBiblatexEntryType)])
-        1
-        >>> from zope.schema import vocabulary 
-        >>> vocabulary.setVocabularyRegistry(vocabulary.VocabularyRegistry())
-        >>> vr = vocabulary.getVocabularyRegistry()
-        >>> from quotationtool.biblatex.interfaces import EntryTypeVocabulary
-        >>> vr.register('quotationtool.biblatex.EntryTypes', EntryTypeVocabulary)
-
-        
-        >>> IBiblatexEntry['entry_type'].validate('quotationtool.biblatex.entrytypes.Book')
+    (Note: Registration of some utilities and vocabularies is done in tests.)
+    
         >>> IBiblatexEntry['entry_type'].validate('Book')
+        >>> IBiblatexEntry['entry_type'].validate('LetItFail')
         Traceback (most recent call last):
         ...
-        ConstraintNotSatisfied: Book
+        ConstraintNotSatisfied: LetItFail
 
-    TODO: schema validation should be done with a class that fully implements IBiblatexEnty
+    TODO: schema validation should be done with a class that fully implements IBiblatexEntry
     Now we can play with the schema validation:
 
         >>> import zope.schema
@@ -168,13 +160,13 @@ class IBiblatexEntry(IContained, ientry.IEntry):
 
         >>> b = MyBook()
         >>> b.date = u"2010"
-        >>> b.entry_type = 'quotationtool.biblatex.entrytypes.Book'
+        >>> b.entry_type = 'Book'
         >>> b.title = u""
         >>> b.author = None
         >>> IBiblatexEntry.validateInvariants(b)
         Traceback (most recent call last):
         ...
-        RequiredNotPresent: zblx-book-reqdesc
+        RequiredNotPresent: zblx-Book-required
         
 
         >>> b.author = [u"Ratze, Papa"]
@@ -235,14 +227,14 @@ class IBiblatexEntry(IContained, ientry.IEntry):
                         u"Choose a type from the list."),
         required = True,
         vocabulary = 'quotationtool.biblatex.EntryTypes',
-        default = 'quotationtool.biblatex.entrytypes.Book',
+        default = 'Book',
         )
 
     @zope.interface.invariant
     def requiredFieldsPresent(entry):
-        fac = zope.component.getUtility(IFactory, entry.entry_type)
-        _type = fac()
-        for alternative_fields in _type.getRequiredFields():
+        _type = zope.component.queryUtility(
+            IBiblatexEntryType, entry.entry_type, default = None)
+        for alternative_fields in _type.required:
             if len(alternative_fields) == 1:
                 # reset required in schema
                 pass
@@ -253,7 +245,7 @@ class IBiblatexEntry(IContained, ientry.IEntry):
                     # at least one of the alternative fields is present (logical OR)
                     one_present = True
             if not one_present:
-                raise RequiredNotPresent(_type.required_fields_desc)
+                raise RequiredNotPresent(_type.required_description)
 
 
 class IBibliography(IContainer):

@@ -39,7 +39,7 @@ class EntryGenerator(object):
                      'tex4ht': '.html',
                      }
 
-    def __init__(self, context):
+    def __init__(self, context = None):
         self.context = context
         timehash = md5.new()
         timehash.update(str(time.time()))
