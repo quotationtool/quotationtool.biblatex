@@ -1,0 +1,30 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool">
+
+  <!--include file="meta.zcml"/-->
+
+  <!-- skin -->
+  <interface
+      interface=".skin.IBochumBrowserSkin"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="Bochum"
+      />
+  <z3c:layout
+      for="*"
+      layer=".layer.IBochumBrowserLayer"
+      template="layout.pt"
+      />
+  <z3c:macro
+      name="quotationtool-layout"
+      macro="quotationtool-layout"
+      template="layout.pt"
+      layer=".layer.IBochumBrowserLayer"
+      />
+
+
+  <include file="bibliography.zcml"/>
+
+</configure>

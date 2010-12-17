@@ -3,8 +3,8 @@ import zope.interface
 import zope.schema
 import zope.component
 from zope.component.interfaces import IFactory
-from zope.app.container.interfaces import IContainer, IContained
-from zope.app.container.constraints import contains, containers
+from zope.container.interfaces import IContainer, IContained
+from zope.container.constraints import contains, containers
 from zope.interface.common.interfaces import IException
 
 from i18n import _
@@ -140,51 +140,8 @@ class RequiredNotPresent(zope.interface.Invalid):
 
 
 class IBiblatexEntry(IContained, ientry.IEntry):
-    """ An entry in the biblatex database. 
-    Bibtex field definitions are inherited from IEntry
-
-    (Note: Registration of some utilities and vocabularies is done in tests.)
-    
-        >>> IBiblatexEntry['entry_type'].validate('Book')
-        >>> IBiblatexEntry['entry_type'].validate('LetItFail')
-        Traceback (most recent call last):
-        ...
-        ConstraintNotSatisfied: LetItFail
-
-    TODO: schema validation should be done with a class that fully implements IBiblatexEntry
-    Now we can play with the schema validation:
-
-        >>> import zope.schema
-        >>> class MyBook(object):
-        ...     pass
-
-        >>> b = MyBook()
-        >>> b.date = u"2010"
-        >>> b.entry_type = 'Book'
-        >>> b.title = u""
-        >>> b.author = None
-        >>> IBiblatexEntry.validateInvariants(b)
-        Traceback (most recent call last):
-        ...
-        RequiredNotPresent: zblx-Book-required
-        
-
-        >>> b.author = [u"Ratze, Papa"]
-        >>> b.title = u"Das Licht der Welt"
-        >>> b.subtitle = u"Some subtitle"
-        >>> IBiblatexEntry.validateInvariants(b)
-        
-
-    See if other fields with constraints validate as we want:
-
-        >>> IBiblatexEntry['title'].validate(u"Everything changes")
-        >>> IBiblatexEntry['date'].validate(u"2010-11-26/2010-11-27")
-        >>> IBiblatexEntry['date'].validate(u"2010-11-35")
-        Traceback (most recent call last):
-        ...
-        ConstraintNotSatisfied: 2010-11-35
-
-
+    """ An entry in the biblatex database.  Bibtex field definitions
+    are inherited from IEntry.
 
     """
 
@@ -198,6 +155,61 @@ class IBiblatexEntry(IContained, ientry.IEntry):
         required = True,
         readonly = True,
         )
+
+    entry_type = zope.schema.Choice(
+        title = _('ibiblatexentrytype-entrytype-title',
+                  u"Type"),
+        description = _('ibiblatexentrytype-entrytype-desc',
+                        u"Choose a type from the list."),
+        required = True,
+        vocabulary = 'quotationtool.biblatex.EntryTypes',
+        default = 'Book',
+        )
+
+    @zope.interface.invariant
+    def requiredFieldsPresent(entry):
+        """
+        Note: Registration of some utilities and vocabularies is done
+        in test setup.
+
+            >>> import zope.schema
+            >>> class MyBook(object):
+            ...     pass
+            
+            >>> b = MyBook()
+            >>> b.date = u"2010"
+            >>> b.entry_type = 'Book'
+            >>> b.title = u"Some title"
+            >>> b.author = None
+            >>> IBiblatexEntry.validateInvariants(b)
+            Traceback (most recent call last):
+            ...
+            RequiredNotPresent: zblx-Book-required
+        
+
+            >>> b.author = [u"Kant, Immanuel"]
+            >>> b.title = u"Kritik der Urteilskraft"
+            >>> IBiblatexEntry.validateInvariants(b)
+
+        """
+        _type = zope.component.queryUtility(
+            IBiblatexEntryType, entry.entry_type, default = None)
+        for alternative_fields in _type.required:
+            if len(alternative_fields) == 1:
+                # reset required in schema
+                pass
+                #self[alternative_fields[0]].required = True
+            one_present = False
+            for field in alternative_fields:
+                if getattr(entry, field, None):
+                    # at least one of the alternative fields is present (logical OR)
+                    one_present = True
+            if not one_present:
+                raise RequiredNotPresent(_type.required_description)
+
+
+class IEntryBibtexRepresentation(zope.interface.Interface):
+    """ """
 
     def getField(field):
         """ Returns the value of the field named 'field' in the
@@ -220,36 +232,20 @@ class IBiblatexEntry(IContained, ientry.IEntry):
 
         """
 
-    entry_type = zope.schema.Choice(
-        title = _('ibiblatexentrytype-entrytype-title',
-                  u"Type"),
-        description = _('ibiblatexentrytype-entrytype-desc',
-                        u"Choose a type from the list."),
-        required = True,
-        vocabulary = 'quotationtool.biblatex.EntryTypes',
-        default = 'Book',
-        )
+    def getBibtexWithReferences():
+        """ Returns the entry in BibTeX style with referenced entries,
+        e.g. entries referenced by xref or crossref."""
+    
 
-    @zope.interface.invariant
-    def requiredFieldsPresent(entry):
-        _type = zope.component.queryUtility(
-            IBiblatexEntryType, entry.entry_type, default = None)
-        for alternative_fields in _type.required:
-            if len(alternative_fields) == 1:
-                # reset required in schema
-                pass
-                #self[alternative_fields[0]].required = True
-            one_present = False
-            for field in alternative_fields:
-                if getattr(entry, field, None):
-                    # at least one of the alternative fields is present (logical OR)
-                    one_present = True
-            if not one_present:
-                raise RequiredNotPresent(_type.required_description)
+class IBibliography(zope.interface.Interface):
+    """ A bibliography holding IBiblatexEntry objects. This is the
+    schema part of the bibliography."""
+    
 
-
-class IBibliography(IContainer):
-    """ A bibliography is a container for IBiblatexEntry objects."""
+class IBibliographyContainer(zope.interface.Interface):
+    """ A bibliography is a container for IBiblatexEntry objects. This
+    interface and IBibliography must be different because of managing
+    permissions."""
     
     contains('.IBiblatexEntry')
 

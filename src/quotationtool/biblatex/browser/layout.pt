@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<metal:block 
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    define-macro="quotationtool-layout">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xml:lang="en" lang="en"
+    i18n:domain="quotationtool"
+    >
+  <head>
+    <metal:block define-slot="title">
+      <!--title tal:content="provider:page_title">Quotationtool</title-->
+      <title>Quotationtool</title>
+    </metal:block>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  </head>
+  <body>
+    <div id="wrapper">
+
+      <div id="header">
+        <metal:block define-slot="header">
+          <h1>Quotationtool</h1>
+        </metal:block>
+      </div>
+
+      <div id="userhelpers">
+        &nbsp;
+      </div>
+
+      <div id="columns">
+           <div id="leftcolumn">
+
+        <div id="navigation" class="box">
+          <h1 i18n:translate="navigation-label">Navigation</h1>
+          <div class="wrapper"
+              tal:content="structure provider:navigation|nothing"/>
+        </div>
+
+        <div id="tools" tal:content="structure provider:sitetools|nothing">Site Tools</div>
+
+      </div>
+
+      <div id="content">
+        <tal:block replace="structure context/@@breadcrumbs|default">Breadcrumbs</tal:block>
+        <div id="content-tabs" 
+             tal:content="structure provider:tabs|nothing"/>
+        <div tal:content="structure provider:pagelet">Page Content</div>
+
+        <div id="footer" tal:content="structure context/@@footerInfo|nothing"></div>
+
+      </div>
+
+    </div>
+
+    </div>
+  </body>
+</html>
+</metal:block>

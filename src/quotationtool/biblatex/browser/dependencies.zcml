@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+  
+  <include package="z3c.template" file="meta.zcml"/>
+  <include package="z3c.macro" file="meta.zcml"/>
+  <include package="z3c.pagelet" file="meta.zcml"/>
+  <include package="zope.browserpage" file="meta.zcml"/>
+  <include package="zope.publisher" file="meta.zcml"/>
+
+  <include package="z3c.layer.pagelet"/>
+
+</configure>

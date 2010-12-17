@@ -4,15 +4,13 @@ from zope.testing import doctest
 from zope.component.testing import setUp, tearDown, PlacelessSetup
 import zope.interface
 import zope.schema
+import zope.component
+import zope.security
 from zope.schema import vocabulary
 from zope.schema.interfaces import IVocabularyFactory, IVocabulary
-import zope.component
 from zope.configuration.xmlconfig import XMLConfig, xmlconfig
 
-from quotationtool.biblatex import entrytypes
-from quotationtool.biblatex.interfaces import IEntryTypesConfiguration 
-
-from quotationtool.biblatex import interfaces
+import quotationtool.biblatex
 
 _flags = doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS
 
@@ -20,7 +18,13 @@ def testZcml():
     """
        >>> from zope.configuration.xmlconfig import xmlconfig
        >>> import quotationtool.biblatex
-       >>> XMLConfig('meta.zcml', zope.component)()
+       
+    First we have to load the dependencies:
+       
+       >>> XMLConfig('dependencies.zcml', quotationtool.biblatex)()
+
+    Now we can test configure.zcml
+
        >>> XMLConfig('configure.zcml', quotationtool.biblatex)()
 
     """
@@ -31,9 +35,13 @@ def setUpZcml(test):
 def setUpRegistration(test):
     setUp(test)
 
+    zope.component.provideAdapter(
+        quotationtool.biblatex.bibtex.EntryBibtexRepresentation)
+
     zope.component.provideUtility(
-        entrytypes.EntryTypesConfiguration(),
-        IEntryTypesConfiguration, '')
+        quotationtool.biblatex.entrytypes.EntryTypesConfiguration(),
+        quotationtool.biblatex.interfaces.IEntryTypesConfiguration, 
+        '')
 
     # register vocabularies
     vocabulary.setVocabularyRegistry(vocabulary.VocabularyRegistry())
@@ -77,7 +85,27 @@ def test_suite():
                                  tearDown = tearDown,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
                                  ),
-            doctest.DocTestSuite('quotationtool.biblatex.entrytypes',
+            doctest.DocTestSuite('quotationtool.biblatex.biblatexentry',
+                                 setUp = setUpRegistration,
+                                 tearDown = tearDownRegistration,
+                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+                                 ),
+            doctest.DocTestSuite('quotationtool.biblatex.bibtex',
+                                 setUp = setUpRegistration,
+                                 tearDown = tearDownRegistration,
+                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+                                 ),
+            doctest.DocTestSuite('quotationtool.biblatex.generator',
+                                 setUp = setUpRegistration,
+                                 tearDown = tearDownRegistration,
+                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+                                 ),
+            doctest.DocTestSuite('quotationtool.biblatex.bibliography',
+                                 setUp = setUpRegistration,
+                                 tearDown = tearDownRegistration,
+                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+                                 ),
+            doctest.DocTestSuite('quotationtool.biblatex.namechooser',
                                  setUp = setUpRegistration,
                                  tearDown = tearDownRegistration,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,

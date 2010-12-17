@@ -2,12 +2,89 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="quotationtool">
 
+  <!-- bibliography -->
+  
+  <interface
+      interface=".interfaces.IBibliography"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".bibliography.Bibliography">
+    <implements
+	interface="zope.annotation.interfaces.IAttributeAnnotatable"
+	/>
+    <allow
+	interface="zope.container.interfaces.IReadContainer"
+	/>
+    <require
+	permission="zope.ManageContent"
+	interface="zope.container.interfaces.IWriteContainer"
+	/>
+    <allow
+	interface=".interfaces.IBibliography"
+	/>
+    <require
+	permission="zope.ManageSite"
+	set_schema=".interfaces.IBibliography"
+	/>
+  </class>
+      
+  <!--subscriber handler=".bibliography.createBibliography"/-->
+
   <adapter
       for=".interfaces.IBibliography"
       provides="zope.app.container.interfaces.INameChooser"
       factory=".namechooser.BiblatexEntryNameChooser"
       />
+
+
+  <!-- entry -->
+
+  <interface
+      interface=".interfaces.IBiblatexEntry"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <class class=".biblatexentry.BiblatexEntry">
+    <implements
+	interface="zope.annotation.interfaces.IAttributeAnnotatable"
+	/>
+    <allow
+	interface=".interfaces.IBiblatexEntry"
+	/>
+    <require
+	permission="zope.ManageContent"
+	set_schema=".interfaces.IBiblatexEntry"
+	/>
+  </class>    
+
   
+  <!-- entry types -->
+
+  <utility
+      factory=".entrytypes.EntryTypesConfiguration"
+      provides=".interfaces.IEntryTypesConfiguration"
+      name=""
+      />
+
+  <utility
+      component=".entrytypes.EntryTypeVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.EntryTypes"
+      />
+
+
+  <!-- components related to generation (latexing) -->
+
+  <utility
+      factory=".generator.EntryGenerator"
+      name="quotationtool.biblatex.generator.EntryGenerator"
+      provides=".interfaces.IFormattedEntryGenerator"
+      />
+  
+
+  <!-- vocabularies related to biblatex fields-->
+
   <utility
       component=".field.PaginationVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
@@ -46,17 +123,5 @@
 
   <!-- todo: language und hyphenation vocabularies -->
 
-  <utility
-      component=".entrytypes.EntryTypeVocabulary"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      name="quotationtool.biblatex.EntryTypes"
-      />
-
-  <utility
-      factory=".generator.EntryGenerator"
-      name="quotationtool.biblatex.generator.EntryGenerator"
-      provides=".interfaces.IFormattedEntryGenerator"
-      />
-  
 
 </configure>

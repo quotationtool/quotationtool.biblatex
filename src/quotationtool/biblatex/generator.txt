@@ -6,7 +6,7 @@
 
 >>> mybook = BiblatexEntry()
 >>> mybook.__name__ = 'Adelung1811'
->>> mybook.entry_type = 'quotationtool.biblatex.entrytypes.Book'
+>>> mybook.entry_type = 'Book'
 >>> mybook.author = [u"Adelung, Johann Christoph"]
 >>> mybook.gender = u"sm"
 >>> mybook.title = u'Grammatisch-kritisches W\\"{o}rterbuch der Hochdeutschen Mundart, mit best\\"{a}ndiger Vergleichung der \\"{u}brigen Mundarten, besonders aber der Oberdeutschen'

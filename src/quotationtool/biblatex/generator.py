@@ -10,7 +10,50 @@ import interfaces
 
 class EntryGenerator(object):
     """See interfaces.IFormattedEntryGenerator and generator.txt for
-    documentation.
+    documentation and latex tests.
+
+
+    Testing Internals
+    ~~~~~~~~~~~~~~~~~
+        
+    If you are not interested in internals, see generator.txt for usage.
+
+        >>> from quotationtool.biblatex import generator
+        >>> import os
+        >>> g = generator.EntryGenerator(object())
+
+        >>> from quotationtool.biblatex.biblatexentry import BiblatexEntry
+
+        >>> mybook = BiblatexEntry()
+        >>> mybook.__name__ = 'Adelung1811'
+        >>> mybook.entry_type = 'Book'
+        >>> mybook.author = [u"Adelung, Johann Christoph"]
+        >>> mybook.gender = u"sm"
+        >>> mybook.title = u'Grammatisch-kritisches W\\"{o}rterbuch'
+        >>> mybook.location = u"Wien"
+        >>> mybook.publilsher = u"Bauer"
+        >>> mybook.date = u"1811"
+        >>> mybook.volumes = u"4"
+        >>> mybook.pagination = 'column'
+        >>> mybook.url = u"http://mdz.bib-bvb.de/digbib/lexika/adelung/"
+        >>> mybook.urldate = u"2007-10-28"
+        >>> mybook.hyphenation = 'ngerman'
+        >>> mybook.keywords = u"QU"
+
+
+        Let's see if a tex file is created. Set some internal values of the
+        generator for that perpose. There is also a bib file latex/biblio.bib
+
+        >>> g.entry = mybook
+        >>> g.language = 'ngerman'
+        >>> g.citestyle = 'verbose'
+        >>> g.bibstyle = 'verbose'
+        >>> g._createTexFile()
+        >>> f = open(os.path.join(g.texdir, g.texfile))
+        >>> f.read()
+        '%%...
+        >>> f.close()
+
     """
 
     zope.interface.implements(interfaces.IFormattedEntryGenerator)
@@ -85,7 +128,7 @@ class EntryGenerator(object):
         try:
             tfile = open(os.path.join(os.path.dirname(__file__), self.tex_template))
             d = dict(key = self.entry.__name__,
-                     bibtex = self.entry.getBibtex(),
+                     bibtex = interfaces.IEntryBibtexRepresentation(self.entry).getBibtexWithReferences(),
                      tex4ht = self.tex4ht_options,
                      language = self.language,
                      bibliography = self.bibliography,

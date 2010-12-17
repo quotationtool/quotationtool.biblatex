@@ -1,0 +1,21 @@
+<configure
+    xmlns='http://namespaces.zope.org/browser'
+    xmlns:zope='http://namespaces.zope.org/zope'
+    xmlns:z3c='http://namespaces.zope.org/z3c'
+    i18n_domain='quotationtool.biblatex'>
+
+  <!-- IUniformTitleContainer -->
+  <z3c:pagelet
+      for="..interfaces.IBibliography"
+      name="index.html"
+      layer=".skin.IBochumBrowserLayer"
+      permission="zope.View"
+      class=".bibliography.Container"
+      />
+  <z3c:template
+      for=".bibliography.Container"
+      template="bibliography_container.pt"
+      layer=".skin.IBochumBrowserLayer"
+      />
+  
+</configure>
