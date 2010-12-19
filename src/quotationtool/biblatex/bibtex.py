@@ -8,8 +8,8 @@ import ifield
 from ientry import IEntry
 
 
-field_template = string.Template('  $name = \t\t{$value},\n')
-entry_template = string.Template('@$type{$key,\n$fields\n}\n')
+field_template = string.Template('  $name = \t{$value},\n')
+entry_template = string.Template('@$type{$key,\n$fields}\n')
 
 
 class EntryBibtexRepresentation(object):
@@ -92,3 +92,48 @@ class EntryBibtexRepresentation(object):
     def getBibtexWithReferences(self):
         #TODO
         return self.getBibtex()
+
+
+class BibliographyBibtexRepresentation(object):
+    """An adapter for making BibTeX representations of the
+    bibliography.
+
+        >>> from quotationtool.biblatex.bibliography import Bibliography
+        >>> from quotationtool.biblatex.biblatexentry import BiblatexEntry
+        >>> kdu = BiblatexEntry()
+        >>> kdu.__name__ = u"Kant1790"
+        >>> kdu.entry_type = 'Book'
+        >>> kdu.author = [u"Kant, Immanuel"]
+        >>> kdu.title = u"Kritik der Urteilskraft"
+        >>> kdu.date = u"1790"
+        >>> krv = BiblatexEntry()
+        >>> krv.__name__ = u"Kant1790"
+        >>> krv.entry_type = 'Book'
+        >>> krv.author = [u"Kant, Immanuel"]
+        >>> krv.title = u"Kritik der reinen Vernunft"
+        >>> krv.date = u"1781"
+        >>> biblio = Bibliography()
+        >>> biblio['Kant1790'] = kdu
+        >>> biblio['Kant1781'] = krv
+
+    The getBibtex() method returns a bibtex-like formatted string for
+    the entry:
+    
+        >>> from quotationtool.biblatex.interfaces import IBibliographyBibtexRepresentation
+        >>> IBibliographyBibtexRepresentation(biblio).getBibtex()
+        u'@Book{Kant...@Book{Kant...'
+
+
+    """
+
+    zope.interface.implements(interfaces.IBibliographyBibtexRepresentation)
+    zope.component.adapts(interfaces.IBibliography)
+
+    def __init__(self, context):
+        self.context = context
+
+    def getBibtex(self):
+        rc = u""
+        for entry in self.context.values():
+            rc += interfaces.IEntryBibtexRepresentation(entry).getBibtex()
+        return rc

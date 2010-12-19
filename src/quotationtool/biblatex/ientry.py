@@ -76,7 +76,7 @@ author. Not used by the standard bibliography styles.
         title = _('zblx-bookpagination-tit', u'Bookpagination'),
         description = _('zblx-bookpagination-desc', u'''If the work is published as part of another one, this is the pagination scheme of the enclosing work, i. e., bookpagination relates to pagination like booktitle to title. The value of this field will affect the formatting of the pages and pagetotal fields. See also pagination.'''),
         required = False,
-        default = 'page',
+        default = None,
         vocabulary = 'quotationtool.biblatex.Pagination',
         )
 
@@ -343,7 +343,7 @@ annotator.'''),
         description = _('zblx-language-desc', u'''TODO'''),
         required = False,
         vocabulary = 'quotationtool.biblatex.Language',
-        default = 'english',
+        default = None,
         )
 
     library = field.Literal(
@@ -418,7 +418,7 @@ annotator.'''),
         description = _('zblx-origlanguage-desc', u'''TODO'''),
         required = False,
         vocabulary = 'quotationtool.biblatex.Language',
-        default = 'english',
+        default = None,
         )
     
     origlocation = field.Literal(
@@ -456,7 +456,7 @@ annotator.'''),
         description = _('zblx-pagination-desc', u'''TODO'''),
         required = False,
         vocabulary = 'quotationtool.biblatex.Pagination',
-        default = 'page',
+        default = None,
         )
     
     part = field.Literal(

@@ -1,6 +1,8 @@
 <div i18n:domain="quotationtool.biblatex">
   
   <h1 i18n:translate="bibliography-container-label">Bibliography</h1>
+  
+  <div id="content">
 
   <div class="bibliography-entries">
     <tal:block repeat="entry view/getEntries">
@@ -19,6 +21,8 @@
 	</a>
       </div>
     </tal:block>
+  </div>
+  
   </div>
 
 </div>

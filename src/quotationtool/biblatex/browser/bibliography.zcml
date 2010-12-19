@@ -4,18 +4,29 @@
     xmlns:z3c='http://namespaces.zope.org/z3c'
     i18n_domain='quotationtool.biblatex'>
 
-  <!-- IUniformTitleContainer -->
   <z3c:pagelet
       for="..interfaces.IBibliography"
       name="index.html"
-      layer=".skin.IBochumBrowserLayer"
+      layer=".layer.IBochumBrowserLayer"
       permission="zope.View"
       class=".bibliography.Container"
       />
   <z3c:template
       for=".bibliography.Container"
       template="bibliography_container.pt"
-      layer=".skin.IBochumBrowserLayer"
+      layer=".layer.IBochumBrowserLayer"
       />
+  <defaultView
+      for="..interfaces.IBibliography"
+      name="index.html"
+      />      
   
+  <page
+      for="..interfaces.IBibliography"
+      name="bibliography.bib"
+      layer=".layer.IBochumBrowserLayer"
+      class=".bibliography.PlainBibtex"
+      permission="zope.View"
+      />
+
 </configure>

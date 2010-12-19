@@ -53,6 +53,7 @@ class EntryGenerator(object):
         >>> f.read()
         '%%...
         >>> f.close()
+        >>> shutil.rmtree(g.texdir)
 
     """
 

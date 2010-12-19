@@ -1,0 +1,5 @@
+<div i18n:domain="quotationtool.biblatex">
+  <pre 
+      tal:content="view/getBibtex">
+  </pre>
+</div>

@@ -194,6 +194,11 @@ class IBiblatexEntry(IContained, ientry.IEntry):
         """
         _type = zope.component.queryUtility(
             IBiblatexEntryType, entry.entry_type, default = None)
+        if _type is None:
+            conf = zope.component.getUtility(IEntryTypesConfiguration, '')
+            conf.register()
+        _type = zope.component.queryUtility(
+            IBiblatexEntryType, entry.entry_type, default = None)
         for alternative_fields in _type.required:
             if len(alternative_fields) == 1:
                 # reset required in schema
@@ -248,6 +253,27 @@ class IBibliographyContainer(zope.interface.Interface):
     permissions."""
     
     contains('.IBiblatexEntry')
+
+
+class IBibliographyBibtexRepresentation(zope.interface.Interface):
+    """A BibTeX representation of the bibliography."""
+
+    def getBibtex():
+        """ Returns the bibliography in the BibTeX style, like
+
+        @Book{Kant1790,
+          author         = {Kant, Immanuel},
+          title          = {Kritik der Urteilskraft},
+          ...
+          }
+
+        @Book{Kant1781,
+          author         = {Kant, Immanuel},
+          title          = {Kritik der reinen Vernunft},
+          ...
+          }
+
+        """
 
 
 class IBibliographyConfiguration(zope.interface.Interface):

@@ -62,6 +62,34 @@ def _requiredFields(flds):
     return [alt.split() for alt in l]
 
 
+def getRequiredTuple(req):
+    """Return tuple of fields for a required list list.
+
+        >>> from quotationtool.biblatex.entrytypes import getRequiredTuple
+        >>> getRequiredTuple([['author', 'editor'], ['title'], ['date']])
+        ('author', 'editor', 'title', 'date')
+
+    """
+
+    t = ()
+    for alternatives in req:
+        for f in alternatives:
+            t += (f,)
+    return t
+
+def getTuple(flds):
+    """Return a tuple of fields for a list of fields.
+
+        >>> from quotationtool.biblatex.entrytypes import getTuple
+        >>> getTuple([u'subtitle', 'titleaddon'])
+        (u'subtitle', 'titleaddon')
+
+     """
+
+    t = ()
+    for fld in flds:
+        t += (fld,)
+    return t
     
 
 class EntryTypesConfiguration(object):

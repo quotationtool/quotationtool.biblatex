@@ -176,6 +176,37 @@ def GenderVocabulary(context):
 zope.interface.alsoProvides(GenderVocabulary, IVocabularyFactory)
 
 
+def LanguageVocabulary(context):
+    """ Vocabulary component that defines languages.
+
+    """
+
+    terms = []
+    values = {
+        'english': _('zblx-languagevocabulary-english',
+                     u"English"),
+        'ngerman': _('zblx-languagevocabulary-ngerman',
+                     u"German (new orthography)"),
+        'german': _('zblx-languagevocabulary-german',
+                     u"German (old orthography)"),
+        }
+    for key, value in values.items():
+        terms.append(SimpleTerm(key, token = key, title = value))
+    return SimpleVocabulary(terms)
+
+zope.interface.alsoProvides(LanguageVocabulary, IVocabularyFactory)
+
+
+def HyphenationVocabulary(context):
+    """ Vocabulary component that defines hyphenation.
+
+    """
+    return LanguageVocabulary(context)
+
+zope.interface.alsoProvides(HyphenationVocabulary, IVocabularyFactory)
+
+
+
 class EntryKey(zope.schema.TextLine):
     """ A bibtex entry key.
 

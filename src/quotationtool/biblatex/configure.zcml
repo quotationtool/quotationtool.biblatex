@@ -33,8 +33,14 @@
 
   <adapter
       for=".interfaces.IBibliography"
-      provides="zope.app.container.interfaces.INameChooser"
+      provides="zope.container.interfaces.INameChooser"
       factory=".namechooser.BiblatexEntryNameChooser"
+      />
+  
+  <adapter
+      for=".interfaces.IBibliography"
+      provides=".interfaces.IBibliographyBibtexRepresentation"
+      factory=".bibtex.BibliographyBibtexRepresentation"
       />
 
 
@@ -57,6 +63,12 @@
 	set_schema=".interfaces.IBiblatexEntry"
 	/>
   </class>    
+
+  <adapter
+      for=".interfaces.IBiblatexEntry"
+      provides=".interfaces.IEntryBibtexRepresentation"
+      factory=".bibtex.EntryBibtexRepresentation"
+      />
 
   
   <!-- entry types -->
@@ -121,7 +133,17 @@
       name="quotationtool.biblatex.AuthorTypes"
       />
 
-  <!-- todo: language und hyphenation vocabularies -->
+  <utility
+      component=".field.LanguageVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.Language"
+      />
+
+  <utility
+      component=".field.HyphenationVocabulary"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="quotationtool.biblatex.Hyphenation"
+      />
 
 
 </configure>

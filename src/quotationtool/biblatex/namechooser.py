@@ -52,7 +52,7 @@ class BiblatexEntryNameChooser(NameChooser):
         
     """
 
-
+    zope.interface.implements(zope.container.interfaces.INameChooser)
     zope.component.adapts(interfaces.IBibliography)
 
     def chooseName(self, name, obj):
@@ -63,10 +63,10 @@ class BiblatexEntryNameChooser(NameChooser):
                                             i in (':', '_', '-')))
         if name:
             name = removeNonAscii(name)
-            if name and not self.context.has_key(name):
+            if name and name not in self.context:
                 return name
             for i in range(25):
-                if not self.context.has_key(name + chr(97 + i)):
+                if not name + chr(97 + i) in self.context:
                     return name + chr(97 + i)
         # no success with proposed name
         name = u""
@@ -76,14 +76,15 @@ class BiblatexEntryNameChooser(NameChooser):
             if obj.editor:
                 name += removeNonAscii(obj.editor[0].split(',')[0])
             else:
-                name += removeNonAscii(obj.title)
+                if obj.title:
+                    name += removeNonAscii(obj.title)
     
         if obj.date:
             name += obj.date.split('/')[0].split('-')[0]
-        if not self.context.has_key(name):
+        if not name in self.context:
             return name
         for i in range(25):
-            if not self.context.has_key(name + chr(97 + i)):
+            if not name + chr(97 + i) in self.context:
                 return name + chr(97 + i)
         raise Exception("No name found!")
             

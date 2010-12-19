@@ -17,46 +17,88 @@
       <title>Quotationtool</title>
     </metal:block>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <tal:block replace="resource_library:quotationtool.biblatex.css"/>
   </head>
   <body>
     <div id="wrapper">
 
       <div id="header">
         <metal:block define-slot="header">
-          <h1>Quotationtool</h1>
+          <h1>quotationtool.biblatex</h1>
         </metal:block>
       </div>
 
-      <div id="userhelpers">
-        &nbsp;
+      <div id="mainnav">
+	<ul>
+	  <li class="current">
+	    <div class="active">Search</div>
+	    <ul>
+	      <li>
+		<a>Simple Search</a>
+	      </li>
+	      <li>
+		<div>Advanced Search</div>
+	      </li>
+	    </ul>
+	  </li>
+	  <li>
+	    <a href="/bilio/">Bibliography</a>
+	  </li>
+	  <li>
+	    <a href="/examples/">Examples</a>
+	  </li>
+	  <li>
+	    <a href="/categories/">Categories</a>
+	  </li>
+	</ul>
+	<div id="login">
+	  <a 
+	      href="/@@login.html"
+	      tal:attributes="href string:${request/URL/0}/@@login.html">
+	    login
+	  </a>
+	</div>
+      </div><!-- mainnav -->
+      <br class="cleaner"/>
+      <div id="bgmainnav">
+	<div id="nav2">
+	  <ul>
+	    <li>
+	      <a href="">Help</a>
+	    </li>
+	  </ul>
+	</div>
+      </div><!-- bgmainnav -->
+      <br class="cleaner"/>
+
+      <div id="content-wrapper">
+	
+	<div id="contentlabel"
+	    tal:content="structure context/@@label">
+	  Bibliography
+	</div>
+	  
+	<div id="content">
+	  <div tal:content="structure context/@@details"/>
+	</div>
+	  
+	<div id="tabbedcontent-wrapper">
+	  <div id="itemtabs">
+	    <ul tal:content="structure provider:itemtabs">
+	      <li class="active"><a href="">Active</a></li>
+	    </ul>
+	  </div>
+	  <br class="cleaner"/>
+	  <div id="tabbedcontent">
+	    <div tal:content="structure provider:pagelet">Page Content</div>
+	  </div>
+	</div>
+	
       </div>
+      
+      <div id="footer" tal:content="structure context/@@footerInfo|nothing"></div>
 
-      <div id="columns">
-           <div id="leftcolumn">
-
-        <div id="navigation" class="box">
-          <h1 i18n:translate="navigation-label">Navigation</h1>
-          <div class="wrapper"
-              tal:content="structure provider:navigation|nothing"/>
-        </div>
-
-        <div id="tools" tal:content="structure provider:sitetools|nothing">Site Tools</div>
-
-      </div>
-
-      <div id="content">
-        <tal:block replace="structure context/@@breadcrumbs|default">Breadcrumbs</tal:block>
-        <div id="content-tabs" 
-             tal:content="structure provider:tabs|nothing"/>
-        <div tal:content="structure provider:pagelet">Page Content</div>
-
-        <div id="footer" tal:content="structure context/@@footerInfo|nothing"></div>
-
-      </div>
-
-    </div>
-
-    </div>
+    </div><!-- wrapper -->
   </body>
 </html>
 </metal:block>

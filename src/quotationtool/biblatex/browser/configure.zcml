@@ -23,8 +23,49 @@
       template="layout.pt"
       layer=".layer.IBochumBrowserLayer"
       />
+  <resourceLibrary
+      name="quotationtool.biblatex"
+      require="quotationtool.biblatex.css"
+      layer=".layer.IBochumBrowserLayer"
+      />
+  <resourceLibrary
+      layer=".layer.IBochumBrowserLayer"
+      name="quotationtool.biblatex.css">
+    <directory
+	source="css"
+	include="global.css"
+	/>
+  </resourceLibrary>
+  <browser:resourceDirectory
+      name="quotationtool.biblatex.images"
+      directory="images"
+      layer=".layer.IBochumBrowserLayer"
+      />
 
+  <view
+      name="label"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      for="*"
+      factory=".view.NotImplementedView"
+      permission="zope.View"
+      />
+  <view
+      name="details"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      for="*"
+      factory=".view.NotImplementedView"
+      permission="zope.View"
+      />
+
+  <browser:viewletManager
+      name="itemtabs"
+      class=".tab.ItemTabs"
+      provides=".tab.IItemTabs"
+      layer=".layer.IBochumBrowserLayer"
+      permission="zope.View"
+      />
 
   <include file="bibliography.zcml"/>
+  <include file="biblatexentry.zcml"/>
 
 </configure>

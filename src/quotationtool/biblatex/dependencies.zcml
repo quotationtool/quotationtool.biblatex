@@ -3,9 +3,12 @@
     
     <include package="zope.component" file="meta.zcml"/>
     <include package="zope.security" file="meta.zcml"/>
+    <include package="zope.i18n" file="meta.zcml"/>
     
+    <include package="zope.component"/>
     <include package="zope.security"/>
     <include package="zope.dublincore"/>
+    <include package="zope.app.schema"/>
 
 
 </configure>

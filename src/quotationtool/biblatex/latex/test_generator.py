@@ -5,11 +5,13 @@ from zope.testing import doctest
 from zope.component.testing import setUp, tearDown, PlacelessSetup
 from zope.configuration.xmlconfig import XMLConfig
 
+import quotationtool.biblatex
 
-def setUpZcml(test):
-    setUp()
-    XMLConfig('dependencies.zcml', quotationtool.biblatex)
-    XMLConfig('configure.zcml', quotationtool.biblatex)
+
+def setUpZCML(test):
+    setUp(test)
+    XMLConfig('dependencies.zcml', quotationtool.biblatex)()
+    XMLConfig('configure.zcml', quotationtool.biblatex)()
 
 def setUpRegistration(test):
     setUp(test)
@@ -49,7 +51,7 @@ def setUpRegistration(test):
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(os.path.join('..', 'generator.txt'),
-                             setUp = setUpRegistration,
+                             setUp = setUpRegistration,#setUpZCML,
                              tearDown = tearDown,
                              optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
                              ),

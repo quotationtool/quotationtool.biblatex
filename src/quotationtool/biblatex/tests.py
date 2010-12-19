@@ -38,6 +38,9 @@ def setUpRegistration(test):
     zope.component.provideAdapter(
         quotationtool.biblatex.bibtex.EntryBibtexRepresentation)
 
+    zope.component.provideAdapter(
+        quotationtool.biblatex.bibtex.BibliographyBibtexRepresentation)
+
     zope.component.provideUtility(
         quotationtool.biblatex.entrytypes.EntryTypesConfiguration(),
         quotationtool.biblatex.interfaces.IEntryTypesConfiguration, 
@@ -55,12 +58,8 @@ def setUpRegistration(test):
     vr.register('quotationtool.biblatex.Type', field.TypeVocabulary)
     vr.register('quotationtool.biblatex.Gender', field.GenderVocabulary)
     vr.register('quotationtool.biblatex.AuthorTypes', field.AuthorTypeVocabulary)
-
-    def eurocentric(*context):
-        return vocabulary.SimpleVocabulary.fromValues(
-            ['english', 'french', 'ngerman', 'german'])
-    vr.register('quotationtool.biblatex.Language', eurocentric)
-    vr.register('quotationtool.biblatex.Hyphenation', eurocentric)
+    vr.register('quotationtool.biblatex.Language', field.LanguageVocabulary)
+    vr.register('quotationtool.biblatex.Hyphenation', field.HyphenationVocabulary)
 
 
 def tearDownRegistration(test):
