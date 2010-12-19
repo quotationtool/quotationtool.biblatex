@@ -5,7 +5,7 @@ from zope.dublincore.interfaces import IWriteZopeDublinCore
 from zope.container.interfaces import IContentContainer
 
 # TODO!!! find a solution to unwire from new site event
-from zope.component.interfaces import IObjectEvent as INewSiteEvent
+from site import INewQuotationtoolSiteEvent
 
 from quotationtool.biblatex import interfaces
 
@@ -26,7 +26,7 @@ class Bibliography(BTreeContainer):
 
     
 
-@adapter(INewSiteEvent)
+@adapter(INewQuotationtoolSiteEvent)
 def createBibliography(event):
     # TODO: hardcoded names are not nice, but where can we put this?
     container = event.object['bibliography'] = Bibliography()

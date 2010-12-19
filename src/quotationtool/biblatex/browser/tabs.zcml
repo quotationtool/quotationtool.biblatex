@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool.biblatex">
+
+  <browser:viewletManager
+      name="itemtabs"
+      class=".tabs.ItemTabs"
+      provides=".tabs.IItemTabs"
+      layer=".layer.IBochumBrowserLayer"
+      permission="zope.View"
+      />
+
+  <!-- for biblatex entry -->
+
+  <z3c:contextMenuItem
+      for="..interfaces.IBiblatexEntry"
+      title="[itemtabs-biblatexentry-bibtex] BibTeX"
+      name="biblatexentry-bibtex"
+      permission="zope.View"
+      layer=".layer.IBochumBrowserLayer"
+      manager=".tabs.IItemTabs"
+      viewName="bibtex.html"
+      weight="50"
+      />
+
+  <z3c:contextMenuItem
+      for="..interfaces.IBiblatexEntry"
+      title="[itemtabs-biblatexentry-edit] Edit"
+      name="biblatexentry-edit"
+      permission="zope.View"
+      layer=".layer.IBochumBrowserLayer"
+      manager=".tabs.IItemTabs"
+      viewName="edit.html"
+      weight="40"
+      />
+
+
+
+</configure>

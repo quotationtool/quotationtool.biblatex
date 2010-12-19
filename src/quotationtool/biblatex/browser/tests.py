@@ -23,6 +23,9 @@ def setUpZCML(test):
         >>> XMLConfig('dependencies.zcml', quotationtool.biblatex.browser)()
 
         >>> XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
+        >>> XMLConfig('nav.zcml', quotationtool.biblatex.browser)()
+        >>> XMLConfig('tabs.zcml', quotationtool.biblatex.browser)()
+        >>> XMLConfig('bb.zcml', quotationtool.biblatex.browser)()
 
     """
     setUp(test)
@@ -30,6 +33,8 @@ def setUpZCML(test):
     XMLConfig('configure.zcml', quotationtool.biblatex)()
     XMLConfig('dependencies.zcml', quotationtool.biblatex.browser)()
     XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
+    XMLConfig('nav.zcml', quotationtool.biblatex.browser)()
+    XMLConfig('tabs.zcml', quotationtool.biblatex.browser)()
     return
 
 class SkinTests(PlacelessSetup, unittest.TestCase):

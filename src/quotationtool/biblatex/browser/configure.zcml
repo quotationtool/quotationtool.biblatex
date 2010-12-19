@@ -2,9 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:z3c="http://namespaces.zope.org/z3c"
-    i18n_domain="quotationtool">
-
-  <!--include file="meta.zcml"/-->
+    i18n_domain="quotationtool.biblatex">
 
   <!-- skin -->
   <interface
@@ -42,6 +40,7 @@
       layer=".layer.IBochumBrowserLayer"
       />
 
+  <!-- default label and details views -->
   <view
       name="label"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
@@ -54,14 +53,6 @@
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       for="*"
       factory=".view.NotImplementedView"
-      permission="zope.View"
-      />
-
-  <browser:viewletManager
-      name="itemtabs"
-      class=".tab.ItemTabs"
-      provides=".tab.IItemTabs"
-      layer=".layer.IBochumBrowserLayer"
       permission="zope.View"
       />
 

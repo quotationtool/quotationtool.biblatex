@@ -131,28 +131,6 @@
       layer=".layer.IBochumBrowserLayer"
       />
 
-  <z3c:contextMenuItem
-      for="..interfaces.IBiblatexEntry"
-      title="[itemtabs-biblatexentry-bibtex] BibTeX"
-      name="biblatexentry-bibtex"
-      permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
-      manager=".tab.IItemTabs"
-      viewName="@@bibtex.html"
-      weight="50"
-      />
-
-  <z3c:contextMenuItem
-      for="..interfaces.IBiblatexEntry"
-      title="[itemtabs-biblatexentry-edit] Edit"
-      name="biblatexentry-edit"
-      permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
-      manager=".tab.IItemTabs"
-      viewName="@@edit.html"
-      weight="40"
-      />
-
   <zope:adapter
       factory=".validation.EntryInvariantsValidator"
       />

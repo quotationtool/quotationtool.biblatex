@@ -1,0 +1,86 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool.biblatex">
+
+  <browser:viewletManager
+      name="mainnav"
+      class=".nav.MainNav"
+      provides=".nav.IMainNav"
+      layer=".layer.IBochumBrowserLayer"
+      permission="zope.View"
+      />
+
+  <z3c:template
+      for=".nav.MainNavItem"
+      template="mainnavitem.pt"
+      layer=".layer.IBochumBrowserLayer"
+      />
+
+  <!-- TODO: change global menu items to site menu items? -->
+
+  <!-- bibliography -->
+
+  <z3c:siteMenuItem
+      for="*"
+      title="[mainnav-bibliography] Bibliography"
+      name="bibliography"
+      class=".nav.MainNavItem"
+      permission="zope.View"
+      layer=".layer.IBochumBrowserLayer"
+      manager=".nav.IMainNav"
+      viewName="bibliography/"
+      weight="50"
+      subMenuProviderName="bibliographysubnav"
+      />
+
+  <z3c:siteMenuItem
+      for="*"
+      title="[mainnav-bibliography] Add Entry"
+      name="add-biblatexentry"
+      permission="zope.View"
+      layer=".layer.IBochumBrowserLayer"
+      manager=".nav.IBibliographySubNav"
+      viewName="bibliography/@@addEntry.html"
+      weight="100"
+      />
+
+
+
+  <!-- bibliography subnav-->
+
+  <browser:viewletManager
+      name="bibliographysubnav"
+      class=".nav.BibliographySubNav"
+      provides=".nav.IBibliographySubNav"
+      layer=".layer.IBochumBrowserLayer"
+      permission="zope.View"
+      />
+
+  <!-- search -->
+
+  <z3c:siteMenuItem
+      for="*"
+      title="[mainnav-search] Search"
+      name="search"
+      class=".nav.MainNavItem"
+      permission="zope.View"
+      layer=".layer.IBochumBrowserLayer"
+      manager=".nav.IMainNav"
+      viewName="search.html"
+      weight="50"
+      subMenuProviderName="searchsubnav"
+      />
+
+  <browser:viewletManager
+      name="searchsubnav"
+      class=".nav.SearchSubNav"
+      provides=".nav.ISearchSubNav"
+      layer=".layer.IBochumBrowserLayer"
+      permission="zope.View"
+      />
+
+
+
+</configure>

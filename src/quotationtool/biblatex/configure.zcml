@@ -29,7 +29,7 @@
 	/>
   </class>
       
-  <!--subscriber handler=".bibliography.createBibliography"/-->
+  <subscriber handler=".bibliography.createBibliography"/>
 
   <adapter
       for=".interfaces.IBibliography"

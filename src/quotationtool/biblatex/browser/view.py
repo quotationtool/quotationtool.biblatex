@@ -1,4 +1,10 @@
 from zope.publisher.browser import BrowserView
+from z3c.pagelet.browser import BrowserPagelet
+
+
+class NotImplementedPagelet(BrowserPagelet):
+    pass
+
 
 class NotImplementedView(BrowserView):
     
