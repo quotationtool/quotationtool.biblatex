@@ -1,10 +1,13 @@
+import zope.interface
+import zope.component
 from zope.viewlet.manager import ViewletManager
 from z3c.menu.ready2go import IGlobalMenu, ISiteMenu
 from z3c.menu.ready2go.manager import MenuManager
 from z3c.menu.ready2go.interfaces import IMenuManager
 from z3c.menu.ready2go.item import GlobalMenuItem, SiteMenuItem
+from zope.publisher.interfaces.browser import IBrowserRequest
 
-# TODO: change from global menu to site menu?
+from quotationtool.biblatex import interfaces
 
 
 class IMainNav(IMenuManager):
@@ -35,10 +38,12 @@ class MainNavItem(SiteMenuItem):
     pass
 
 
+class IBibliographyMainNavItem(zope.interface.Interface): pass
+
 class BibliographyMainNavItem(MainNavItem):
     """The bibliography navigation item in the main navigation."""
 
-
+    zope.interface.implements(IBibliographyMainNavItem)
 
 
 class ISearchSubNav(ISubNavManager):

@@ -27,6 +27,7 @@ def testZcml():
 
        >>> XMLConfig('configure.zcml', quotationtool.biblatex)()
        >>> XMLConfig('site.zcml', quotationtool.biblatex)()
+       >>> XMLConfig('user.zcml', quotationtool.biblatex)()
 
     """
 

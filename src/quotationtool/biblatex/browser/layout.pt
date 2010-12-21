@@ -9,7 +9,7 @@
 <html
     xmlns="http://www.w3.org/1999/xhtml"
     xml:lang="en" lang="en"
-    i18n:domain="quotationtool"
+    i18n:domain="quotationtool.biblatex"
     >
   <head>
     <metal:block define-slot="title">
@@ -51,12 +51,18 @@
 	    <a href="/categories/">Categories</a>
 	  </li>
 	</ul>
-	<div id="login">
-	  <a 
+	<div id="login" tal:define="principal_id request/principal/id">
+	  <a  
+	      tal:condition="python: principal_id == 'zope.anybody'"
 	      href="/@@login.html"
 	      tal:attributes="href string:${request/URL/0}/@@login.html">
 	    login
 	  </a>
+	  <span 
+	      tal:condition="python: principal_id != 'zope.anybody'">
+	    <span i18n:translate="">Logged in as:</span>
+	    <span tal:content="request/principal/title|default">some user</span>
+	  </span>
 	</div>
       </div><!-- mainnav -->
       <br class="cleaner"/>
@@ -78,23 +84,13 @@
 	  Bibliography
 	</div>
 	  
+	<metal:slot define-slot="content">
 	<div id="content">
-	  <div tal:content="structure context/@@details"/>
+	  <div tal:content="structure provider:pagelet"/>
 	</div>
+	</metal:slot>
 	  
-	<div id="tabbedcontent-wrapper">
-	  <div id="itemtabs">
-	    <ul tal:content="structure provider:itemtabs">
-	      <li class="active"><a href="">Active</a></li>
-	    </ul>
-	  </div>
-	  <br class="cleaner"/>
-	  <div id="tabbedcontent">
-	    <div tal:content="structure provider:pagelet">Page Content</div>
-	  </div>
-	</div>
-	
-      </div>
+      </div><!-- content-wrapper -->
       
       <div id="footer" tal:content="structure context/@@footerInfo|nothing"></div>
 

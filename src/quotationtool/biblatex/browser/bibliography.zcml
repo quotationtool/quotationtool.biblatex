@@ -4,13 +4,22 @@
     xmlns:z3c='http://namespaces.zope.org/z3c'
     i18n_domain='quotationtool.biblatex'>
 
-  <z3c:pagelet
+  <zope:view
+      name="label"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
       for="..interfaces.IBibliography"
+      factory=".bibliography.LabelView"
+      permission="zope.View"
+      />
+
+  <z3c:pagelet
       name="index.html"
-      layer=".layer.IBochumBrowserLayer"
+      for="..interfaces.IBibliography"
+      layer="z3c.layer.pagelet.IPageletBrowserLayer"
       permission="zope.View"
       class=".bibliography.Container"
       />
+  <!--layer=".layer.IBochumBrowserLayer"-->
   <z3c:template
       for=".bibliography.Container"
       template="bibliography_container.pt"

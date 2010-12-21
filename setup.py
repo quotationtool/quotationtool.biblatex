@@ -56,6 +56,11 @@ setup(
         'zope.dublincore',
         'zope.location',
         'zope.app.schema',
+        'zope.security',
+        'zope.securitypolicy',
+        'zope.authentication',
+        'zope.pluggableauth',
+        'zope.app.authentication',
 
         'z3c.template',
         'z3c.macro',

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<metal:block 
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    use-macro="macro:quotationtool-layout">
+
+  <metal:macro fill-slot="content">
+
+	<div id="content">
+	  <div tal:content="structure context/@@details"/>
+	</div>
+
+	<div id="tabbedcontent-wrapper">
+	  <div id="itemtabs">
+	    <ul tal:content="structure provider:itemtabs">
+	      <li class="active"><a href="">Active</a></li>
+	    </ul>
+	  </div>
+	  <br class="cleaner"/>
+	  <div id="tabbedcontent">
+	    <div tal:content="structure provider:pagelet">Page Content</div>
+	  </div>
+	</div><!-- tabbedcontent-wrapper -->
+
+  </metal:macro><!-- end filling content slot -->
+
+</metal:block>

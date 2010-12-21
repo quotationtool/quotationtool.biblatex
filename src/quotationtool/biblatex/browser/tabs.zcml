@@ -29,11 +29,21 @@
       for="..interfaces.IBiblatexEntry"
       title="[itemtabs-biblatexentry-edit] Edit"
       name="biblatexentry-edit"
+      class=".tabs.BiblatexEntryEditTab"
       permission="zope.View"
       layer=".layer.IBochumBrowserLayer"
       manager=".tabs.IItemTabs"
       viewName="edit.html"
       weight="40"
+      />
+  <adapter
+      for="..interfaces.IBiblatexEntry
+	   zope.publisher.interfaces.browser.IBrowserRequest
+	   .biblatexentry.IEditStep
+	   z3c.menu.ready2go.interfaces.IMenuManager
+	   .tabs.IBiblatexEntryEditTab"
+      provides="z3c.menu.ready2go.interfaces.ISelectedChecker"
+      factory="z3c.menu.ready2go.checker.TrueSelectedChecker"
       />
 
 

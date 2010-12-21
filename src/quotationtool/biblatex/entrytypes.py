@@ -1,6 +1,7 @@
 from ConfigParser import ConfigParser
 import os
 from zope.interface import implements
+import zope.component
 from zope.component.factory import Factory
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
@@ -10,8 +11,81 @@ from interfaces import IEntryTypesConfiguration, IBiblatexEntryType
 from i18n import _
 
 
-def _fields(flds):
+def getEntryTypeSafely(name):
+    """ A convenient method that returns an entry type object for a
+    given name. This method should be used outsite of this module to
+    safely get the entry type object for a given name. It makes code
+    outsite of this module independent of the the internals of this
+    module.  (It asserts that the utilities for the various entry
+    types are always registered.)
+
+       >>> from quotationtool.biblatex.entrytypes import getEntryTypeSafely
+       >>> getEntryTypeSafely('Book')
+       Traceback (most recent call last):
+       ComponentLookupError: (<InterfaceClass quotationtool.biblatex.interfaces.IEntryTypesConfiguration>, '')
+
+    It needs the configuration utility registered:
+
+       >>> from zope.component import provideUtility
+       >>> from quotationtool.biblatex.entrytypes import EntryTypesConfiguration
+       >>> from quotationtool.biblatex.interfaces import IEntryTypesConfiguration
+       >>> conf = EntryTypesConfiguration()
+       >>> provideUtility(conf, IEntryTypesConfiguration, '')
+
+    Now we can use the function:
+       
+       >>> getEntryTypeSafely('Book')
+       <quotationtool.biblatex.entrytypes.BiblatexEntryType object at 0x...>
+       >>> getEntryTypeSafely('Book').value
+       'Book'
+
     """
+    
+    _type = zope.component.queryUtility(IBiblatexEntryType,
+                                         name, None)
+    if _type is not None:
+        return _type
+    conf = zope.component.getUtility(IEntryTypesConfiguration)
+    conf.register()
+    return zope.component.getUtility(IBiblatexEntryType,
+                                     name)
+    
+
+def getRequiredTuple(req):
+    """ A convenient method that returns tuple of fields for a required
+    list list.
+
+        >>> from quotationtool.biblatex.entrytypes import getRequiredTuple
+        >>> getRequiredTuple([['author', 'editor'], ['title'], ['date']])
+        ('author', 'editor', 'title', 'date')
+
+    """
+
+    t = ()
+    for alternatives in req:
+        for f in alternatives:
+            t += (f,)
+    return t
+
+
+def getTuple(flds):
+    """ A convenient method that returns a tuple of fields for a list
+    of fields.
+
+        >>> from quotationtool.biblatex.entrytypes import getTuple
+        >>> getTuple([u'subtitle', 'titleaddon'])
+        (u'subtitle', 'titleaddon')
+
+     """
+
+    t = ()
+    for fld in flds:
+        t += (fld,)
+    return t
+
+
+def _fields(flds):
+    """ Used for parsing the ini file.
 
     For a string like:
 
@@ -30,8 +104,9 @@ def _fields(flds):
 
     return [str(fld) for fld in flds.split()]
 
+
 def _requiredFields(flds):
-    """
+    """ Used for parsing the ini file.
 
     For a string like:
 
@@ -61,36 +136,6 @@ def _requiredFields(flds):
             part = u''
     return [alt.split() for alt in l]
 
-
-def getRequiredTuple(req):
-    """Return tuple of fields for a required list list.
-
-        >>> from quotationtool.biblatex.entrytypes import getRequiredTuple
-        >>> getRequiredTuple([['author', 'editor'], ['title'], ['date']])
-        ('author', 'editor', 'title', 'date')
-
-    """
-
-    t = ()
-    for alternatives in req:
-        for f in alternatives:
-            t += (f,)
-    return t
-
-def getTuple(flds):
-    """Return a tuple of fields for a list of fields.
-
-        >>> from quotationtool.biblatex.entrytypes import getTuple
-        >>> getTuple([u'subtitle', 'titleaddon'])
-        (u'subtitle', 'titleaddon')
-
-     """
-
-    t = ()
-    for fld in flds:
-        t += (fld,)
-    return t
-    
 
 class EntryTypesConfiguration(object):
     """A utility that parses a entry types configuration.

@@ -26,13 +26,33 @@
       for="*"
       title="[mainnav-bibliography] Bibliography"
       name="bibliography"
-      class=".nav.MainNavItem"
+      class=".nav.BibliographyMainNavItem"
       permission="zope.View"
       layer=".layer.IBochumBrowserLayer"
       manager=".nav.IMainNav"
       viewName="bibliography/"
       weight="50"
       subMenuProviderName="bibliographysubnav"
+      />
+  <!-- adaptation: context, request, view, menu, item. See
+       z3c.menu.ready2go.checker for more info. -->
+  <adapter
+      for="..interfaces.IBibliography
+	   zope.publisher.interfaces.browser.IBrowserRequest
+	   zope.interface.Interface
+	   .nav.IMainNav
+	   .nav.IBibliographyMainNavItem"
+      provides="z3c.menu.ready2go.interfaces.ISelectedChecker"
+      factory="z3c.menu.ready2go.checker.TrueSelectedChecker"
+      />
+  <adapter
+      for="..interfaces.IBiblatexEntry
+	   zope.publisher.interfaces.browser.IBrowserRequest
+	   zope.interface.Interface
+	   .nav.IMainNav
+	   .nav.IBibliographyMainNavItem"
+      provides="z3c.menu.ready2go.interfaces.ISelectedChecker"
+      factory="z3c.menu.ready2go.checker.TrueSelectedChecker"
       />
 
   <z3c:siteMenuItem

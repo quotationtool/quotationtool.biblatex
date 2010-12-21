@@ -21,6 +21,10 @@ class IEntryTypesConfiguration(zope.interface.Interface):
         """ Register the utilities."""
 
 
+# Also have a look at the getEntryTypeSafely(name) method in the
+# entrytypes module.
+
+
 class IBiblatexEntryType(zope.interface.Interface):
 
     name = zope.schema.ASCII(
@@ -192,6 +196,8 @@ class IBiblatexEntry(IContained, ientry.IEntry):
             >>> IBiblatexEntry.validateInvariants(b)
 
         """
+        # We cannot use entrytypes.getEntryTypeSafely() here because
+        # of circular imports. So we do the same thing.
         _type = zope.component.queryUtility(
             IBiblatexEntryType, entry.entry_type, default = None)
         if _type is None:

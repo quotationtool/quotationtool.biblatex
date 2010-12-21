@@ -9,6 +9,7 @@
     <include package="zope.security"/>
     <include package="zope.dublincore"/>
     <include package="zope.app.schema"/>
+    <include package="zope.securitypolicy"/>
 
 
 </configure>

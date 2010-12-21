@@ -10,9 +10,9 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from quotationtool.biblatex import interfaces, ientry
 from quotationtool.biblatex.i18n import _
-from quotationtool.biblatex.entrytypes import getRequiredTuple, getTuple
-
+from quotationtool.biblatex.entrytypes import getRequiredTuple, getTuple, getEntryTypeSafely
 from quotationtool.biblatex.biblatexentry import BiblatexEntry
+from quotationtool.biblatex.browser.skin import ITabbedContentLayout
 
 
 class DetailsView(BrowserView):
@@ -41,6 +41,9 @@ class SimpleAddForm(form.AddForm):
     
     """
 
+    label = _('biblatexentry-simpleaddform-label',
+              u"Add Entry")
+
     def __init__OFF(self, context, request):
         super(SimpleAddForm, self).__init__(context, request)
         self.fields = field.Fields(interfaces.IBiblatexEntry).select('entry_type')
@@ -59,16 +62,28 @@ class SimpleAddForm(form.AddForm):
 
     def nextURL(self):
         return absoluteURL(self._obj, self.request)
-    
 
-class EditEntryTypeStep(step.EditStep):
+
+class IEditStep(zope.interface.Interface):
+    """ A marker interface for steps that are part of the edit wizard."""
+    pass
+
+
+class EditStep(step.EditStep):
+    """ A base class for steps part of the edit wizard."""
+
+    zope.interface.implements(ITabbedContentLayout,
+                              IEditStep)
+
+
+class EditEntryTypeStep(EditStep):
 
     label = _('zblx-editentrytypestep-label', u"Entry Type")
 
     fields = field.Fields(interfaces.IBiblatexEntry['entry_type'])
 
 
-class EditRequiredStep(step.EditStep):
+class EditRequiredStep(EditStep):
 
     label = _('zblx-editrequiredstep-label', u"Required")
 
@@ -76,17 +91,13 @@ class EditRequiredStep(step.EditStep):
 
     def __init__(self, context, request, wizard):
         # set fields
-        _type = zope.component.queryUtility(
-            interfaces.IBiblatexEntryType,
-            getattr(context, 'entry_type'))
-        if _type is None:
-            raise Exception(context)
+        _type = getEntryTypeSafely(getattr(context, 'entry_type'))
         flds = getRequiredTuple(_type.required)
         self.fields = field.Fields(interfaces.IBiblatexEntry).select(*flds)
         super(EditRequiredStep, self).__init__(context, request, wizard)
 
 
-class EditOptionalStep(step.EditStep):
+class EditOptionalStep(EditStep):
 
     label = _('zblx-editoptionalstep-label', u"Optional")
 
@@ -94,11 +105,7 @@ class EditOptionalStep(step.EditStep):
 
     def __init__(self, context, request, wizard):
         # set fields
-        _type = zope.component.queryUtility(
-            interfaces.IBiblatexEntryType,
-            getattr(context, 'entry_type'))
-        if _type is None:
-            raise Exception(context)
+        _type = getEntryTypeSafely(getattr(context, 'entry_type'))
         flds = getTuple(getattr(_type, self._myflds))
         self.fields = field.Fields(interfaces.IBiblatexEntry).select(*flds)
         super(EditOptionalStep, self).__init__(context, request, wizard)
@@ -159,7 +166,10 @@ class IEditWizard(zope.interface.Interface):
 
 class EditWizard(wizard.Wizard):
     
-    zope.interface.implements(IEditWizard)
+    zope.interface.implements(IEditWizard,
+                              ITabbedContentLayout,
+                              )
+
 
     label = _('zblx-editwizard-label',
               u"Edit Bibliography Entry")
@@ -185,6 +195,8 @@ class EditWizard(wizard.Wizard):
 class HtmlBibtex(BrowserPagelet):
     """A BibTeX representation of the entry embedded in the html
     layout."""
+
+    zope.interface.implements(ITabbedContentLayout)
 
     def getBibtex(self):
         return interfaces.IEntryBibtexRepresentation(self.context).getBibtex()

@@ -4,6 +4,7 @@
     xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="quotationtool.biblatex">
 
+
   <!-- skin -->
   <interface
       interface=".skin.IBochumBrowserSkin"
@@ -20,6 +21,11 @@
       macro="quotationtool-layout"
       template="layout.pt"
       layer=".layer.IBochumBrowserLayer"
+      />
+  <z3c:layout
+      for=".skin.ITabbedContentLayout"
+      layer=".layer.IBochumBrowserLayer"
+      template="layout_tabbedcontent.pt"
       />
   <resourceLibrary
       name="quotationtool.biblatex"
@@ -40,6 +46,20 @@
       layer=".layer.IBochumBrowserLayer"
       />
 
+  <include package=".authentication"/>
+  <!--z3c:pagelet
+      name="loginForm.html"
+      for="*"
+      class=".auth.LoginPagelet"
+      permission="zope.View"
+      layer=".layer.IBochumBrowserLayer"
+      />
+  <z3c:template
+      for=".auth.LoginPagelet"
+      layer=".layer.IBochumBrowserLayer"
+      template="login.pt"
+      /-->
+      
   <!-- default label and details views -->
   <view
       name="label"

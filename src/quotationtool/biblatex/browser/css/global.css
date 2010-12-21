@@ -27,16 +27,58 @@ a:active { color: #034ea2; }
 
 /* mainnav */
 /*#mainnav {min-width:780px;} makes a mess with IE7 */
-#mainnav ul, #mainnav ul ul { float:left; list-style:none;} /*keine height, wg. pixelabstand unten*/
-#mainnav ul li {float:left; background:url(++resource++quotationtool.biblatex.images/mainnav-right.gif) no-repeat top right;}
-#mainnav li a {display:block; padding:0.5em 2em 0.6em 1em; font-size:0.7em; font-weight:bold; color:#20344a; background:url(++resource++quotationtool.biblatex.images/mainnav-left.gif) no-repeat top left; text-decoration:none;}/*display: block --> gesamte Schaltflaeche anklickbar; height-Angabe zerlegt den IE*/
-#mainnav li.current {background:url(++resource++quotationtool.biblatex.images/mainnav-right1.gif) no-repeat top right;}
-#mainnav li.current .active {padding:0.5em 2em 0.6em 1em; font-size:0.7em; font-weight:bold; color:#fff; background:url(++resource++quotationtool.biblatex.images/mainnav-left1.gif) no-repeat top left; border-bottom:1px solid #6985a5;}
+#mainnav ul, #mainnav ul ul { 
+    float:left; 
+    list-style:none;
+} /*keine height, wg. pixelabstand unten*/
+#mainnav ul li {
+    float:left; 
+    background:url(++resource++quotationtool.biblatex.images/mainnav-right.gif) no-repeat top right;
+}
+#mainnav li a {
+    display:block; 
+    padding:0.5em 2em 0.6em 1em; 
+    font-size:0.7em; 
+    font-weight:bold; 
+    color:#20344a; 
+    background:url(++resource++quotationtool.biblatex.images/mainnav-left.gif) no-repeat top left; text-decoration:none;
+}/*display: block --> gesamte Schaltflaeche anklickbar; height-Angabe zerlegt den IE*/
+#mainnav li.selected {
+    background:url(++resource++quotationtool.biblatex.images/mainnav-right1.gif) no-repeat top right;
+}
+#mainnav li.selected .active {
+    padding:0.5em 2em 0.6em 1em; 
+    font-size:0.7em; 
+    font-weight:bold; 
+    color:#fff; 
+    background:url(++resource++quotationtool.biblatex.images/mainnav-left1.gif) no-repeat top left; 
+    border-bottom:1px solid #6985a5;
+}
 
-#mainnav ul ul {position:absolute; left:0px; height:2em;}
-#mainnav ul li li {float:left;background:none;}/*background:none ist wichtig, da sonst Reiter erscheinen*/
-#mainnav li li a, #mainnav li li div {display:block; padding:0.4em 0.5em 0.25em 1em; font-size:0.7em; font-weight:bold; color:#fff; text-decoration:none; background:none;}
-#mainnav li li.current2 {color:#ffff00; font-size:0.7em; font-weight:bold; padding:0.4em 0.5em 0.25em 1em;}
+#mainnav ul ul {
+    position:absolute; 
+    left:0px; height:2em;
+}
+#mainnav ul li li {
+    float:left;
+    background:none;
+}/*background:none ist wichtig, da sonst Reiter erscheinen*/
+#mainnav li li a, 
+#mainnav li li div {
+    display:block; 
+    padding:0.4em 0.5em 0.25em 1em; 
+    font-size:0.7em; 
+    font-weight:bold; 
+    color:#fff; 
+    text-decoration:none; 
+    background:none;
+}
+#mainnav li li.selected {
+    color:#ffff00; 
+    font-size:0.7em; 
+    font-weight:bold; 
+    padding:0.4em 0.5em 0.25em 1em;
+}
 
 #bgmainnav {left:0; background-color:#6985a5; min-width:780px; width:99.9%; height:1.5em; border-left:1px solid #a9bcd5;}
 
