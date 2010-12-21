@@ -23,6 +23,30 @@ class DetailsView(BrowserView):
     def __call__(self):
         return self.template()
 
+    def formatted(self):
+        return None
+
+    def getFieldTuples(self):
+        iface = interfaces.IBiblatexEntry
+        value_adapter = interfaces.IEntryBibtexRepresentation(self.context)
+        _type = getEntryTypeSafely(getattr(self.context, 'entry_type'))
+        tuples = [('entry_type', 
+                   iface['entry_type'].title, 
+                   getattr(self.context, 'entry_type'))
+                  ]
+        flds = getRequiredTuple(_type.required)
+        flds += getTuple(_type.optional)
+        for fld in flds:
+            tuples.append((fld, 
+                           iface[fld].title,
+                           value_adapter.getField(fld))
+                          )
+        tuples.append(('Id',
+                       iface['__name__'].title,
+                       self.context.__name__
+                       ))
+        return tuples
+   
 
 class LabelView(BrowserView):
     """Label for this item."""

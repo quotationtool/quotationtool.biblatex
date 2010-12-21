@@ -1,4 +1,23 @@
-<pre>
-    TODO
-</pre>
-	    
+<div class="biblatexentry_formatted"
+     tal:content="view/formatted|default">
+  No formatted string available
+</div>
+
+<div class="biblatexentry_fieldvalues">
+  <table>
+    <tal:block tal:repeat="field view/getFieldTuples">
+      <tr tal:condition="python:field[2]">
+	<td>
+	  <span class="fieldname" 
+		tal:content="python:field[0]">entry_type</span>
+	  (<span class="fieldtitle" 
+	         tal:content="python:field[1]">BibLaTeX Entry Type</span>):
+	</td>
+	<td>
+	  <span class="fieldvalue"
+		tal:content="python:field[2]">Book</span>
+	</td>
+      </tr>
+    </tal:block>
+  </table>
+</div>
