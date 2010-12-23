@@ -5,12 +5,14 @@ from zope.component.testing import setUp, tearDown, PlacelessSetup
 import zope.interface
 import zope.component
 from zope.configuration.xmlconfig import XMLConfig, xmlconfig
-
+import zope.publisher.browser
+import z3c.form.interfaces
 import z3c.layer
 
 import quotationtool.biblatex
 from quotationtool.biblatex.browser import skin
 from quotationtool.biblatex.browser import bibliography
+from quotationtool.biblatex.browser import biblatexentry
 
 
 def setUpZCML(test):
@@ -37,43 +39,62 @@ def setUpZCML(test):
     XMLConfig('tabs.zcml', quotationtool.biblatex.browser)()
     return
 
+
+def generateContent():
+    biblio = quotationtool.biblatex.bibliography.Bibliography()
+    kdu = quotationtool.biblatex.biblatexentry.BiblatexEntry()
+    kdu.entry_type = 'Book'
+    kdu.author = [u"Kant, Immanuel"]
+    kdu.title = u"Kritik der Urteilskraft"
+    kdu.date = u"1790"
+    biblio['kdu'] = kdu
+    assert(kdu.__name__ == 'kdu')
+    assert(kdu.__parent__ == biblio)
+    return biblio
+        
+
 class SkinTests(PlacelessSetup, unittest.TestCase):
     
     def testLayer(self):
         pass
 
 
-import zope.publisher.browser
-import z3c.form.interfaces
 class TestRequest(zope.publisher.browser.TestRequest):
-    zope.interface.implements(z3c.form.interfaces.IFormLayer)
+    # we have to implement the layer interface which the templates and
+    # layout are registered for. See the skin.txt file in the
+    # zope.publisher.browser module.
+    zope.interface.implements(
+        z3c.form.interfaces.IFormLayer,
+        quotationtool.biblatex.browser.layer.IBochumBrowserLayer)
 
 
-class WizardTests(PlacelessSetup, unittest.TestCase):
+
+class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
-        super(WizardTests, self).setUp()
-        quotationtool.biblatex.tests.setUpRegistration(self) #setUpZCML(self)
-
-    def generateContent(self):
-        biblio = quotationtool.biblatex.bibliography.Bibliography()
-        kdu = quotationtool.biblatex.biblatexentry.BiblatexEntry()
-        kdu.entry_type = 'Book'
-        kdu.author = [u"Kant, Immanuel"]
-        kdu.title = u"Kritik der Urteilskraft"
-        kdu.date = u"1790"
-        biblio['kdu'] = kdu
-        assert(kdu.__name__ == 'kdu')
-        assert(kdu.__parent__ == biblio)
-        self._sample_book = kdu
-        
+        super(BiblatexEntryTests, self).setUp()
+        setUpZCML(self)
 
     def tearDown(self):
         tearDown(self)
 
+    def testViews(self):
+        sample_book = generateContent()['kdu']
+        request = TestRequest()
+        view = biblatexentry.DetailsView(sample_book, request)
+        assert(type(view()) == unicode)
+        view = biblatexentry.LabelView(sample_book, request)
+        assert(view())
+        view = biblatexentry.PlainBibtex(sample_book, request)
+        assert(view())
+
+    def testPagelets(self):
+        sample_book = generateContent()['kdu']
+        request = TestRequest()
+        view = biblatexentry.HtmlBibtex(sample_book, request)
+        assert(view.render())
+
     def testEditWizard(self):
-        self.generateContent()
-        from quotationtool.biblatex.browser import biblatexentry
         import z3c.wizard
         from zope.publisher.interfaces.browser import IBrowserRequest
         zope.component.provideAdapter(
@@ -137,14 +158,15 @@ class WizardTests(PlacelessSetup, unittest.TestCase):
             name = 'general'
             )
         from z3c.formui.interfaces import IDivFormLayer
+        sample_book = generateContent()['kdu']
         request = TestRequest()
         zope.interface.alsoProvides(request, IDivFormLayer)
         # play with the wizard
-        wizard = biblatexentry.EditWizard(self._sample_book, request)
-        wizard.__parent__ = self._sample_book
+        wizard = biblatexentry.EditWizard(sample_book, request)
+        wizard.__parent__ = sample_book
         wizard.__name__ = u"wizard"
         ob, names = wizard.browserDefault(request)
-        
+
 
 def test_suite():
     return unittest.TestSuite((
@@ -153,5 +175,8 @@ def test_suite():
                                  setUp = setUpZCML,
                                  tearDown = tearDown),
             unittest.makeSuite(SkinTests),
-            unittest.makeSuite(WizardTests),
+            unittest.makeSuite(BiblatexEntryTests),
             ))
+
+if __name__ == "__main__":
+    unittest.main(defaultTest='test_suite')

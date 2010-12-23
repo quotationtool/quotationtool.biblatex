@@ -61,6 +61,7 @@ setup(
         'zope.authentication',
         'zope.pluggableauth',
         'zope.app.authentication',
+        'zope.traversing',
 
         'z3c.template',
         'z3c.macro',
@@ -77,7 +78,6 @@ setup(
         'lxml >= 2.0.0',
 
         'zope.app.pagetemplate',
-        'zope.traversing',
         'zope.viewlet',
         'zope.app.component',
         ],
