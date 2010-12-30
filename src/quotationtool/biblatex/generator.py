@@ -8,56 +8,92 @@ import tempfile, shutil
 import interfaces
 
 
-class EntryGenerator(object):
+def _strip(s):
+    """ Remove some characters we don't want in a filesystem
+
+        >>> from quotationtool.biblatex.generator import _strip
+        >>> _strip('39457akgfh_=()')
+        '39457akgfh'
+
+    """
+    return ''.join(c for c in s if ((ord(c)>=48 and ord(c)<=57) or 
+                                    (ord(c)>=65 and ord(c)<=90) or
+                                    (ord(c)>=97 and ord(c)<=122)))
+
+def disableLigature(s):
+    """ Disbale latex's ligatures by adding {} between characters.
+
+        >>> from quotationtool.biblatex.generator import disableLigature
+        >>> disableLigature(u'fffi')
+        u'f{}f{}f{}i{}'
+
+    """
+
+    return ''.join(c + '{}' for c in s)
+
+
+class BiblatexEntryGenerator(object):
     """See interfaces.IFormattedEntryGenerator and generator.txt for
     documentation and latex tests.
 
 
-    Testing Internals
-    ~~~~~~~~~~~~~~~~~
-        
-    If you are not interested in internals, see generator.txt for usage.
+    Testing setUp() and tearDown(). See generator.txt for testing latex.
+
+    First we create an entry object.
+
+        >>> from quotationtool.biblatex.latextests import generateContent
+        >>> mybook = generateContent(object())
+
+    Let's see if a tex file is created.
 
         >>> from quotationtool.biblatex import generator
         >>> import os
-        >>> g = generator.EntryGenerator(object())
+        >>> g = generator.BiblatexEntryGenerator(mybook)
+        >>> g.getBibliographicEntry()
+        Traceback (most recent call last):
+        ...
+        Exception: Not yet! call generate() before!
 
-        >>> from quotationtool.biblatex.biblatexentry import BiblatexEntry
+        >>> g.generate()
+        Traceback (most recent call last):
+        ...
+        Exception: Not Yet! call setUp() before!
 
-        >>> mybook = BiblatexEntry()
-        >>> mybook.__name__ = 'Adelung1811'
-        >>> mybook.entry_type = 'Book'
-        >>> mybook.author = [u"Adelung, Johann Christoph"]
-        >>> mybook.gender = u"sm"
-        >>> mybook.title = u'Grammatisch-kritisches W\\"{o}rterbuch'
-        >>> mybook.location = u"Wien"
-        >>> mybook.publilsher = u"Bauer"
-        >>> mybook.date = u"1811"
-        >>> mybook.volumes = u"4"
-        >>> mybook.pagination = 'column'
-        >>> mybook.url = u"http://mdz.bib-bvb.de/digbib/lexika/adelung/"
-        >>> mybook.urldate = u"2007-10-28"
-        >>> mybook.hyphenation = 'ngerman'
-        >>> mybook.keywords = u"QU"
-
-
-        Let's see if a tex file is created. Set some internal values of the
-        generator for that perpose. There is also a bib file latex/biblio.bib
-
-        >>> g.entry = mybook
-        >>> g.language = 'ngerman'
-        >>> g.citestyle = 'verbose'
-        >>> g.bibstyle = 'verbose'
-        >>> g._createTexFile()
-        >>> f = open(os.path.join(g.texdir, g.texfile))
+        >>> g.setUp('ngerman', 'style=verbose')
+        >>> fname = os.path.join(g.texdir, g.texfile)
+        >>> f = open(fname)
         >>> f.read()
         '%%...
         >>> f.close()
-        >>> shutil.rmtree(g.texdir)
+        >>> g.tearDown()
+        >>> f = open(fname)
+        Traceback (most recent call last):
+        ...
+        IOError: [Errno 2] No such file or directory: u'...'
 
+    Now let's see if temporary files are left over after destruction:
+
+        >>> g.setUp('ngerman', 'style=verbose')
+        >>> fname = os.path.join(g.texdir, g.texfile)
+        >>> f = open(fname)
+        >>> f.read()
+        '%%...
+        >>> f.close()
+        >>> del g
+        >>> f = open(fname)
+        Traceback (most recent call last):
+        ...
+        IOError: [Errno 2] No such file or directory: u'...'
+
+        g = generator.BiblatexEntryGenerator()
+        del g
+
+
+    For more testing see latextests and latex.txt
     """
 
     zope.interface.implements(interfaces.IFormattedEntryGenerator)
+    zope.component.adapts(interfaces.IBiblatexEntry)
 
     def getTag(self):
         self.timehash.update(str(self.time))
@@ -72,10 +108,11 @@ class EntryGenerator(object):
     htlatex_command = '/tmp/htlatex'
     tex4ht_command = 'tex4ht -cunihtf -utf8 -f$PATHSEPARATOR$TEXFILE'
     tex4ht_options = u'\\usepackage[xhtml,info,charset=utf8]{tex4ht}'
+    language = u"english"
+    style = u"style=verbose"
     texfile = u'entry.tex'
-    bibtag = None
-    citetag = None
-    citeagaintag = None
+    setup = False # set to True after setUp() and to False after tearDown()
+    parsed = False # set to True after generate()
 
     output_suffix = {'latex': '.dvi',
                      'bibtex': '.bbl',
@@ -83,61 +120,75 @@ class EntryGenerator(object):
                      'tex4ht': '.html',
                      }
 
-    def __init__(self, context = None):
+    def __init__(self, context):
         self.context = context
-        timehash = md5.new()
-        timehash.update(str(time.time()))
-        self.bibtag = timehash.hexdigest()
-        timehash.update(str(time.time()))
-        self.citetag = timehash.hexdigest()
-        timehash.update(str(time.time()))
-        self.citeagaintag = timehash.hexdigest()
-        # todo: ok with hashes?
-        self.bibtag = "BBBB"
-        #self.citetag = "CCCC"
-        self.citeagaintag = "AAAA"
-        
 
-    def generate(self, entry, language = None, bibstyle = None, citestyle = None):
-        self.entry = entry
-        self.language = language
-        self.bibstyle = bibstyle
-        self.citestyle = citestyle
-        
+    def __del__(self):
+        # remove temporary files
+        if self.setup:
+            self.tearDown()
+        #super(BiblatexEntryGenerator, self).__del__()
+
+    def setUp(self, language = None, style = None):
+        if self.setup:
+            raise Exception("generator already setup. Call tearDown() before setting up again!")
+        # set up language and style
+        if language is not None:
+            self.language = language
+        else:
+            pass # TODO
+        if style is not None:
+            self.style = style
+        else:
+            pass # TODO
+        # set up tags
+        tag = md5.new()
+        tag.update(str(self.language+self.style+'bibtag'))
+        self.bibtag = str(tag.hexdigest())
+        tag.update(str(self.language+self.style+'citetag'))
+        self.citetag = str(tag.hexdigest())
+        tag.update(str(self.language+self.style+'citeagaintag'))
+        self.citeagaintag = str(tag.hexdigest())
+        # create temporary texdir
+        self.texdir = tempfile.mkdtemp(
+            u"-zblx-" +
+            self.context.__name__ + u"-" +
+            self.language + u"-" +
+            _strip(self.style))
+        # create tex file
         self._createTexFile()
+        self.setup = True
+        self.parsed = False
+
+    def generate(self):
+        if not self.setup:
+            raise Exception("Not Yet! call setUp() before!")
         self._tex('latex')
         self._tex('bibtex')
         self._tex('latex')
         self._tex4ht()
         self._parse()
-        shutil.rmtree(self.texdir)
+        self.parsed = True
 
-    _texdir = None
-    def _getTexDir(self):
-        # create tempdir when called first time
-        if self._texdir is None:
-            self._texdir = tempfile.mkdtemp(
-                u"-zblx-" +
-                self.entry.__name__ + u"-" +
-                self.language + u"-" +
-                self.bibstyle + u"-" +
-                self.citestyle)
-        return self._texdir
-    texdir = property(_getTexDir)
+    def tearDown(self):
+        if not self.setup:
+            raise Exception("Not yet! call setup() before!")
+        shutil.rmtree(self.texdir)
+        self.setup = False
+        self.parsed = False
 
     def _createTexFile(self):
         try:
             tfile = open(os.path.join(os.path.dirname(__file__), self.tex_template))
-            d = dict(key = self.entry.__name__,
-                     bibtex = interfaces.IEntryBibtexRepresentation(self.entry).getBibtexWithReferences(),
+            d = dict(key = self.context.__name__,
+                     bibtex = interfaces.IEntryBibtexRepresentation(self.context).getBibtexWithReferences(),
                      tex4ht = self.tex4ht_options,
                      language = self.language,
                      bibliography = self.bibliography,
-                     citestyle = self.citestyle, 
-                     bibstyle = self.bibstyle,
-                     citetag = self.citetag,
-                     citeagaintag = self.citeagaintag,
-                     bibtag = self.bibtag) 
+                     style = self.style, 
+                     citetag = disableLigature(self.citetag),
+                     citeagaintag = disableLigature(self.citeagaintag),
+                     bibtag = disableLigature(self.bibtag)) 
             templ = string.Template(tfile.read())
             tex = templ.substitute(d)
             f = open(os.path.join(self.texdir, self.texfile) , 'wt')
@@ -146,7 +197,7 @@ class EntryGenerator(object):
         except Exception, err:
             # wouldn't it be good to write the err to a logger?
             msg = u"Creation of latex file failed!\n" + unicode(err)
-            raise Exception(msg)
+            raise interfaces.FormattingEntryException(msg)
 
     def getTexCommand(self, tex_command):
         cmd_template = getattr(self, tex_command+'_command')
@@ -176,23 +227,11 @@ class EntryGenerator(object):
                 ):
                 raise Exception("Output file not generated\n")
         except Exception, err:
-            # todo: raise FormattingEntryException
             msg = u"%s failed! _tex('%s')\n" % (tex_cmd, tex_cmd)
             msg += unicode(err)
             msg += tex_process.stdout.read()
             msg += tex_process.stderr.read()
-            raise Exception(msg)
-            
-    def _tex4htOFF(self):
-        cmd = "cd %s; %s" % (self.texdir, self.getTexCommand('tex4ht'))
-        out = u""
-        try:
-            out = os.system(cmd)
-        except Exception, err:
-            msg = u"tex4ht failed! (_tex4ht)\n"
-            msg += unicode(err)
-            msg += out
-            raise Exception(msg)
+            raise interfaces.FormattingEntryException(msg)
             
     def _tex4ht(self):
         cmd = "cd %s; %s" % (self.texdir, self.getTexCommand('tex4ht'))
@@ -211,7 +250,7 @@ class EntryGenerator(object):
         except Exception, err:
             msg = u"tex4ht failed! (_tex4ht)\n"
             msg += unicode(err)
-            raise Exception(msg)
+            raise interfaces.FormattingEntryException(msg)
 
     def _parse(self):
         f = codecs.open(os.path.join(self.texdir, self.texfile[:-4]+u".html"),
@@ -223,22 +262,25 @@ class EntryGenerator(object):
         self.citeagain = html.split(self.citeagaintag)[1]
 
     def getBibliographicEntry(self):
+        if not self.parsed:
+            raise Exception("Not yet! call generate() before!")
         bib = getattr(self, 'bib', None)
         if bib is None:
             raise Exception("generate() must be called before")
         return self.bib
 
     def getCitation(self):
+        if not self.parsed:
+            raise Exception("Not yet! call generate() before!")
         cite = getattr(self, 'cite', None)
         if cite is None:
             raise Exception("generate() must be called before")
         return self.cite
 
     def getCitationAgain(self):
+        if not self.parsed:
+            raise Exception("Not yet! call generate() before!")
         citeagain = getattr(self, 'citeagain', None)
         if citeagain is None:
             raise Exception("generate() must be called before")
         return self.citeagain
-
-    
-        

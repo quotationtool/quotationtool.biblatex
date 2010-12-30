@@ -1,0 +1,18 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="quotationtool">
+
+  <subscriber
+      for=".interfaces.IBiblatexEntry
+	   zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".formatted.setFormattedStrings"
+      trusted="True"
+      />
+  <subscriber
+      for=".interfaces.IBiblatexEntry
+	   zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".formatted.setFormattedStrings"
+      trusted="True"
+      />
+
+</configure>

@@ -25,7 +25,7 @@ a:active { color: #034ea2; }
 
 #login {float:right; font-size:0.7em; padding:0.5em 0 0 0; border-right:1em solid white;} /*Abstand zum re Rand funktioniert nur über padding, nicht right:0.75em*/
 
-/* mainnav */
+/* ---------- MAINNAV ---------- */
 /*#mainnav {min-width:780px;} makes a mess with IE7 */
 #mainnav ul, #mainnav ul ul { 
     float:left; 
@@ -89,18 +89,29 @@ a:active { color: #034ea2; }
 #nav2 li.current {font-size:0.7em; font-weight:bold; color:#ffff00; padding:0.4em 1em 0.25em 0.5em;}
 #direkthilfe {display:none; position:absolute; right:0.5em; top:11em; width:300px; z-index:10; padding:5px; font-size:0.7em; background-color:#ffffcc; border:1px solid #ccc; z-index:100;}
 
+
+/* --------- info1 ---------- */
+#info1 {
+    float:left; 
+    padding:1em 0.75em 0.75em 1em; 
+    font-size:0.7em;
+}
+/*Suchfeld - Systematische Suche*/
+#info1 input.f2 {
+    width:11.25em; 
+    height:1.25em; 
+    border:1px solid #ccc;
+}
+
+/* --------- CONTENT --------- */
+
 #content-wrapper {
     padding:1em 0.75em 0.75em 0.7em;
 }
-
-/*info1:Sprachauswahl, Suchanfrage, Meinten Sie...*/
-#info1 {float:left; padding:1em 0.75em 0.75em 1em; font-size:0.7em;}
-/*Suchfeld - Systematische Suche*/
-#info1 input.f2 {width:11.25em; height:1.25em; border:1px solid #ccc;}
-
 #content, #tabbedcontent {
     border: 1px solid #a9bcd5; 
     padding:0.5em 0.75em 1em 0.75em;
+    font-size: 0.7em;
 }
 
 #contentlabel {
@@ -115,6 +126,19 @@ a:active { color: #034ea2; }
     border-collapse:collapse;
 }
 
+#contentlabel h1,
+#content h1,
+#content h2,
+#content h3,
+#content h4,
+#tabbedcontent h1 {
+    font-size: 1.1em;
+}
+#content pre,
+#tabbedcontent pre {
+    font-size: 10pt;
+}
+
 #tabbedcontent-wrapper {
     margin-top: 2em;
 }
@@ -123,7 +147,51 @@ a:active { color: #034ea2; }
     
 }
 
+.required-info .required, 
+label .required {
+    color: darkorange;
+}
 
+.wizard {
+    border: 1px solid #a9bcd5; 
+}
+.wizard .header,
+.wizard .wizardMenu,
+.wizard .viewspace {
+    padding:0.5em 0.75em 0.5em 0.75em;
+}
+.wizard .header {
+    font-size: 1em;
+    font-weight: 600;
+    color: #444;
+    background-color: #dae5f0;    
+}
+.wizard .viewspace .label {
+    border-bottom: 1px solid #a9bcd5;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.wizard .viewspace .step .row .label {
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    border: 0;
+}
+.wizard .viewspace .step {
+    margin-top: 1em;
+}
+.wizard .viewspace .step .row {
+    margin-top: 0.5em;
+}
+.wizard .viewspace .buttons {
+    margin-top: 2em;
+}
+.wizard .viewspace .step .row .buttons {
+    margin-top: 0.2em;
+}
+
+
+/* -------------- TABS ------------- */
 #itemtabs {
     width:auto;/*44.9em*/ 
     margin:0;  
@@ -148,7 +216,7 @@ a:active { color: #034ea2; }
     color:#20344a; 
     background:url(++resource++quotationtool.biblatex.images/subtab-left1.gif) no-repeat top left; 
     text-decoration:none; 
-    margin-bottom:-1px;  
+    margin-bottom:0;/*-1px;*/  
     border-bottom:1px solid #a9bcd5;
 } /* margin-bottom:-1px --> IE6, einfache Linie unterhalb der inaktiven Buttons  */
 
@@ -161,5 +229,27 @@ a:active { color: #034ea2; }
 #itemtabs li.selected li a {background:none; padding:0.4em 0 0.25em 1em; border:0; background-image:none; font-weight:normal; text-decoration:underline;}
 #tab li li.selected2  {color:#20344a; font-size:0.7em; font-weight:bold; padding:0.4em 0 0.25em 1em;}
 
+
+
+
+
+/* quotationtool.biblatex specific css classes */
+
+
+.biblatexentry_formatted {
+    font-weight: 600;
+}
+
+.ecti-1000 {
+    font-style: italic;
+}
+
+.biblatexentry_fieldvalues {
+    margin-top: 2em;
+}
+
+td span.fieldname {
+    font-weight: 600;
+}
 
 /* ]]> */

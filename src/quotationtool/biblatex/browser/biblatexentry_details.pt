@@ -1,9 +1,11 @@
 <div class="biblatexentry_formatted"
-     tal:content="view/formatted|default">
+     tal:content="structure view/formatted|default">
   No formatted string available
 </div>
 
+
 <div class="biblatexentry_fieldvalues">
+  <h3 i18n:translate="">Field values (required and optional fields):</h3>
   <table>
     <tal:block tal:repeat="field view/getFieldTuples">
       <tr tal:condition="python:field[2]">

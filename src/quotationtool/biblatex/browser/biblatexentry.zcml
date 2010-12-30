@@ -23,6 +23,13 @@
       factory=".biblatexentry.DetailsView"
       permission="zope.View"
       />
+  <zope:view
+      name="list"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      for="..interfaces.IBiblatexEntry"
+      factory=".biblatexentry.ListView"
+      permission="zope.View"
+      />
 
   <z3c:pagelet
       name="bibtex.html"

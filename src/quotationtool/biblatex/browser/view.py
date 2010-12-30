@@ -9,5 +9,5 @@ class NotImplementedPagelet(BrowserPagelet):
 class NotImplementedView(BrowserView):
     
     def __call__(self):
-        return u"view '%s' NOT IMPLEMENTED context:%s request:%s" % (
+        return u"NOT IMPLEMENTED<!-- view '%s' NOT IMPLEMENTED context:%s request:%s -->" % (
             self.__name__, str(self.context), str(self.request))

@@ -86,16 +86,71 @@
       />
 
 
-  <!-- components related to generation (latexing) -->
+  <!-- components related to generation (latexing) of formatted
+       strings -->
 
-  <utility
-      factory=".generator.EntryGenerator"
-      name="quotationtool.biblatex.generator.EntryGenerator"
+  <adapter
+      for=".interfaces.IBiblatexEntry"
       provides=".interfaces.IFormattedEntryGenerator"
+      factory=".generator.BiblatexEntryGenerator"
       />
   
+  <class class=".formatted.LocalizedFormattedEntriesContainer">
+    <allow
+	interface="zope.container.interfaces.IReadContainer"/>
+    <require
+	permission="zope.ManageContent"
+	interface="zope.container.interfaces.IWriteContainer"/>
+  </class>
 
-  <!-- vocabularies related to biblatex fields-->
+  <adapter
+      factory=".formatted.annotation_factory"
+      trusted="true"
+      />
+
+  <class class=".formatted.LocalizedFormattedEntry">
+    <allow
+	interface=".iformatted.ILocalizedFormattedEntry"/>
+    <require
+	permission="zope.ManageContent"
+	set_schema=".iformatted.ILocalizedFormattedEntry"/>
+  </class>
+
+  <class class=".formatted.FormattedStringsContainer">
+    <allow
+	interface="zope.container.interfaces.IReadContainer"/>
+    <require
+	permission="zope.ManageContent"
+	interface="zope.container.interfaces.IWriteContainer"/>
+  </class>
+
+  <class class=".formatted.FormattedString">
+    <allow
+	interface=".iformatted.IFormattedString"/>
+    <require
+	permission="zope.ManageContent"
+	set_schema=".iformatted.IFormattedString"/>
+  </class>
+		
+  <adapter
+      for=".interfaces.IBiblatexEntry"
+      provides=".interfaces.IWriteFormatted"
+      factory=".formatted.WriteFormatted"
+      trusted="true"
+      />
+  <class class=".formatted.WriteFormatted">
+    <require
+	permission="zope.ManageContent"
+	interface=".interfaces.IWriteFormatted"/>
+  </class>
+
+  <adapter
+      for=".interfaces.IBiblatexEntry"
+      provides=".interfaces.IReadFormatted"
+      factory=".formatted.ReadFormatted"
+      />
+
+  <!-- vocabularies related to biblatex fields -->
 
   <utility
       component=".field.PaginationVocabulary"

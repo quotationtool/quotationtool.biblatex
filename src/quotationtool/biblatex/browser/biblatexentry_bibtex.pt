@@ -1,5 +1,13 @@
 <div i18n:domain="quotationtool.biblatex">
-  <pre 
+  <pre
       tal:content="view/getBibtex">
   </pre>
+</div>
+
+<div>
+  <a class="internal"
+     href="@@bibtex.bib"
+     tal:attributes="href string: ${context/@@absolute_url}/@@bibtex.bib">
+    View as plain BibTeX
+  </a>
 </div>

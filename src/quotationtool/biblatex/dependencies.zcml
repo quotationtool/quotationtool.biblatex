@@ -7,10 +7,10 @@
     
     <include package="zope.component"/>
     <include package="zope.security"/>
+    <include package="zope.annotation"/>
     <include package="zope.dublincore"/>
     <include package="zope.app.schema"/>
     <include package="zope.securitypolicy"/>
-    <include package="zope.annotation"/>
     <include package="zope.traversing"/>
 
 

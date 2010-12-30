@@ -1,0 +1,64 @@
+First we need some sample content.
+
+>>> from quotationtool.biblatex.latextests import generateContent
+>>> mybook = generateContent(object())
+
+Generator
+---------
+
+The generator is an adapter:
+
+>>> from quotationtool.biblatex.interfaces import IFormattedEntryGenerator
+>>> g = IFormattedEntryGenerator(mybook)
+
+We have to call setUp() and generate() before we can get the formatted
+bibliographic entry or citation or repeated citation. The setUp method
+takes some parameters to set language and style.
+
+>>> g.setUp(language = 'ngerman', style = 'style=verbose')
+>>> g.generate()
+>>> g.getCitation()
+u'...Adelung...'
+
+>>> g.getBibliographicEntry()
+u'...'
+
+>>> g.getCitationAgain()
+u'...'
+
+After getting the formatted strings it is recommended to tear down the
+generator in order to delete temporary files or call __del__:
+
+>>> g.tearDown()
+
+We can also setup with using default values 
+
+>>> g.setUp()
+>>> g.generate()
+>>> del g
+
+
+Subscriber
+----------
+
+>>> from quotationtool.biblatex.interfaces import IReadFormatted
+>>> from quotationtool.biblatex.bibliography import Bibliography
+>>> IReadFormatted(mybook).getCitation() is None
+True
+
+>>> from quotationtool.biblatex.formatted import setFormattedStrings
+>>> setFormattedStrings(mybook, object())
+>>> IReadFormatted(mybook).getCitation() is None
+False
+
+The subscriber is called when a biblatex entry object is added
+
+>>> mybook2 = generateContent(object())
+>>> IReadFormatted(mybook2).getCitation() is None
+True
+>>> biblio = Bibliography()
+>>> biblio['adelung'] = mybook2
+>>> IReadFormatted(mybook2).getCitation() is None
+False
+>>> IReadFormatted(mybook2).getCitation()
+u'...Adelung...'

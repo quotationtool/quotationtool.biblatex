@@ -82,9 +82,9 @@ class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
         sample_book = generateContent()['kdu']
         request = TestRequest()
         view = biblatexentry.DetailsView(sample_book, request)
-        assert(type(view()) == unicode)
+        self.assertTrue(type(view()) == unicode)
         view = biblatexentry.LabelView(sample_book, request)
-        assert(view())
+        self.assertTrue(view())
         view = biblatexentry.PlainBibtex(sample_book, request)
         assert(view())
 

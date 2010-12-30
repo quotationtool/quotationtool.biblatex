@@ -1,7 +1,6 @@
 import zope.interface
 import zope.component
 from zope.container.interfaces import IContainer, IObjectAddedEvent
-#from zope.app.container.interfaces import IObjectAddedEvent
 from zope.location.interfaces import IPossibleSite
 import zope.event
 from zope.container.btree import BTreeContainer

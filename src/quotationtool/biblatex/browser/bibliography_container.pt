@@ -1,28 +1,18 @@
-<div i18n:domain="quotationtool.biblatex">
-  
-  <h1 i18n:translate="bibliography-container-label">Bibliography</h1>
-  
-  <div id="content">
-
-  <div class="bibliography-entries">
-    <tal:block repeat="entry view/getEntries">
-      <div class="odd" tal:condition="repeat/entry/odd">
-	<a 
-	    tal:attributes="href entry/@@absolute_url"
-	    tal:content="entry/@@list|default">
-	  Entry
-	</a>
-      </div>
-      <div class="even" tal:condition="repeat/entry/even">
-	<a 
-	    tal:attributes="href entry/@@absolute_url"
-	    tal:content="entry/@@list|default">
-	  Entry
-	</a>
-      </div>
-    </tal:block>
-  </div>
-  
-  </div>
-
+<div class="bibliography_container">
+  <tal:block repeat="entry view/getEntries">
+    <div class="odd" tal:condition="repeat/entry/odd">
+      <a 
+	  tal:attributes="href entry/@@list"
+	  tal:content="structure entry/@@list|default">
+	Entry
+      </a>
+    </div>
+    <div class="even" tal:condition="repeat/entry/even">
+      <a 
+	  tal:attributes="href entry/@@absolute_url"
+	  tal:content="structure entry/@@list|default">
+	Entry
+      </a>
+    </div>
+  </tal:block>
 </div>

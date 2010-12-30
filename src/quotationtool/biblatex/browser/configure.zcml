@@ -60,7 +60,7 @@
       template="login.pt"
       /-->
       
-  <!-- default label and details views -->
+  <!-- default label and details and list views -->
   <view
       name="label"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
@@ -70,6 +70,13 @@
       />
   <view
       name="details"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      for="*"
+      factory=".view.NotImplementedView"
+      permission="zope.View"
+      />
+  <view
+      name="list"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       for="*"
       factory=".view.NotImplementedView"

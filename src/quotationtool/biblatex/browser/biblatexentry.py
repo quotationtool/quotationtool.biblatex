@@ -13,6 +13,7 @@ from quotationtool.biblatex.i18n import _
 from quotationtool.biblatex.entrytypes import getRequiredTuple, getTuple, getEntryTypeSafely
 from quotationtool.biblatex.biblatexentry import BiblatexEntry
 from quotationtool.biblatex.browser.skin import ITabbedContentLayout
+from quotationtool.biblatex.formatted import getDefaultLanguage, getDefaultStyle
 
 
 class DetailsView(BrowserView):
@@ -24,7 +25,10 @@ class DetailsView(BrowserView):
         return self.template()
 
     def formatted(self):
-        return None
+        language = getDefaultLanguage(self.context)
+        style = getDefaultStyle(self.context)
+        rf = interfaces.IReadFormatted(self.context)
+        return rf.getCitation(language, style)
 
     def getFieldTuples(self):
         iface = interfaces.IBiblatexEntry
@@ -46,7 +50,17 @@ class DetailsView(BrowserView):
                        self.context.__name__
                        ))
         return tuples
-   
+
+
+class ListView(BrowserView):
+    """Representation for lists of similar objects."""
+
+    def __call__(self):
+        language = getDefaultLanguage(self.context)
+        style = getDefaultStyle(self.context)
+        rf = interfaces.IReadFormatted(self.context)
+        return rf.getCitation(language, style)
+        
 
 class LabelView(BrowserView):
     """Label for this item."""
@@ -56,14 +70,9 @@ class LabelView(BrowserView):
                u"Bibliographic Entry: $name",
                mapping = {'name': self.context.__name__})
     
-    
 
 class SimpleAddForm(form.AddForm):
-    """A very simple add form for entry type objects.
-
-        >>> from quotationtool.biblatex.
-    
-    """
+    """A very simple add form for entry type objects. """
 
     label = _('biblatexentry-simpleaddform-label',
               u"Add Entry")
@@ -196,7 +205,7 @@ class EditWizard(wizard.Wizard):
 
 
     label = _('zblx-editwizard-label',
-              u"Edit Bibliography Entry")
+              u"Edit Bibliographic Entry")
 
     def setUpSteps(self):
         return [

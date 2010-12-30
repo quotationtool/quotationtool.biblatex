@@ -26,13 +26,19 @@ def testZcml():
     Now we can test configure.zcml
 
        >>> XMLConfig('configure.zcml', quotationtool.biblatex)()
+       >>> XMLConfig('latex.zcml', quotationtool.biblatex)()
        >>> XMLConfig('site.zcml', quotationtool.biblatex)()
        >>> XMLConfig('user.zcml', quotationtool.biblatex)()
 
     """
 
+
 def setUpZcml(test):
     setUp(test)
+    XMLConfig('dependencies.zcml', quotationtool.biblatex)()
+    XMLConfig('configure.zcml', quotationtool.biblatex)()
+    # do not load latex.zcml because we don't want latex to be run
+
 
 def setUpRegistration(test):
     setUp(test)
@@ -108,6 +114,11 @@ def test_suite():
                                  ),
             doctest.DocTestSuite('quotationtool.biblatex.namechooser',
                                  setUp = setUpRegistration,
+                                 tearDown = tearDownRegistration,
+                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+                                 ),
+            doctest.DocTestSuite('quotationtool.biblatex.formatted',
+                                 setUp = setUpZcml,
                                  tearDown = tearDownRegistration,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
                                  ),
