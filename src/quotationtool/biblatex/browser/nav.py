@@ -1,27 +1,26 @@
 import zope.interface
 import zope.component
 from zope.viewlet.manager import ViewletManager
-from z3c.menu.ready2go import IGlobalMenu, ISiteMenu
+from z3c.menu.ready2go import ISiteMenu
 from z3c.menu.ready2go.manager import MenuManager
-from z3c.menu.ready2go.interfaces import IMenuManager
-from z3c.menu.ready2go.item import GlobalMenuItem, SiteMenuItem
-from zope.publisher.interfaces.browser import IBrowserRequest
+#from z3c.menu.ready2go.interfaces import IMenuManager
+#from z3c.menu.ready2go.item import GlobalMenuItem, SiteMenuItem
+#from zope.publisher.interfaces.browser import IBrowserRequest
 
 from quotationtool.biblatex import interfaces
+from quotationtool.skin.interfaces import ISubNavManager
+from quotationtool.skin.browser.nav import MainNavItem
 
 
-class IMainNav(IMenuManager):
-    """A manager for the main navigation."""
-
-MainNav = ViewletManager('mainnav', ISiteMenu,
-                      bases = (MenuManager,))
+class IBibliographyMainNavItem(zope.interface.Interface): 
+    """ A marker interface for the bibliography's item in the main navigation."""
+    pass
 
 
-IMainNav.implementedBy(MainNav)
+class BibliographyMainNavItem(MainNavItem):
+    """The bibliography navigation item in the main navigation."""
 
-
-class ISubNavManager(IMenuManager):
-    """A subnav manager."""
+    zope.interface.implements(IBibliographyMainNavItem)
 
 
 class IBibliographySubNav(ISubNavManager):
@@ -34,27 +33,3 @@ BibliographySubNav = ViewletManager('bibliographysubnav',
 IBibliographySubNav.implementedBy(BibliographySubNav)
 
 
-class MainNavItem(SiteMenuItem):
-    pass
-
-
-class IBibliographyMainNavItem(zope.interface.Interface): pass
-
-class BibliographyMainNavItem(MainNavItem):
-    """The bibliography navigation item in the main navigation."""
-
-    zope.interface.implements(IBibliographyMainNavItem)
-
-
-class ISearchSubNav(ISubNavManager):
-    """A manager for the search subnavigation."""
-
-SearchSubNav = ViewletManager('searchsubnav',
-                              ISiteMenu,
-                              bases = (MenuManager,))
-
-ISearchSubNav.implementedBy(SearchSubNav)
-
-
-class SearchMainNavItem(MainNavItem):
-    """The search navigation item in the main navigation."""

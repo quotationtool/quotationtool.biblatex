@@ -12,8 +12,8 @@ from quotationtool.biblatex import interfaces, ientry
 from quotationtool.biblatex.i18n import _
 from quotationtool.biblatex.entrytypes import getRequiredTuple, getTuple, getEntryTypeSafely
 from quotationtool.biblatex.biblatexentry import BiblatexEntry
-from quotationtool.biblatex.browser.skin import ITabbedContentLayout
 from quotationtool.biblatex.formatted import getDefaultLanguage, getDefaultStyle
+from quotationtool.skin.interfaces import ITabbedContentLayout
 
 
 class DetailsView(BrowserView):

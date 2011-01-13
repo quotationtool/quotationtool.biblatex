@@ -1,6 +1,6 @@
 import unittest
+import doctest
 import zope.testing
-from zope.testing import doctest
 from zope.component.testing import setUp, tearDown, PlacelessSetup
 import zope.interface
 import zope.schema
@@ -28,7 +28,6 @@ def testZcml():
        >>> XMLConfig('configure.zcml', quotationtool.biblatex)()
        >>> XMLConfig('latex.zcml', quotationtool.biblatex)()
        >>> XMLConfig('site.zcml', quotationtool.biblatex)()
-       >>> XMLConfig('user.zcml', quotationtool.biblatex)()
 
     """
 

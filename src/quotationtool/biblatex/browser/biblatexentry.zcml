@@ -35,12 +35,12 @@
       name="bibtex.html"
       for="..interfaces.IBiblatexEntry"
       class=".biblatexentry.HtmlBibtex"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       permission="zope.View"
       />
   <z3c:template
       for=".biblatexentry.HtmlBibtex"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       template="biblatexentry_bibtex.pt"
       />
   
@@ -48,7 +48,7 @@
       name="bibtex.bib"
       for="..interfaces.IBiblatexEntry"
       class=".biblatexentry.PlainBibtex"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       permission="zope.View"
       />
 
@@ -56,7 +56,7 @@
       for="..interfaces.IBibliography"
       name="addEntry.html"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       class=".biblatexentry.SimpleAddForm"
       />
 
@@ -65,77 +65,77 @@
       for="..interfaces.IBiblatexEntry"
       class=".biblatexentry.EditWizard"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="entry_type"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditEntryTypeStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="required"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditRequiredStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="optional"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditOptionalStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="publication_facts"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditPublicationFactsStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="roles"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditRolesStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="shortening"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditShorteningStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="sorting"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditSortingStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="linking"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditLinkingStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="compat"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditCompatStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="general"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditGeneralStep"
       permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
 
   <zope:adapter

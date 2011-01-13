@@ -1,6 +1,6 @@
 import unittest
+import doctest
 import zope.testing
-from zope.testing import doctest
 from zope.component.testing import setUp, tearDown, PlacelessSetup
 import zope.interface
 import zope.component
@@ -10,9 +10,11 @@ import z3c.form.interfaces
 import z3c.layer
 
 import quotationtool.biblatex
-from quotationtool.biblatex.browser import skin
+from quotationtool.biblatex import interfaces
 from quotationtool.biblatex.browser import bibliography
 from quotationtool.biblatex.browser import biblatexentry
+
+from quotationtool.skin.interfaces import IQuotationtoolBrowserLayer 
 
 
 def setUpZCML(test):
@@ -25,18 +27,12 @@ def setUpZCML(test):
         >>> XMLConfig('dependencies.zcml', quotationtool.biblatex.browser)()
 
         >>> XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
-        >>> XMLConfig('nav.zcml', quotationtool.biblatex.browser)()
-        >>> XMLConfig('tabs.zcml', quotationtool.biblatex.browser)()
-        >>> XMLConfig('bb.zcml', quotationtool.biblatex.browser)()
 
     """
     setUp(test)
     XMLConfig('dependencies.zcml', quotationtool.biblatex)()
     XMLConfig('configure.zcml', quotationtool.biblatex)()
-    XMLConfig('dependencies.zcml', quotationtool.biblatex.browser)()
     XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
-    XMLConfig('nav.zcml', quotationtool.biblatex.browser)()
-    XMLConfig('tabs.zcml', quotationtool.biblatex.browser)()
     return
 
 
@@ -50,6 +46,8 @@ def generateContent():
     biblio['kdu'] = kdu
     assert(kdu.__name__ == 'kdu')
     assert(kdu.__parent__ == biblio)
+    from zope.location.interfaces import IRoot
+    zope.interface.directlyProvides(biblio, IRoot)
     return biblio
         
 
@@ -65,7 +63,7 @@ class TestRequest(zope.publisher.browser.TestRequest):
     # zope.publisher.browser module.
     zope.interface.implements(
         z3c.form.interfaces.IFormLayer,
-        quotationtool.biblatex.browser.layer.IBochumBrowserLayer)
+        IQuotationtoolBrowserLayer)
 
 
 

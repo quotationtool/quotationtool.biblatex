@@ -19,11 +19,11 @@
       permission="zope.View"
       class=".bibliography.Container"
       />
-  <!--layer=".layer.IBochumBrowserLayer"-->
+  <!--layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"-->
   <z3c:template
       for=".bibliography.Container"
       template="bibliography_container.pt"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <defaultView
       for="..interfaces.IBibliography"
@@ -33,7 +33,7 @@
   <page
       for="..interfaces.IBibliography"
       name="bibliography.bib"
-      layer=".layer.IBochumBrowserLayer"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       class=".bibliography.PlainBibtex"
       permission="zope.View"
       />

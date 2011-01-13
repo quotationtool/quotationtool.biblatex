@@ -4,86 +4,10 @@
     xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="quotationtool.biblatex">
 
-
-  <!-- skin -->
-  <interface
-      interface=".skin.IBochumBrowserSkin"
-      type="zope.publisher.interfaces.browser.IBrowserSkinType"
-      name="Bochum"
-      />
-  <z3c:layout
-      for="*"
-      layer=".layer.IBochumBrowserLayer"
-      template="layout.pt"
-      />
-  <z3c:macro
-      name="quotationtool-layout"
-      macro="quotationtool-layout"
-      template="layout.pt"
-      layer=".layer.IBochumBrowserLayer"
-      />
-  <z3c:layout
-      for=".skin.ITabbedContentLayout"
-      layer=".layer.IBochumBrowserLayer"
-      template="layout_tabbedcontent.pt"
-      />
-  <resourceLibrary
-      name="quotationtool.biblatex"
-      require="quotationtool.biblatex.css"
-      layer=".layer.IBochumBrowserLayer"
-      />
-  <resourceLibrary
-      layer=".layer.IBochumBrowserLayer"
-      name="quotationtool.biblatex.css">
-    <directory
-	source="css"
-	include="global.css"
-	/>
-  </resourceLibrary>
-  <browser:resourceDirectory
-      name="quotationtool.biblatex.images"
-      directory="images"
-      layer=".layer.IBochumBrowserLayer"
-      />
-
-  <include package=".authentication"/>
-  <!--z3c:pagelet
-      name="loginForm.html"
-      for="*"
-      class=".auth.LoginPagelet"
-      permission="zope.View"
-      layer=".layer.IBochumBrowserLayer"
-      />
-  <z3c:template
-      for=".auth.LoginPagelet"
-      layer=".layer.IBochumBrowserLayer"
-      template="login.pt"
-      /-->
-      
-  <!-- default label and details and list views -->
-  <view
-      name="label"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      for="*"
-      factory=".view.NotImplementedView"
-      permission="zope.View"
-      />
-  <view
-      name="details"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      for="*"
-      factory=".view.NotImplementedView"
-      permission="zope.View"
-      />
-  <view
-      name="list"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      for="*"
-      factory=".view.NotImplementedView"
-      permission="zope.View"
-      />
-
+  <include file="dependencies.zcml"/>
   <include file="bibliography.zcml"/>
   <include file="biblatexentry.zcml"/>
+  <include file="nav.zcml"/>
+  <include file="tabs.zcml"/>
 
 </configure>
