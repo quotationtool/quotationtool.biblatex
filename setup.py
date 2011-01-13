@@ -44,6 +44,7 @@ setup(
     zip_safe=False,
     install_requires = [
         'quotationtool.skin',
+        'quotationtool.site',
         'setuptools',
         'ZODB3',
         'zope.interface',
@@ -76,7 +77,6 @@ setup(
         'z3c.wizard',
         'zc.resourcelibrary',
         'z3c.menu.ready2go',
-        #'lxml >= 2.0.0',
 
         'zope.app.pagetemplate',
         'zope.viewlet',

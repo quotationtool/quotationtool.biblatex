@@ -4,8 +4,7 @@ from zope.component import adapter
 from zope.dublincore.interfaces import IWriteZopeDublinCore
 from zope.container.interfaces import IContentContainer
 
-# TODO!!! find a solution to unwire from new site event
-from site import INewQuotationtoolSiteEvent
+from quotationtool.site.interfaces import INewQuotationtoolSiteEvent
 
 from quotationtool.biblatex import interfaces
 
