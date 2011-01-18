@@ -1,6 +1,5 @@
 import unittest
 import doctest
-import zope.testing
 from zope.component.testing import setUp, tearDown, PlacelessSetup
 import zope.interface
 import zope.schema
@@ -18,23 +17,17 @@ def testZcml():
     """
        >>> from zope.configuration.xmlconfig import xmlconfig
        >>> import quotationtool.biblatex
-       
-    First we have to load the dependencies:
-       
-       >>> XMLConfig('dependencies.zcml', quotationtool.biblatex)()
 
     Now we can test configure.zcml
 
        >>> XMLConfig('configure.zcml', quotationtool.biblatex)()
        >>> XMLConfig('latex.zcml', quotationtool.biblatex)()
-       >>> XMLConfig('site.zcml', quotationtool.biblatex)()
-
+       
     """
 
 
 def setUpZcml(test):
     setUp(test)
-    XMLConfig('dependencies.zcml', quotationtool.biblatex)()
     XMLConfig('configure.zcml', quotationtool.biblatex)()
     # do not load latex.zcml because we don't want latex to be run
 

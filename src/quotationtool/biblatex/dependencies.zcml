@@ -13,5 +13,6 @@
     <include package="zope.securitypolicy"/>
     <include package="zope.traversing"/>
 
+    <include package="quotationtool.security"/>
 
 </configure>

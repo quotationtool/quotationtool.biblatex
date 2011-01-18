@@ -7,6 +7,7 @@ from zope.container.interfaces import INameChooser
 from zope.traversing.browser import absoluteURL
 from z3c.pagelet.browser import BrowserPagelet
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from quotationtool.biblatex import interfaces, ientry
 from quotationtool.biblatex.i18n import _
@@ -87,6 +88,14 @@ class SimpleAddForm(form.AddForm):
     def create(self, data):
         obj = BiblatexEntry()
         form.applyChanges(self, obj, data)
+
+        # Grant the current user the Edit permission, but only in
+        # the context of the newly created object.
+        permission_man = IPrincipalPermissionManager(obj)
+        permission_man.grantPermissionToPrincipal(
+            'quotationtool.Creator',
+            self.request.principal.id)
+        
         return obj
 
     def add(self, obj):

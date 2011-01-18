@@ -2,6 +2,7 @@
     xmlns="http://namespaces.zope.org/zope">
 
   <include package="quotationtool.skin"/>
+  <include package="quotationtool.biblatex"/>
   
   <include package="z3c.template" file="meta.zcml"/>
   <include package="z3c.macro" file="meta.zcml"/>
@@ -13,12 +14,6 @@
   <include package="zope.app.publisher.browser" file="meta.zcml"/>
   <include package="z3c.wizard" file="meta.zcml"/>
   <include package="z3c.menu.ready2go" file="meta.zcml"/>
-
-  <!-- not in use since separation of skin 
-  <include package="zope.browserresource" file="meta.zcml"/>
-  <include package="zc.resourcelibrary" file="meta.zcml"/>
-  <include package="zc.resourcelibrary"/>
-  -->
 
   <include package="z3c.layer.pagelet"/>
   <include package="z3c.pagelet"/>

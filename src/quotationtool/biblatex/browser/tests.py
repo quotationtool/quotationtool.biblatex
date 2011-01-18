@@ -1,6 +1,5 @@
 import unittest
 import doctest
-import zope.testing
 from zope.component.testing import setUp, tearDown, PlacelessSetup
 import zope.interface
 import zope.component
@@ -20,18 +19,11 @@ from quotationtool.skin.interfaces import IQuotationtoolBrowserLayer
 def setUpZCML(test):
     """
         >>> XMLConfig('meta.zcml', zope.component)()
-        
-        >>> import quotationtool.biblatex
-        >>> import quotationtool.biblatex.browser
-        >>> XMLConfig('dependencies.zcml', quotationtool.biblatex)()
-        >>> XMLConfig('dependencies.zcml', quotationtool.biblatex.browser)()
 
         >>> XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
 
     """
     setUp(test)
-    XMLConfig('dependencies.zcml', quotationtool.biblatex)()
-    XMLConfig('configure.zcml', quotationtool.biblatex)()
     XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
     return
 

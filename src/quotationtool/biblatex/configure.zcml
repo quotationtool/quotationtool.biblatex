@@ -2,6 +2,11 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="quotationtool">
 
+  <include file="dependencies.zcml"/>
+  
+  <include file="permissions.zcml"/>
+  <include file="roles.zcml"/>
+
   <!-- bibliography -->
   
   <interface
