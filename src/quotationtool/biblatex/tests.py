@@ -17,11 +17,13 @@ def testZcml():
     """
        >>> from zope.configuration.xmlconfig import xmlconfig
        >>> import quotationtool.biblatex
+       >>> import quotationtool.biblatex.generations
 
-    Now we can test configure.zcml
+    Now we can test the zcml
 
        >>> XMLConfig('configure.zcml', quotationtool.biblatex)()
        >>> XMLConfig('latex.zcml', quotationtool.biblatex)()
+       >>> XMLConfig('configure.zcml', quotationtool.biblatex.generations)()
        
     """
 

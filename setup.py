@@ -65,6 +65,7 @@ setup(
         'zope.pluggableauth',
         'zope.app.authentication',
         'zope.traversing',
+        'zope.generations',
 
         'z3c.template',
         'z3c.macro',
