@@ -14,5 +14,6 @@
     <include package="zope.traversing"/>
 
     <include package="quotationtool.security"/>
+    <include package="quotationtool.bibliography"/>
 
 </configure>

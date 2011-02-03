@@ -26,6 +26,13 @@ class IBiblatexField(zope.interface.Interface):
         required = False,
         )
 
+    def toUnicode(value):
+        """ Cooks a unicode string from value."""
+
+    def toBibtex(value):
+        """ Cooks a bibtex string from value."""
+ 
+
 # The interfaces below do not regard the functions but are more like
 # marker Interfaces. For functionality see field definitions in
 # field.py, where the fields inherit zope.schema.interfaces from their

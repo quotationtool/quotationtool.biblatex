@@ -29,6 +29,7 @@ class IEntry(zope.interface.Interface):
         description = _('zblx-afterword-desc', u'''The author(s) of an afterword to the work. If the author of the afterword is identical to the editor and/or translator, the standard styles will automatically concatenate these fields in the bibliography. See also introduction and foreword.
 '''),
         required = False,
+        default = [],
         )
 
     annotation = field.Literal(
@@ -48,12 +49,14 @@ and/or translator, the standard styles will automatically concatenate these fiel
 in the bibliography. See also commentator.
 '''),
         required = False,
+        default = [],
         )
 
     author = field.Name(
         title = _('zblx-author-tit', u"Author"),
         description = _('zblx-author-desc', u"The author(s) of the title."),
         required = False,
+        default = [],
         )
 
     authortype = field.Key(
@@ -70,6 +73,7 @@ author. Not used by the standard bibliography styles.
         title = _('zblx-bookauthor-tit', u'Bookauthor'),
         description = _('zblx-bookauthor-desc', u'''The author(s) of the booktitle.'''),
         required = False,
+        default = [],
         )
     
     bookpagination = field.Key(
@@ -115,6 +119,7 @@ work is a stand-alone commentary, the commentator should be given in the author
 field. If the commentator is identical to the editor and/or translator, the standard styles will automatically concatenate these fields in the bibliography. See also
 annotator.'''),
         required = False,
+        default = [],
         )
 
     date = field.Date(
@@ -139,24 +144,28 @@ annotator.'''),
         title = _('zblx-editor-tit', u'Editor'),
         description = _('zblx-editor-desc', u'''The editor(s) of the title, booktitle, or maintitle, depending on the entry type. Use the editortype field to specifiy the role if it is different from 'editor'.'''),
         required = False,
+        default = [],
         )
 
     editora = field.Name(
         title = _('zblx-editora-tit', u'Editor A'),
         description = _('zblx-editora-desc', u'''A secondary editor performing a different editorial role, such as compiling, redacting, etc. Use the editoratype field to specifiy the role.'''),
         required = False,
+        default = [],
         )
 
     editorb = field.Name(
         title = _('zblx-editorb-tit', u'Editor B'),
         description = _('zblx-editorb-desc', u'''A secondary editor performing a different editorial role, such as compiling, redacting, etc. Use the Editor B Type field to specifiy the role.'''),
         required = False,
+        default = [],
         )
 
     editorc = field.Name(
         title = _('zblx-editorc-tit', u'Editor C'),
         description = _('zblx-editorc-desc', u'''A secondary editor performing a different editorial role, such as compiling, redacting, etc. Use the Editor C Type field to specifiy the role.'''),
         required = False,
+        default = [],
         )
 
     editortype = field.Key(
@@ -234,12 +243,14 @@ annotator.'''),
         title = _('zblx-foreword-tit', u'Foreword'),
         description = _('zblx-foreword-desc', u'''The author(s) of a foreword to the work. If the author of the foreword is identical to the Editor and/or Translator, the standard styles will automatically concatenate these fields in the bibliography. See also Introduction and Afterword.'''),
         required = False,
+        default = [],
         )
 
     holder = field.Name(
         title = _('zblx-holder-tit', u'Holder'),
         description = _('zblx-holder-desc', u'''The holder(s) of a Patent, if different from the author. Not that corporate holders need to be wrapped in an additional set of braces, see 2.3.3 for details.'''),
         required = False,
+        default = [],
         )
 
     howpublished = field.Literal(
@@ -264,6 +275,7 @@ annotator.'''),
         title = _('zblx-introduction-tit', u'Introduction'),
         description = _('zblx-introduction-desc', u'''The author(s) of an introduction to the work. If the author of the introduction is identical to the editor and/or translator, the standard styles will automatically concatenate these fields in the bibliography. See also foreword and afterword.'''),
         required = False,
+        default = [],
         )
 
     isan = field.Literal(
@@ -495,12 +507,14 @@ annotator.'''),
         title = _('zblx-shortauthor-tit', u'Short Author'),
         description = _('zblx-shortauthor-desc', u'''TODO'''),
         required = False,
+        default = [],
         )
     
     shorteditor = field.Name(
         title = _('zblx-shorteditor-tit', u'Short Editor'),
         description = _('zblx-shorteditor-desc', u'''TODO'''),
         required = False,
+        default = [],
         )
     
     shorthand = field.Literal(
@@ -555,6 +569,7 @@ annotator.'''),
         title = _('zblx-translator-tit', u'Translator'),
         description = _('zblx-translator-desc', u'''TODO'''),
         required = False,
+        default = [],
         )
     
     type = field.Key(
@@ -687,6 +702,7 @@ annotator.'''),
         title = _('zblx-sortname-tit', u'Sort Name'),
         description = _('zblx-sortname-desc', u'''TODO'''),
         required = False,
+        default = [],
         )
     
     sorttitle = field.Literal(

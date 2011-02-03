@@ -2,36 +2,10 @@
     xmlns='http://namespaces.zope.org/browser'
     xmlns:zope='http://namespaces.zope.org/zope'
     xmlns:z3c='http://namespaces.zope.org/z3c'
-    i18n_domain='quotationtool.biblatex'>
-
-  <zope:view
-      name="label"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      for="..interfaces.IBibliography"
-      factory=".bibliography.LabelView"
-      permission="zope.View"
-      />
-
-  <z3c:pagelet
-      name="index.html"
-      for="..interfaces.IBibliography"
-      layer="z3c.layer.pagelet.IPageletBrowserLayer"
-      permission="zope.View"
-      class=".bibliography.Container"
-      />
-  <!--layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"-->
-  <z3c:template
-      for=".bibliography.Container"
-      template="bibliography_container.pt"
-      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      />
-  <defaultView
-      for="..interfaces.IBibliography"
-      name="index.html"
-      />      
+    i18n_domain='quotationtool'>
   
   <page
-      for="..interfaces.IBibliography"
+      for="quotationtool.bibliography.interfaces.IBibliography"
       name="bibliography.bib"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       class=".bibliography.PlainBibtex"

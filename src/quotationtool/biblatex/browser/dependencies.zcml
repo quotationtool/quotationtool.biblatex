@@ -23,6 +23,6 @@
   <include package="z3c.wizard"/>
   <include package="z3c.menu.ready2go"/>
   <include package="zope.pluggableauth"/>
-
+  <include package="z3c.macro"/>
 
 </configure>

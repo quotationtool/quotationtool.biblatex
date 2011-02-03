@@ -42,7 +42,7 @@ Subscriber
 ----------
 
 >>> from quotationtool.biblatex.interfaces import IReadFormatted
->>> from quotationtool.biblatex.bibliography import Bibliography
+>>> from quotationtool.bibliography.bibliography import Bibliography
 >>> IReadFormatted(mybook).getCitation() is None
 True
 

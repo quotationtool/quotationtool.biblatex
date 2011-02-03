@@ -2,7 +2,7 @@
     xmlns='http://namespaces.zope.org/browser'
     xmlns:zope='http://namespaces.zope.org/zope'
     xmlns:z3c='http://namespaces.zope.org/z3c'
-    i18n_domain='quotationtool.biblatex'>
+    i18n_domain='quotationtool'>
 
   <defaultView
       for="..interfaces.IBiblatexEntry"
@@ -11,23 +11,30 @@
 
   <zope:view
       name="label"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       for="..interfaces.IBiblatexEntry"
       factory=".biblatexentry.LabelView"
       permission="zope.View"
       />
   <zope:view
       name="details"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       for="..interfaces.IBiblatexEntry"
       factory=".biblatexentry.DetailsView"
       permission="zope.View"
       />
   <zope:view
       name="list"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       for="..interfaces.IBiblatexEntry"
       factory=".biblatexentry.ListView"
+      permission="zope.View"
+      />
+  <zope:view
+      name="bibliography"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".biblatexentry.BibliographyView"
       permission="zope.View"
       />
 
@@ -41,7 +48,7 @@
   <z3c:template
       for=".biblatexentry.HtmlBibtex"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      template="biblatexentry_bibtex.pt"
+      template="bibtex.pt"
       />
   
   <page
@@ -53,9 +60,9 @@
       />
 
   <z3c:pagelet
-      for="..interfaces.IBibliography"
+      for="quotationtool.bibliography.interfaces.IBibliography"
       name="addEntry.html"
-      permission="quotationtool.biblatex.AddEntry"
+      permission="quotationtool.bibliography.AddEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       class=".biblatexentry.SimpleAddForm"
       />
@@ -64,77 +71,77 @@
       name="edit.html"
       for="..interfaces.IBiblatexEntry"
       class=".biblatexentry.EditWizard"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="entry_type"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditEntryTypeStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="required"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditRequiredStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="optional"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditOptionalStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="publication_facts"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditPublicationFactsStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="roles"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditRolesStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="shortening"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditShorteningStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="sorting"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditSortingStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="linking"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditLinkingStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="compat"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditCompatStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
   <z3c:wizardStep
       name="general"
       wizard=".biblatexentry.EditWizard"
       class=".biblatexentry.EditGeneralStep"
-      permission="quotationtool.biblatex.EditEntry"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       />
 

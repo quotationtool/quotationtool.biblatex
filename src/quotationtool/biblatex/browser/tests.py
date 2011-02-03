@@ -7,19 +7,15 @@ from zope.configuration.xmlconfig import XMLConfig, xmlconfig
 import zope.publisher.browser
 import z3c.form.interfaces
 import z3c.layer
+from zope.security.testing import Principal
 
 import quotationtool.biblatex
-from quotationtool.biblatex import interfaces
-from quotationtool.biblatex.browser import bibliography
-from quotationtool.biblatex.browser import biblatexentry
 
 from quotationtool.skin.interfaces import IQuotationtoolBrowserLayer 
 
 
 def setUpZCML(test):
     """
-        >>> XMLConfig('meta.zcml', zope.component)()
-
         >>> XMLConfig('configure.zcml', quotationtool.biblatex.browser)()
 
     """
@@ -29,7 +25,8 @@ def setUpZCML(test):
 
 
 def generateContent():
-    biblio = quotationtool.biblatex.bibliography.Bibliography()
+    from quotationtool.bibliography.bibliography import Bibliography
+    biblio = Bibliography()
     kdu = quotationtool.biblatex.biblatexentry.BiblatexEntry()
     kdu.entry_type = 'Book'
     kdu.author = [u"Kant, Immanuel"]
@@ -57,6 +54,7 @@ class TestRequest(zope.publisher.browser.TestRequest):
         z3c.form.interfaces.IFormLayer,
         IQuotationtoolBrowserLayer)
 
+    principal = Principal('testing')
 
 
 class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
@@ -69,24 +67,31 @@ class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
         tearDown(self)
 
     def testViews(self):
+        from quotationtool.biblatex.browser import biblatexentry
         sample_book = generateContent()['kdu']
         request = TestRequest()
         view = biblatexentry.DetailsView(sample_book, request)
         self.assertTrue(type(view()) == unicode)
         view = biblatexentry.LabelView(sample_book, request)
-        self.assertTrue(view())
+        self.assertTrue(isinstance(view(), unicode))
+        view = biblatexentry.BibliographyView(sample_book, request)
+        self.assertTrue(isinstance(view(), unicode))
+        view = biblatexentry.ListView(sample_book, request)
+        self.assertTrue(isinstance(view(), unicode))
         view = biblatexentry.PlainBibtex(sample_book, request)
-        assert(view())
+        self.assertTrue(isinstance(view(), unicode))
 
     def testPagelets(self):
+        from quotationtool.biblatex.browser import biblatexentry
         sample_book = generateContent()['kdu']
         request = TestRequest()
         view = biblatexentry.HtmlBibtex(sample_book, request)
-        assert(view.render())
+        self.assertTrue(isinstance(view(), unicode))
 
     def testEditWizard(self):
         import z3c.wizard
         from zope.publisher.interfaces.browser import IBrowserRequest
+        from quotationtool.biblatex.browser import biblatexentry
         zope.component.provideAdapter(
             biblatexentry.EditEntryTypeStep,
             (None, IBrowserRequest, None),

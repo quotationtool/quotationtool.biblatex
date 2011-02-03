@@ -7,7 +7,6 @@
   <include file="dependencies.zcml"/>
   <include file="bibliography.zcml"/>
   <include file="biblatexentry.zcml"/>
-  <include file="nav.zcml"/>
   <include file="tabs.zcml"/>
 
 </configure>

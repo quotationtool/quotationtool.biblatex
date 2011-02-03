@@ -45,7 +45,7 @@ setup(
     install_requires = [
         'quotationtool.security',
         'quotationtool.skin',
-        'quotationtool.site',
+        'quotationtool.bibliography',
         'setuptools',
         'ZODB3',
         'zope.interface',

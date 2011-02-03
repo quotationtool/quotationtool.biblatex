@@ -1,13 +1,17 @@
-import re
 import zope.interface
 import zope.schema
 import zope.component
 from zope.container.interfaces import IContainer, IContained
 from zope.container.constraints import contains, containers
 from zope.interface.common.interfaces import IException
+from zope.i18nmessageid import MessageFactory
 
-from i18n import _
+from quotationtool.bibliography.interfaces import IEntry as IBibliographyEntry
+
 import field, ientry
+
+
+_ =  MessageFactory('quotationtool')
 
 
 class IEntryTypesConfiguration(zope.interface.Interface):
@@ -142,22 +146,12 @@ class RequiredNotPresent(zope.interface.Invalid):
         return self.general_msg + u" " + self.args    
 
 
-class IBiblatexEntry(IContained, ientry.IEntry):
+class IBiblatexEntry(IBibliographyEntry, ientry.IEntry):
     """ An entry in the biblatex database.  Bibtex field definitions
-    are inherited from IEntry.
+    are inherited from IEntry. The __name__ field is inherited from
+    IBibliographyEntry.
 
     """
-
-    containers('.IBibliography')
-
-    __name__ = field.EntryKey(
-        title = _('ibiblatexentrytype-name-title',
-                  u"Database Key"),
-        description = _('ibiblatexentrytype-name-desc',
-                        u"The unique key of the entry in the BibTeX database."),
-        required = True,
-        readonly = True,
-        )
 
     entry_type = zope.schema.Choice(
         title = _('ibiblatexentrytype-entrytype-title',
@@ -246,19 +240,6 @@ class IEntryBibtexRepresentation(zope.interface.Interface):
         """ Returns the entry in BibTeX style with referenced entries,
         e.g. entries referenced by xref or crossref."""
     
-
-class IBibliography(zope.interface.Interface):
-    """ A bibliography holding IBiblatexEntry objects. This is the
-    schema part of the bibliography."""
-    
-
-class IBibliographyContainer(zope.interface.Interface):
-    """ A bibliography is a container for IBiblatexEntry objects. This
-    interface and IBibliography must be different because of managing
-    permissions."""
-    
-    contains('.IBiblatexEntry')
-
 
 class IBibliographyBibtexRepresentation(zope.interface.Interface):
     """A BibTeX representation of the bibliography."""

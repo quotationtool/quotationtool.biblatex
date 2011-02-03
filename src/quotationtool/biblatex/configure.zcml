@@ -3,51 +3,6 @@
            i18n_domain="quotationtool">
 
   <include file="dependencies.zcml"/>
-  
-  <include file="permissions.zcml"/>
-  <include file="roles.zcml"/>
-
-  <!-- bibliography -->
-  
-  <interface
-      interface=".interfaces.IBibliography"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
-  <class class=".bibliography.Bibliography">
-    <implements
-	interface="zope.annotation.interfaces.IAttributeAnnotatable"
-	/>
-    <allow
-	interface="zope.container.interfaces.IReadContainer"
-	/>
-    <require
-	permission="zope.ManageContent"
-	interface="zope.container.interfaces.IWriteContainer"
-	/>
-    <allow
-	interface=".interfaces.IBibliography"
-	/>
-    <require
-	permission="zope.ManageSite"
-	set_schema=".interfaces.IBibliography"
-	/>
-  </class>
-      
-  <subscriber handler=".bibliography.createBibliography"/>
-
-  <adapter
-      for=".interfaces.IBibliography"
-      provides="zope.container.interfaces.INameChooser"
-      factory=".namechooser.BiblatexEntryNameChooser"
-      />
-  
-  <adapter
-      for=".interfaces.IBibliography"
-      provides=".interfaces.IBibliographyBibtexRepresentation"
-      factory=".bibtex.BibliographyBibtexRepresentation"
-      />
-
 
   <!-- entry -->
 
@@ -69,12 +24,6 @@
 	/>
   </class>    
 
-  <adapter
-      for=".interfaces.IBiblatexEntry"
-      provides=".interfaces.IEntryBibtexRepresentation"
-      factory=".bibtex.EntryBibtexRepresentation"
-      />
-
   
   <!-- entry types -->
 
@@ -93,6 +42,18 @@
 
   <!-- components related to generation (latexing) of formatted
        strings -->
+
+  <adapter
+      for=".interfaces.IBiblatexEntry"
+      provides=".interfaces.IEntryBibtexRepresentation"
+      factory=".bibtex.EntryBibtexRepresentation"
+      />
+
+  <adapter
+      for="quotationtool.bibliography.interfaces.IBibliography"
+      provides=".interfaces.IBibliographyBibtexRepresentation"
+      factory=".bibtex.BibliographyBibtexRepresentation"
+      />
 
   <adapter
       for=".interfaces.IBiblatexEntry"
@@ -158,49 +119,49 @@
   <!-- vocabularies related to biblatex fields -->
 
   <utility
-      component=".field.PaginationVocabulary"
+      component=".vocabulary.PaginationVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.Pagination"
       />
 
   <utility
-      component=".field.EditorRoleVocabulary"
+      component=".vocabulary.EditorRoleVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.EditorRoles"
       />
 
   <utility
-      component=".field.PubstateVocabulary"
+      component=".vocabulary.PubstateVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.Pubstate"
       />
 
   <utility
-      component=".field.TypeVocabulary"
+      component=".vocabulary.TypeVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.Type"
       />
 
   <utility
-      component=".field.GenderVocabulary"
+      component=".vocabulary.GenderVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.Gender"
       />
 
   <utility
-      component=".field.AuthorTypeVocabulary"
+      component=".vocabulary.AuthorTypeVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.AuthorTypes"
       />
 
   <utility
-      component=".field.LanguageVocabulary"
+      component=".vocabulary.LanguageVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.Language"
       />
 
   <utility
-      component=".field.HyphenationVocabulary"
+      component=".vocabulary.HyphenationVocabulary"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="quotationtool.biblatex.Hyphenation"
       />

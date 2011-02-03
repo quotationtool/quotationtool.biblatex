@@ -1,0 +1,4 @@
+<div class="biblatexentry_formatted"
+     tal:content="structure view/formatted|default">
+  No formatted string available
+</div>

@@ -17,10 +17,10 @@ from quotationtool.biblatex.formatted import getDefaultLanguage, getDefaultStyle
 from quotationtool.skin.interfaces import ITabbedContentLayout
 
 
-class DetailsView(BrowserView):
-    """Details of the item."""
+class BibliographyView(BrowserView):
+    """ Used in bibliography listings. See quotationtool.bibliogrraphy package."""
 
-    template = ViewPageTemplateFile('biblatexentry_details.pt')
+    template = ViewPageTemplateFile('bibliography.pt')
 
     def __call__(self):
         return self.template()
@@ -30,6 +30,15 @@ class DetailsView(BrowserView):
         style = getDefaultStyle(self.context)
         rf = interfaces.IReadFormatted(self.context)
         return rf.getCitation(language, style)
+
+
+ListView = BibliographyView
+
+
+class DetailsView(BibliographyView, BrowserView):
+    """Details of the item."""
+
+    template = ViewPageTemplateFile('details.pt')
 
     def getFieldTuples(self):
         iface = interfaces.IBiblatexEntry
@@ -52,16 +61,6 @@ class DetailsView(BrowserView):
                        ))
         return tuples
 
-
-class ListView(BrowserView):
-    """Representation for lists of similar objects."""
-
-    def __call__(self):
-        language = getDefaultLanguage(self.context)
-        style = getDefaultStyle(self.context)
-        rf = interfaces.IReadFormatted(self.context)
-        return rf.getCitation(language, style)
-        
 
 class LabelView(BrowserView):
     """Label for this item."""

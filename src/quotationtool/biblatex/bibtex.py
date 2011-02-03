@@ -3,6 +3,8 @@ import zope.interface
 import zope.component
 from zope.schema import getFields
 
+from quotationtool.bibliography.interfaces import IBibliography
+
 import interfaces
 import ifield
 from ientry import IEntry
@@ -98,7 +100,7 @@ class BibliographyBibtexRepresentation(object):
     """An adapter for making BibTeX representations of the
     bibliography.
 
-        >>> from quotationtool.biblatex.bibliography import Bibliography
+        >>> from quotationtool.bibliography.bibliography import Bibliography
         >>> from quotationtool.biblatex.biblatexentry import BiblatexEntry
         >>> kdu = BiblatexEntry()
         >>> kdu.__name__ = u"Kant1790"
@@ -127,7 +129,7 @@ class BibliographyBibtexRepresentation(object):
     """
 
     zope.interface.implements(interfaces.IBibliographyBibtexRepresentation)
-    zope.component.adapts(interfaces.IBibliography)
+    zope.component.adapts(IBibliography)
 
     def __init__(self, context):
         self.context = context
@@ -135,5 +137,6 @@ class BibliographyBibtexRepresentation(object):
     def getBibtex(self):
         rc = u""
         for entry in self.context.values():
-            rc += interfaces.IEntryBibtexRepresentation(entry).getBibtex()
+            if interfaces.IBiblatexEntry.providedBy(entry):
+                rc += interfaces.IEntryBibtexRepresentation(entry).getBibtex()
         return rc

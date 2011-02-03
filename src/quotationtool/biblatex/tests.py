@@ -53,15 +53,15 @@ def setUpRegistration(test):
     vr = vocabulary.getVocabularyRegistry()
     from quotationtool.biblatex.entrytypes import EntryTypeVocabulary
     vr.register('quotationtool.biblatex.EntryTypes', EntryTypeVocabulary)
-    from quotationtool.biblatex import field
-    vr.register('quotationtool.biblatex.Pagination', field.PaginationVocabulary)
-    vr.register('quotationtool.biblatex.EditorRoles', field.EditorRoleVocabulary)
-    vr.register('quotationtool.biblatex.Pubstate', field.PubstateVocabulary)
-    vr.register('quotationtool.biblatex.Type', field.TypeVocabulary)
-    vr.register('quotationtool.biblatex.Gender', field.GenderVocabulary)
-    vr.register('quotationtool.biblatex.AuthorTypes', field.AuthorTypeVocabulary)
-    vr.register('quotationtool.biblatex.Language', field.LanguageVocabulary)
-    vr.register('quotationtool.biblatex.Hyphenation', field.HyphenationVocabulary)
+    from quotationtool.biblatex import vocabulary as vocabularies
+    vr.register('quotationtool.biblatex.Pagination', vocabularies.PaginationVocabulary)
+    vr.register('quotationtool.biblatex.EditorRoles', vocabularies.EditorRoleVocabulary)
+    vr.register('quotationtool.biblatex.Pubstate', vocabularies.PubstateVocabulary)
+    vr.register('quotationtool.biblatex.Type', vocabularies.TypeVocabulary)
+    vr.register('quotationtool.biblatex.Gender', vocabularies.GenderVocabulary)
+    vr.register('quotationtool.biblatex.AuthorTypes', vocabularies.AuthorTypeVocabulary)
+    vr.register('quotationtool.biblatex.Language', vocabularies.LanguageVocabulary)
+    vr.register('quotationtool.biblatex.Hyphenation', vocabularies.HyphenationVocabulary)
 
 
 def tearDownRegistration(test):
@@ -101,17 +101,12 @@ def test_suite():
                                  tearDown = tearDownRegistration,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
                                  ),
-            doctest.DocTestSuite('quotationtool.biblatex.bibliography',
-                                 setUp = setUpRegistration,
-                                 tearDown = tearDownRegistration,
-                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
-                                 ),
-            doctest.DocTestSuite('quotationtool.biblatex.namechooser',
-                                 setUp = setUpRegistration,
-                                 tearDown = tearDownRegistration,
-                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
-                                 ),
             doctest.DocTestSuite('quotationtool.biblatex.formatted',
+                                 setUp = setUpZcml,
+                                 tearDown = tearDownRegistration,
+                                 optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+                                 ),
+            doctest.DocTestSuite('quotationtool.biblatex.catalog',
                                  setUp = setUpZcml,
                                  tearDown = tearDownRegistration,
                                  optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
