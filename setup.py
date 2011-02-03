@@ -13,7 +13,7 @@ name='quotationtool.biblatex'
 
 setup(
     name = name,
-    version='0.1',
+    version='0.1.0',
     description="BibLaTeX database based on Blue Bream (aka Zope3) application server",
     long_description=(
         read('README')
@@ -27,7 +27,7 @@ setup(
         '********\n'
         ),
     keywords='biblatex, blue bream, zope, zope3',
-    author=u"Christian Luck",
+    author=u"Christian Lueck",
     author_email='cluecksbox@googlemail.com',
     url='',
     license='ZPL 2.1',
@@ -61,12 +61,13 @@ setup(
         'zope.app.schema',
         'zope.security',
         'zope.securitypolicy',
-        'zope.authentication',
-        'zope.pluggableauth',
-        'zope.app.authentication',
+        #'zope.authentication',
+        #'zope.pluggableauth',
+        #'zope.app.authentication',
         'zope.traversing',
-        'zope.generations',
+        'zope.app.generations',
 
+        # for browser submodule
         'z3c.template',
         'z3c.macro',
         'z3c.pagelet',
@@ -77,7 +78,7 @@ setup(
         'z3c.formui',
         'z3c.form',
         'z3c.wizard',
-        'zc.resourcelibrary',
+        #'zc.resourcelibrary',
         'z3c.menu.ready2go',
 
         'zope.app.pagetemplate',
@@ -87,7 +88,7 @@ setup(
     extras_require = dict(
         test = [
             'zope.testing',
-            'zope.testrunner',
+            'zope.configuration',
             ],
         ),
     entry_points = {

@@ -4,7 +4,7 @@ generation 0: initial generation
 
 """
 
-from zope.generations.generations import SchemaManager
+from zope.app.generations.generations import SchemaManager
 
 BiblatexSchemaManager = SchemaManager(
     minimum_generation = 0,

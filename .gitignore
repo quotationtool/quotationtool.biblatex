@@ -2,6 +2,7 @@
 *.pyc
 .installed.cfg
 
+coverage
 bin
 eggs
 extends-cache/*
