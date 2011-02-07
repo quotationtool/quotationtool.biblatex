@@ -686,6 +686,7 @@ annotator.'''),
         title = _('zblx-options-tit', u'Options'),
         description = _('zblx-options-desc', u'''A list of entry options in key = value notation. This field is used to set options on a per-entry basis. See 3.1.4 for details. Note that citation and bibliography styles may define additional entry options.'''),
         required = False,
+        default = {}
         )
     
     presort = field.Literal(

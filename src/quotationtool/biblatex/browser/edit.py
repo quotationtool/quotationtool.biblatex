@@ -97,9 +97,9 @@ class EditOptionalStep(step.EditStep):
 
     @property
     def fields(self):
-        _type = getEntryTypeSafely(getattr(context, 'entry_type'))
+        _type = getEntryTypeSafely(getattr(self.context, 'entry_type'))
         flds = getTuple(getattr(_type, self._myflds))
-        self.fields = field.Fields(interfaces.IBiblatexEntry).select(*flds)
+        return field.Fields(interfaces.IBiblatexEntry).select(*flds)
 
 
 class EditPublicationFactsStep(EditOptionalStep):

@@ -57,12 +57,11 @@ class EntryBibtexRepresentation(object):
     def __init__(self, context):
         self.context = context
 
-
     def getBibtex(self):
         fields = u""
         for key in getFields(IEntry).keys():
             value = self.getField(key)
-            if value is not None:
+            if value:
                 fields += field_template.substitute(
                     {'name': key, 'value': value})
         return entry_template.substitute(
@@ -75,21 +74,12 @@ class EntryBibtexRepresentation(object):
         """ See interfaces.IBiblatexEntry
         
         """
-        pyval = getattr(self.context, field, None)
         if not field in getFields(IEntry).keys():
             raise AttributeError
         if not ifield.IBiblatexField.providedBy(IEntry[field]):
             raise AttributeError("not a IBiblatexField")
-        if pyval is None:
-            return None
-        if ifield.IName.providedBy(IEntry[field]):
-            rc = u""
-            for i in range(len(pyval)):
-                if i > 0:
-                    rc += " and "
-                rc += pyval[i]
-            return rc
-        return pyval
+        val = getattr(self.context, field, IEntry[field].default)
+        return IEntry[field].toBibtex(val)
             
     def getBibtexWithReferences(self):
         #TODO

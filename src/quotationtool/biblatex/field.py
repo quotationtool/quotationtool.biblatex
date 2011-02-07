@@ -46,11 +46,14 @@ def _validateDate(value):
 class BiblatexField(object):
     
     def toUnicode(self, value):
-        return unicode(value)
+        if value:
+            return unicode(value)
+        return None
 
     def toBibtex(self, value, encoding = 'utf-8'):
-        return unicode(value)
-
+        if value:
+            return unicode(value)
+        return None
 
 class EntryKey(BiblatexField, BibliographyEntryKey):
     """ A bibtex entry key.
@@ -87,6 +90,8 @@ class Name(zope.schema.List):
         u'Horkheimer, Max Adorno, Theodor W. '
         >>> Name().toBibtex([u"Horkheimer, Max", u"Adorno, Theodor W."])
         u'Horkheimer, Max and Adorno, Theodor W.'
+        >>> Name().toBibtex([u"Adorno, Theodor W."])
+        u'Adorno, Theodor W.'
         >>> from quotationtool.biblatex.ifield import IBiblatexField
     
     """
@@ -114,7 +119,7 @@ class Name(zope.schema.List):
         return rc
 
     def toBibtex(self, value):
-        self.validate(value)
+        #self.validate(value)
         rc = u""
         for i in range(len(value)):
             if i > 0:
@@ -248,7 +253,7 @@ class KeyValueList(zope.schema.Dict):
         super(KeyValueList, self).__init__(**kw)
 
     def toUnicode(self, value):
-        self.validate(value)
+        #self.validate(value)
         rc = u""
         l = [(key, value) for key, value in value.items()]
         for i in range(len(l)):

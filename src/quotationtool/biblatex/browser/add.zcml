@@ -30,8 +30,8 @@
       class=".add.AdvancedAddForm"
       />
 
-  <z3c:wizard
-      name="addBiblatexEntryOFF.html"
+  <!--z3c:wizard
+      name="addBiblatexEntry.html"
       for="quotationtool.bibliography.interfaces.IBibliography"
       class=".add.AddWizard"
       permission="quotationtool.bibliography.AddEntry"
@@ -50,6 +50,6 @@
       class=".add.OptionalStep"
       permission="quotationtool.bibliography.AddEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      />
+      /-->
 
 </configure>

@@ -84,7 +84,8 @@ class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
         sample_book = generateContent()['kdu']
         request = TestRequest()
         view = bibtex.HtmlBibtexEntry(sample_book, request)
-        self.assertTrue(isinstance(view(), unicode))
+        view.update()
+        self.assertTrue(isinstance(view.render(), unicode))
         view = bibtex.PlainBibtexEntry(sample_book, request)
         self.assertTrue(isinstance(view(), unicode))
         view = bibtex.PlainBibtexBibliography(sample_book.__parent__, request)

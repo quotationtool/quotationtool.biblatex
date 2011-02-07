@@ -80,12 +80,16 @@ class AdvancedAddForm(form.AddForm):
     """An add form that lets the user fill in required fields.
 
     It gets the entry_type from the previous form and then sets up
-    widgets for the required fields."""
+    widgets for the required fields.
+
+    The 'entry_type' widget will be set up in hidden mode. """
 
     def label(self):
         return _('zblx-addrequiredform-label',
                  u"Add $TYPE entry.",
                  mapping = {'TYPE': self.type.title})
+
+    more_fields = ('crossref', 'xref',)
 
     @property
     def fields(self):
@@ -105,6 +109,7 @@ class AdvancedAddForm(form.AddForm):
         flds = ('entry_type',)
         flds += getRequiredTuple(self.type.required)
         flds += getTuple(self.type.optional)
+        flds += self.more_fields
         return field.Fields(interfaces.IBiblatexEntry).select(*flds)
 
     def updateWidgets(self):
@@ -131,6 +136,8 @@ class AdvancedAddForm(form.AddForm):
     def nextURL(self):
         return absoluteURL(self._obj, self.request)
 
+
+# The wizard does not work yet.
 
 class IAddWizard(zope.interface.Interface):
     """ A marker interface for views belonging to the add wizard."""
@@ -162,7 +169,13 @@ class RequiredStep(step.Step):
     ignoreContext = True
     handleApplyOnNext = False
 
-    _stepflds = 'required'
+    step_flieds = 'required'
+
+    # additional fields to setup
+    more_fields = ('crossref', 'xref', 'hyphenation',)
+
+    # additional fields to show up in form
+    more_fields_in_form = more_fields
 
     @property
     def fields(self):
@@ -182,15 +195,17 @@ class RequiredStep(step.Step):
         flds = ('entry_type',)
         flds += getRequiredTuple(self.type.required) 
         flds += getTuple(self.type.optional)
+        flds += self.more_fields
         return field.Fields(interfaces.IBiblatexEntry).select(*flds)
 
     def updateWidgets(self):
         super(RequiredStep, self).updateWidgets()
         self.widgets['entry_type'].mode = HIDDEN_MODE
-        if self._stepflds == 'required':
+        if self.step_flieds == 'required':
             flds = getRequiredTuple(self.type.required)
         else:
-            flds = getTuple(getattr(self.type, self._stepflds, []))
+            flds = getTuple(getattr(self.type, self.step_flieds, []))
+        flds += self.more_fields_in_form
         for name in self.widgets.keys():
             if name not in flds:
                 self.widgets[name].mode = HIDDEN_MODE
@@ -198,8 +213,9 @@ class RequiredStep(step.Step):
 
 class OptionalStep(RequiredStep):
     
-    _stepflds = 'optional'
+    step_flieds = 'optional'
 
     label = _('zblx-addwizard-optionalstep-label'
               u"Optional")
 
+    more_fields_in_form = ()
