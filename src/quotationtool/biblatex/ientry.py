@@ -1,9 +1,12 @@
 import zope.interface
 import zope.schema
+from zope.i18nmessageid import MessageFactory
 import re
 
 import field
-from i18n import _
+
+
+_ = MessageFactory('biblatex')
 
 
 class IEntry(zope.interface.Interface):

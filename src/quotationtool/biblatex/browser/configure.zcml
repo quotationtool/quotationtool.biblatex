@@ -2,11 +2,21 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:z3c="http://namespaces.zope.org/z3c"
-    i18n_domain="quotationtool.biblatex">
+    i18n_domain="quotationtool">
 
   <include file="dependencies.zcml"/>
-  <include file="bibliography.zcml"/>
-  <include file="biblatexentry.zcml"/>
+  <include file="view.zcml"/>
+  <include file="bibtex.zcml"/>
+  <include file="validation.zcml"/>
+  <include file="widget.zcml"/>
+  <include file="add.zcml"/>
+  <include file="edit.zcml"/>
+  <include file="flags.zcml"/>
   <include file="tabs.zcml"/>
+
+  <browser:defaultView
+      for="..interfaces.IBiblatexEntry"
+      name="bibtex.html"
+      />
 
 </configure>

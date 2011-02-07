@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool">
+
+  <adapter
+      factory=".widget.EntryTypeFieldWidget"
+      for="..interfaces.IEntryTypeField
+	   quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".widget.IEntryTypeWidget"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="entrytype_input.pt"
+      />
+
+
+</configure>

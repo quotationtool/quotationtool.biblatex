@@ -1,4 +1,5 @@
 from z3c.form import validator, util
+import zope.schema
 
 from quotationtool.biblatex import interfaces
 

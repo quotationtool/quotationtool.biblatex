@@ -3,13 +3,15 @@
     xmlns:zope='http://namespaces.zope.org/zope'
     xmlns:z3c='http://namespaces.zope.org/z3c'
     i18n_domain='quotationtool'>
-  
-  <page
-      for="quotationtool.bibliography.interfaces.IBibliography"
-      name="bibliography.bib"
+
+  <viewlet
+      name="quotationtool.biblatex.browser.flags.SchemaErrorFlag"
+      for="..interfaces.IBiblatexEntry"
+      manager="quotationtool.skin.interfaces.IFlags"
+      class=".flags.SchemaErrorFlag"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      class=".bibliography.PlainBibtex"
       permission="zope.View"
+      weight="10"
       />
 
 </configure>

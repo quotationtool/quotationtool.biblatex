@@ -67,87 +67,107 @@ class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
         tearDown(self)
 
     def testViews(self):
-        from quotationtool.biblatex.browser import biblatexentry
+        from quotationtool.biblatex.browser import view as views
         sample_book = generateContent()['kdu']
         request = TestRequest()
-        view = biblatexentry.DetailsView(sample_book, request)
+        view = views.DetailsView(sample_book, request)
         self.assertTrue(type(view()) == unicode)
-        view = biblatexentry.LabelView(sample_book, request)
+        view = views.LabelView(sample_book, request)
         self.assertTrue(isinstance(view(), unicode))
-        view = biblatexentry.BibliographyView(sample_book, request)
+        view = views.BibliographyView(sample_book, request)
         self.assertTrue(isinstance(view(), unicode))
-        view = biblatexentry.ListView(sample_book, request)
-        self.assertTrue(isinstance(view(), unicode))
-        view = biblatexentry.PlainBibtex(sample_book, request)
+        view = views.ListView(sample_book, request)
         self.assertTrue(isinstance(view(), unicode))
 
-    def testPagelets(self):
-        from quotationtool.biblatex.browser import biblatexentry
+    def testBibtex(self):
+        from quotationtool.biblatex.browser import bibtex
         sample_book = generateContent()['kdu']
         request = TestRequest()
-        view = biblatexentry.HtmlBibtex(sample_book, request)
+        view = bibtex.HtmlBibtexEntry(sample_book, request)
         self.assertTrue(isinstance(view(), unicode))
+        view = bibtex.PlainBibtexEntry(sample_book, request)
+        self.assertTrue(isinstance(view(), unicode))
+        view = bibtex.PlainBibtexBibliography(sample_book.__parent__, request)
+        self.assertTrue(isinstance(view(), unicode))
+
+    def testAddPagelets(self):
+        from quotationtool.biblatex.browser.add import AdvancedAddForm, SimpleAddForm
+        biblio = generateContent()
+        request = TestRequest()
+        view = SimpleAddForm(biblio, request)
+        self.assertTrue(view.update() is None)
+        self.assertTrue(isinstance(view.render(), unicode))
+        from zope.exceptions.interfaces import UserError
+        view = AdvancedAddForm(biblio, request)
+        self.assertRaises(UserError, view.update)
+        request.form = {'form.widgets.entry_type': 'Fail!'}
+        view = AdvancedAddForm(biblio, request)
+        #self.assertRaises(UserError, view.update)
+        request.form = {'form.widgets.entry_type': ['Book']}
+        view = AdvancedAddForm(biblio, request)
+        self.assertTrue(view.update() is None)
+        self.assertTrue(isinstance(view.render(), unicode))
 
     def testEditWizard(self):
         import z3c.wizard
         from zope.publisher.interfaces.browser import IBrowserRequest
-        from quotationtool.biblatex.browser import biblatexentry
+        from quotationtool.biblatex.browser import edit
         zope.component.provideAdapter(
-            biblatexentry.EditEntryTypeStep,
+            edit.EditEntryTypeStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'entry_type'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditRequiredStep,
+            edit.EditRequiredStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'required'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditOptionalStep,
+            edit.EditOptionalStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'optional'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditPublicationFactsStep,
+            edit.EditPublicationFactsStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'publication_facts'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditRolesStep,
+            edit.EditRolesStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'roles'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditShorteningStep,
+            edit.EditShorteningStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'shortening'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditSortingStep,
+            edit.EditSortingStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'sorting'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditLinkingStep,
+            edit.EditLinkingStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'linking'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditCompatStep,
+            edit.EditCompatStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'compat'
             )
         zope.component.provideAdapter(
-            biblatexentry.EditGeneralStep,
+            edit.EditGeneralStep,
             (None, IBrowserRequest, None),
             z3c.wizard.interfaces.IStep,
             name = 'general'
@@ -157,7 +177,7 @@ class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
         request = TestRequest()
         zope.interface.alsoProvides(request, IDivFormLayer)
         # play with the wizard
-        wizard = biblatexentry.EditWizard(sample_book, request)
+        wizard = edit.EditWizard(sample_book, request)
         wizard.__parent__ = sample_book
         wizard.__name__ = u"wizard"
         ob, names = wizard.browserDefault(request)

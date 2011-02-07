@@ -1,4 +1,10 @@
-<div class="biblatexentry_formatted"
-     tal:content="structure view/formatted|default">
-  No formatted string available
+<div class="biblatexentry_formatted">
+  <tal:block 
+      condition="view/formatted|nothing" 
+      content="structure view/formatted|default">
+  </tal:block>
+  <tal:block 
+      condition="not: view/formatted|nothing"
+      content="context/__name__">
+  </tal:block>
 </div>

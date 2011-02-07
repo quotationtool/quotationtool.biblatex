@@ -1,0 +1,39 @@
+<configure
+    xmlns='http://namespaces.zope.org/browser'
+    xmlns:zope='http://namespaces.zope.org/zope'
+    xmlns:z3c='http://namespaces.zope.org/z3c'
+    i18n_domain='quotationtool'>
+
+  <zope:view
+      name="label"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.LabelView"
+      permission="zope.View"
+      />
+
+  <zope:view
+      name="details"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.DetailsView"
+      permission="zope.View"
+      />
+
+  <zope:view
+      name="list"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.ListView"
+      permission="zope.View"
+      />
+
+  <zope:view
+      name="bibliography"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.BibliographyView"
+      permission="zope.View"
+      />
+  
+</configure>

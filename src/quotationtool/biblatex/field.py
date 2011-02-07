@@ -4,11 +4,14 @@ import zope.schema
 from zope.interface import implements
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.schema.interfaces import IVocabularyFactory
+from zope.i18nmessageid import MessageFactory
 
 from quotationtool.bibliography.interfaces import EntryKey as BibliographyEntryKey
 
-from i18n import _
 import ifield
+
+
+_ = MessageFactory('biblatex')
 
 
 def _validateDate(value):

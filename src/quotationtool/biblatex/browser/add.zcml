@@ -1,0 +1,55 @@
+<configure
+    xmlns='http://namespaces.zope.org/browser'
+    xmlns:zope='http://namespaces.zope.org/zope'
+    xmlns:z3c='http://namespaces.zope.org/z3c'
+    i18n_domain='quotationtool'>
+
+  <viewlet
+      name="add-BiblatexEntry"
+      for="*"
+      permission="quotationtool.bibliography.AddEntry"
+      manager="quotationtool.bibliography.interfaces.IAddEntryManager"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      class=".add.AddViewlet"
+      weight="10"
+      />
+
+  <z3c:pagelet
+      for="quotationtool.bibliography.interfaces.IBibliography"
+      name="addBiblatexEntrySimply.html"
+      permission="quotationtool.bibliography.AddEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      class=".add.SimpleAddForm"
+      />
+
+  <z3c:pagelet
+      for="quotationtool.bibliography.interfaces.IBibliography"
+      name="addBiblatexEntry.html"
+      permission="quotationtool.bibliography.AddEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      class=".add.AdvancedAddForm"
+      />
+
+  <z3c:wizard
+      name="addBiblatexEntryOFF.html"
+      for="quotationtool.bibliography.interfaces.IBibliography"
+      class=".add.AddWizard"
+      permission="quotationtool.bibliography.AddEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
+  <z3c:wizardStep
+      name="Required"
+      wizard=".add.AddWizard"
+      class=".add.RequiredStep"
+      permission="quotationtool.bibliography.AddEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
+  <z3c:wizardStep
+      name="Optional"
+      wizard=".add.AddWizard"
+      class=".add.OptionalStep"
+      permission="quotationtool.bibliography.AddEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
+
+</configure>

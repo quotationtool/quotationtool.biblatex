@@ -3,7 +3,7 @@ from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.schema.interfaces import IVocabularyFactory
 from zope.i18nmessageid import MessageFactory
 
-_ = MessageFactory('quotationtool.biblatex')
+_ = MessageFactory('biblatex')
 
 
 def PaginationVocabulary(context):

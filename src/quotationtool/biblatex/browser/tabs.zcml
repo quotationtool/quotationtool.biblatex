@@ -30,7 +30,7 @@
   <adapter
       for="..interfaces.IBiblatexEntry
 	   zope.publisher.interfaces.browser.IBrowserRequest
-	   .biblatexentry.IEditStep
+	   .edit.IEditStep
 	   z3c.menu.ready2go.interfaces.IMenuManager
 	   .tabs.IBiblatexEntryEditTab"
       provides="z3c.menu.ready2go.interfaces.ISelectedChecker"

@@ -1,0 +1,49 @@
+<div class="option biblatex-types">
+
+  <h2>Choose a biblatex entry type:</h2>
+
+  <form 
+      action="addBiblatexEntry.html"
+      tal:attributes="action string:${context/@@absolute_url}/@@addBiblatexEntry.html"
+      method="post"
+      >
+    <table >
+      <tal:block repeat="type view/types">
+	<tr class="entrytype">
+	  <td class="selector">
+	    <input
+		type="radio" name="choose-biblatex-entrytype.entry_type" value="Book"
+		tal:attributes="value type/name;
+				id type/name;
+				name string:${view/prefix}entry_type" />
+	  </td>
+	  <td class="about">
+	    <span 
+		class="name"
+		tal:content="string: @${type/name}">
+	      Book
+	    </span>
+	    &ndash;
+	    <span
+		class="title"
+		tal:content="structure type/title">
+	      Book
+	    </span>:
+	    <span
+		class="description"
+		tal:content="structure type/description">
+	      A self contained Book
+	    </span>
+	  </td>
+	</tr>
+      </tal:block>
+    </table>
+    <div class="action">
+      <input 
+	  type="submit" 
+	  id="choose-biblatex-entrytype-add"
+	  name="choose-biblatex-entrytype.add"
+	  value="Add"/>
+    </div>
+  </form>
+</div>

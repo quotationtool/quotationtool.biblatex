@@ -1,0 +1,36 @@
+<configure
+    xmlns='http://namespaces.zope.org/browser'
+    xmlns:zope='http://namespaces.zope.org/zope'
+    xmlns:z3c='http://namespaces.zope.org/z3c'
+    i18n_domain='quotationtool'>
+  
+  <z3c:pagelet
+      name="bibtex.html"
+      for="..interfaces.IBiblatexEntry"
+      class=".bibtex.HtmlBibtexEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+  <z3c:template
+      for=".bibtex.HtmlBibtexEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      template="bibtex.pt"
+      />
+  
+  <page
+      name="bibtex.bib"
+      for="..interfaces.IBiblatexEntry"
+      class=".bibtex.PlainBibtexEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+
+  <page
+      for="quotationtool.bibliography.interfaces.IBibliography"
+      name="bibliography.bib"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      class=".bibtex.PlainBibtexBibliography"
+      permission="zope.View"
+      />
+
+</configure>

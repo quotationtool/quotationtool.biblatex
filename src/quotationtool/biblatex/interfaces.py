@@ -146,6 +146,10 @@ class RequiredNotPresent(zope.interface.Invalid):
         return self.general_msg + u" " + self.args    
 
 
+class IEntryTypeField(zope.interface.Interface):
+    """ A field that provides information about the entry type."""
+
+
 class IBiblatexEntry(IBibliographyEntry, ientry.IEntry):
     """ An entry in the biblatex database.  Bibtex field definitions
     are inherited from IEntry. The __name__ field is inherited from
@@ -162,6 +166,8 @@ class IBiblatexEntry(IBibliographyEntry, ientry.IEntry):
         vocabulary = 'quotationtool.biblatex.EntryTypes',
         default = 'Book',
         )
+
+    zope.interface.alsoProvides(entry_type, IEntryTypeField)
 
     @zope.interface.invariant
     def requiredFieldsPresent(entry):
@@ -265,6 +271,48 @@ class IBibliographyBibtexRepresentation(zope.interface.Interface):
 class IBibliographyConfiguration(zope.interface.Interface):
     """ Stores some configuration values. """
     
+    babel_languages = zope.schema.Tuple(
+        title = _('',
+                  u"Babel Languages"),
+        description = _('',
+                        u"Languages available to the babel latex package."),
+        required = True,
+        value_type = zope.schema.Choice(
+            title = _('',
+                      u"Language"),
+            required = True,
+            vocabulary = 'quotationtool.biblatex.Hyphentation',
+            default = 'english',
+            ),
+        default = ('english',),
+        )
+
+    languages = zope.schema.Tuple(
+        title = _('',
+                  u"Formatting Languages"),
+        description = _('',
+                        u"All languages in which the formatted bibliography will be available to the user."),
+        required = True,
+        value_type = zope.schema.Choice(
+            title = _('',
+                      u"Language"),
+            required = True,
+            vocabulary = 'quotationtool.biblatex.Hyphenation',
+            default = 'english',
+            ),
+        default = ('english',),
+        )
+
+    default_language = zope.schema.Choice(
+        title = _('',
+                  u"Language"),
+        description = _('',
+                        u"The default language of the bibliography"),
+        required = True,
+        vocabulary = 'quotationtool.biblatex.Hyphenation',
+        default = 'english',
+        )
+
     cite_style = zope.schema.TextLine(
         title = _('',
                   u"Citation Style"),
@@ -281,16 +329,6 @@ class IBibliographyConfiguration(zope.interface.Interface):
                     u"The default bibliography style. There must be a bbx file which LaTeX can find."),
         required = True,
         default = u"verbose",
-        )
-
-    language = zope.schema.Choice(
-        title = _('',
-                  u"Language"),
-        description = _('',
-                        u"The default language of the bibliography"),
-        required = True,
-        vocabulary = 'quotationtool.biblatex.Hyphenation',
-        default = 'english',
         )
 
     bib_styles = zope.schema.Tuple(
@@ -319,22 +357,6 @@ class IBibliographyConfiguration(zope.interface.Interface):
             ),
         required = True,
         default = (u"verbose",),
-        )
-
-    languages = zope.schema.Tuple(
-        title = _('',
-                  u"Available Languages"),
-        description = _('',
-                        u"All languages in that the formatted bibliography entries will be available to the user."),
-        required = True,
-        value_type = zope.schema.Choice(
-            title = _('',
-                      u"Language"),
-            required = True,
-            vocabulary = 'quotationtool.biblatex.Hyphenation',
-            default = 'english',
-            ),
-        default = ('english',),
         )
 
 

@@ -24,6 +24,11 @@
 	/>
   </class>    
 
+  <adapter
+      factory=".catalog.BibliographyCatalogAdapter"
+      for=".interfaces.IBiblatexEntry"
+      provides="quotationtool.bibliography.interfaces.IBibliographyCatalog"
+      />
   
   <!-- entry types -->
 
