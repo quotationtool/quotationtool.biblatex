@@ -7,12 +7,23 @@
 
   <z3c:contextMenuItem
       for="..interfaces.IBiblatexEntry"
-      title="[itemtabs-biblatexentry-bibtex] BibTeX"
+      title="[itemtabs-biblatexentry-fields] Details"
       name="biblatexentry-bibtex"
       permission="zope.View"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       manager="quotationtool.skin.interfaces.IItemTabs"
-      viewName="bibtex.html"
+      viewName="@@fields.html"
+      weight="30"
+      />
+
+  <z3c:contextMenuItem
+      for="..interfaces.IBiblatexEntry"
+      title="[itemtabs-biblatexentry-bibtex] BibTeX"
+      name="biblatexentry-fields"
+      permission="zope.View"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      manager="quotationtool.skin.interfaces.IItemTabs"
+      viewName="@@bibtex.html"
       weight="50"
       />
 
@@ -24,7 +35,7 @@
       permission="zope.View"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       manager="quotationtool.skin.interfaces.IItemTabs"
-      viewName="edit.html"
+      viewName="@@edit.html"
       weight="40"
       />
   <adapter

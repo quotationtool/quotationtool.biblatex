@@ -39,7 +39,9 @@ class LocalizedFormattedEntry(Persistent):
     __name__ = __parent__ = None
 
 
-class FormattedStringsContainer(BTreeContainer):
+class FormattedStringsContainer(PersistentDict):
+    """ We use Persistent Dict because btree containers notify
+    events. """
 
     implements(iformatted.IFormattedStringsContainer)
 

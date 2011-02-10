@@ -33,6 +33,7 @@ class IEntry(zope.interface.Interface):
 '''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     annotation = field.Literal(
@@ -53,6 +54,7 @@ in the bibliography. See also commentator.
 '''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     author = field.Name(
@@ -60,6 +62,7 @@ in the bibliography. See also commentator.
         description = _('zblx-author-desc', u"The author(s) of the title."),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     authortype = field.Key(
@@ -77,6 +80,7 @@ author. Not used by the standard bibliography styles.
         description = _('zblx-bookauthor-desc', u'''The author(s) of the booktitle.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
     
     bookpagination = field.Key(
@@ -123,6 +127,7 @@ field. If the commentator is identical to the editor and/or translator, the stan
 annotator.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     date = field.Date(
@@ -148,6 +153,7 @@ annotator.'''),
         description = _('zblx-editor-desc', u'''The editor(s) of the title, booktitle, or maintitle, depending on the entry type. Use the editortype field to specifiy the role if it is different from 'editor'.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     editora = field.Name(
@@ -155,6 +161,7 @@ annotator.'''),
         description = _('zblx-editora-desc', u'''A secondary editor performing a different editorial role, such as compiling, redacting, etc. Use the editoratype field to specifiy the role.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     editorb = field.Name(
@@ -162,6 +169,7 @@ annotator.'''),
         description = _('zblx-editorb-desc', u'''A secondary editor performing a different editorial role, such as compiling, redacting, etc. Use the Editor B Type field to specifiy the role.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     editorc = field.Name(
@@ -169,6 +177,7 @@ annotator.'''),
         description = _('zblx-editorc-desc', u'''A secondary editor performing a different editorial role, such as compiling, redacting, etc. Use the Editor C Type field to specifiy the role.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     editortype = field.Key(
@@ -247,6 +256,7 @@ annotator.'''),
         description = _('zblx-foreword-desc', u'''The author(s) of a foreword to the work. If the author of the foreword is identical to the Editor and/or Translator, the standard styles will automatically concatenate these fields in the bibliography. See also Introduction and Afterword.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     holder = field.Name(
@@ -254,6 +264,7 @@ annotator.'''),
         description = _('zblx-holder-desc', u'''The holder(s) of a Patent, if different from the author. Not that corporate holders need to be wrapped in an additional set of braces, see 2.3.3 for details.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     howpublished = field.Literal(
@@ -279,6 +290,7 @@ annotator.'''),
         description = _('zblx-introduction-desc', u'''The author(s) of an introduction to the work. If the author of the introduction is identical to the editor and/or translator, the standard styles will automatically concatenate these fields in the bibliography. See also foreword and afterword.'''),
         required = False,
         default = [],
+        missing_value = [],
         )
 
     isan = field.Literal(
@@ -511,6 +523,7 @@ annotator.'''),
         description = _('zblx-shortauthor-desc', u'''TODO'''),
         required = False,
         default = [],
+        missing_value = [],
         )
     
     shorteditor = field.Name(
@@ -518,6 +531,7 @@ annotator.'''),
         description = _('zblx-shorteditor-desc', u'''TODO'''),
         required = False,
         default = [],
+        missing_value = [],
         )
     
     shorthand = field.Literal(
@@ -573,6 +587,7 @@ annotator.'''),
         description = _('zblx-translator-desc', u'''TODO'''),
         required = False,
         default = [],
+        missing_value = [],
         )
     
     type = field.Key(
@@ -707,6 +722,7 @@ annotator.'''),
         description = _('zblx-sortname-desc', u'''TODO'''),
         required = False,
         default = [],
+        missing_value = [],
         )
     
     sorttitle = field.Literal(

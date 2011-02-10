@@ -1,0 +1,19 @@
+<div class="biblatexentry_fieldvalues">
+  <h3 i18n:translate="">Field values</h3>
+  <table>
+    <tal:block tal:repeat="field view/getFieldTuples">
+      <tr tal:condition="python:field[2]">
+	<td>
+	  <span class="fieldname" 
+		tal:content="python:field[0]">entry_type</span>
+	  (<span class="fieldtitle" 
+	         tal:content="python:field[1]">BibLaTeX Entry Type</span>):
+	</td>
+	<td>
+	  <span class="fieldvalue"
+		tal:content="python:field[2]">Book</span>
+	</td>
+      </tr>
+    </tal:block>
+  </table>
+</div>

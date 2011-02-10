@@ -16,7 +16,7 @@
 
   <browser:defaultView
       for="..interfaces.IBiblatexEntry"
-      name="bibtex.html"
+      name="fields.html"
       />
 
 </configure>

@@ -172,6 +172,7 @@ class EntryTypesConfiguration(object):
 
     def _parse(self):
         config = ConfigParser()
+        #config.dollar_expand = True
         f = open(self.file, 'r')
         config.readfp(f)
         f.close()

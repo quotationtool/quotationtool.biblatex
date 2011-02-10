@@ -35,5 +35,42 @@
       factory=".view.BibliographyView"
       permission="zope.View"
       />
+
+  <zope:view
+      name="year"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.YearView"
+      permission="zope.View"
+      />
+
+  <zope:view
+      name="title"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.TitleView"
+      permission="zope.View"
+      />
+
+  <zope:view
+      name="author"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.AuthorView"
+      permission="zope.View"
+      />
+
+  <z3c:pagelet
+      name="fields.html"
+      class=".view.FieldsPagelet"
+      for="..interfaces.IBiblatexEntry"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      />
+  <z3c:template
+      for=".view.FieldsPagelet"
+      template="fields.pt"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      />
   
 </configure>

@@ -78,6 +78,15 @@ class BiblatexEntryTests(PlacelessSetup, unittest.TestCase):
         self.assertTrue(isinstance(view(), unicode))
         view = views.ListView(sample_book, request)
         self.assertTrue(isinstance(view(), unicode))
+        view = views.YearView(sample_book, request)
+        self.assertTrue(isinstance(view(), unicode))
+        view = views.AuthorView(sample_book, request)
+        self.assertTrue(isinstance(view(), unicode))
+        view = views.TitleView(sample_book, request)
+        self.assertTrue(isinstance(view(), unicode))
+        view = views.FieldsPagelet(sample_book, request)
+        view.update()
+        self.assertTrue(isinstance(view.render(), unicode))
 
     def testBibtex(self):
         from quotationtool.biblatex.browser import bibtex

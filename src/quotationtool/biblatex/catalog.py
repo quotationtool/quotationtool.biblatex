@@ -79,8 +79,8 @@ class BibliographyCatalogAdapter(object):
 
     def getAuthor(self):
         rc = u""
-        rc += ientry.IEntry['author'].toUnicode(getattr(self.context, 'author', []))
-        rc += ientry.IEntry['editor'].toUnicode(getattr(self.context, 'editor', []))
+        rc += ientry.IEntry['author'].toUnicode(getattr(self.context, 'author', [])) + u" "
+        rc += ientry.IEntry['editor'].toUnicode(getattr(self.context, 'editor', [])) + u" "
         return rc
     author = property(getAuthor)
 

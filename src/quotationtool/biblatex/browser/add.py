@@ -85,9 +85,11 @@ class AdvancedAddForm(form.AddForm):
     The 'entry_type' widget will be set up in hidden mode. """
 
     def label(self):
+        # TODO: translate this message instead of using the default
+        _type = self.type.title.default
         return _('zblx-addrequiredform-label',
-                 u"Add $TYPE entry.",
-                 mapping = {'TYPE': self.type.title})
+                 u"Add '$TYPE' entry.",
+                 mapping = {'TYPE': _type})
 
     more_fields = ('crossref', 'xref',)
 
