@@ -7,6 +7,7 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.i18nmessageid import MessageFactory
 
 from quotationtool.bibliography.interfaces import EntryKey as BibliographyEntryKey
+from quotationtool.bibliography.interfaces import NAMES_SEPARATOR
 
 import ifield
 
@@ -43,6 +44,28 @@ def _validateDate(value):
     return False
 
 
+def escape(stringv):
+    """ Escapes a bibtex string.
+
+    These test really suck because of escaping the escape
+    character... :( I have tested it on the console with writing to a
+    file.
+
+        >>> escape(u"Duncker & Humblodt")
+        u'Duncker ...& Humblodt'
+
+        >>> escape(u"Duncker \\& Humblodt")
+        u'Duncker ...& Humblodt'
+
+    """
+    to_be_escaped = ['&']
+    for t in to_be_escaped:
+        # we first remove escapes and then escape again using the fast
+        # builtin functions
+        temp = stringv.replace("\x5c"+t, t)
+        return temp.replace(t, "\x5c"+t)
+
+
 class BiblatexField(object):
     
     def toUnicode(self, value):
@@ -52,7 +75,7 @@ class BiblatexField(object):
 
     def toBibtex(self, value, encoding = 'utf-8'):
         if value:
-            return unicode(value)
+            return escape(unicode(value))
         return None
 
 class EntryKey(BiblatexField, BibliographyEntryKey):
@@ -87,11 +110,30 @@ class Name(zope.schema.List):
         >>> from quotationtool.biblatex.field import Name
         >>> Name().validate([u"Horkheimer, Max", u"Adorno, Theodor W."])
         >>> Name().toUnicode([u"Horkheimer, Max", u"Adorno, Theodor W."])
-        u'Horkheimer, Max Adorno, Theodor W. '
+        u'Horkheimer, Max / Adorno, Theodor W.'
         >>> Name().toBibtex([u"Horkheimer, Max", u"Adorno, Theodor W."])
         u'Horkheimer, Max and Adorno, Theodor W.'
+        >>> Name().toUnicode([u"Adorno, Theodor W."])
+        u'Adorno, Theodor W.'
         >>> Name().toBibtex([u"Adorno, Theodor W."])
         u'Adorno, Theodor W.'
+        >>> Name().toUnicode([])
+        u''
+        >>> Name().toBibtex([])
+        u''
+        >>> Name().toUnicode(u"")
+        u''
+        >>> Name().toBibtex(u"")
+        u''
+        >>> Name().toUnicode(None)
+        Traceback (most recent call last):
+        ...
+        TypeError: 'NoneType' object is not iterable
+        >>> Name().toBibtex(None)
+        Traceback (most recent call last):
+        ...
+        TypeError: object of type 'NoneType' has no len()
+
         >>> from quotationtool.biblatex.ifield import IBiblatexField
     
     """
@@ -115,7 +157,9 @@ class Name(zope.schema.List):
     def toUnicode(self, value):
         rc = u""
         for name in value:
-            rc += name + u" "
+            rc += name + NAMES_SEPARATOR
+        if value:
+            rc = rc[:-1 * len(NAMES_SEPARATOR)]
         return rc
 
     def toBibtex(self, value):
@@ -125,7 +169,7 @@ class Name(zope.schema.List):
             if i > 0:
                 rc += " and "
             rc += value[i]
-        return rc
+        return escape(rc)
 
 
 class Literal(BiblatexField, zope.schema.TextLine):
@@ -262,6 +306,7 @@ class KeyValueList(zope.schema.Dict):
             rc += l[i][0] + u"=" + unicode(l[i][1])
         return rc
     
-    toBibtex = toUnicode
+    def toBibtex(self, value):
+        return escape(self.toUnicode(value))
 
     

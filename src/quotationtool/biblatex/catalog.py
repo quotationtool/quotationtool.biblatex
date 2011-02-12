@@ -1,7 +1,7 @@
 import zope.interface
 import zope.component
 
-from quotationtool.bibliography.interfaces import IBibliographyCatalog
+from quotationtool.bibliography.interfaces import IBibliographyCatalog, NAMES_SEPARATOR
 
 import interfaces
 import ientry
@@ -35,7 +35,7 @@ class BibliographyCatalogAdapter(object):
         u'Kritik der Urteilskraft Frankfurt Werke in zwoelf Baenden Suhrkamp ...'
 
         >>> cat.author
-        u'Kant, Immanuel Weischedel, Wilhelm '
+        u'Kant, Immanuel / Weischedel, Wilhelm '
 
         >>> cat.title
         u'Kritik der Urteilskraft Werke in zwoelf Baenden '
@@ -79,8 +79,10 @@ class BibliographyCatalogAdapter(object):
 
     def getAuthor(self):
         rc = u""
-        rc += ientry.IEntry['author'].toUnicode(getattr(self.context, 'author', [])) + u" "
-        rc += ientry.IEntry['editor'].toUnicode(getattr(self.context, 'editor', [])) + u" "
+        rc += ientry.IEntry['author'].toUnicode(getattr(self.context, 'author', []))
+        rc += NAMES_SEPARATOR
+        rc += ientry.IEntry['editor'].toUnicode(getattr(self.context, 'editor', []))
+        rc += u" "
         return rc
     author = property(getAuthor)
 

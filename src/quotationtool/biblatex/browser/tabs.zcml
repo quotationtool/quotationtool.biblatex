@@ -32,7 +32,7 @@
       title="[itemtabs-biblatexentry-edit] Edit"
       name="biblatexentry-edit"
       class=".tabs.BiblatexEntryEditTab"
-      permission="zope.View"
+      permission="quotationtool.bibliography.EditEntry"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       manager="quotationtool.skin.interfaces.IItemTabs"
       viewName="@@edit.html"

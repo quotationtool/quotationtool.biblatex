@@ -110,8 +110,12 @@
       trusted="true"
       />
   <class class=".formatted.WriteFormatted">
-    <require
+    <!-- TODO! Allow is a risk! But it is a minor because the
+         components it creates and modifies are safe.-->
+    <!--require
 	permission="zope.ManageContent"
+	interface=".interfaces.IWriteFormatted"/-->
+    <allow
 	interface=".interfaces.IWriteFormatted"/>
   </class>
 
