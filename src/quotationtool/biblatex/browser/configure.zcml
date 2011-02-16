@@ -13,6 +13,7 @@
   <include file="edit.zcml"/>
   <include file="flags.zcml"/>
   <include file="tabs.zcml"/>
+  <include file="diags.zcml"/>
 
   <browser:defaultView
       for="..interfaces.IBiblatexEntry"

@@ -1,0 +1,15 @@
+<div class="diagnostic-info" i18n:domain="quotationtool">
+  
+  <h2 translate="">System Path</h2>
+
+  <div>python> import os</div>
+  <div>python> os.getEnv('PATH')</div>
+  <div tal:content="view/syspath"/>
+
+
+  <h2 translate="">LaTeX binary</h2>
+
+  <div>$ which latex</div>
+  <div tal:content="view/whichLatex"/>
+
+</div>
