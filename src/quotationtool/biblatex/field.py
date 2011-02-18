@@ -30,16 +30,24 @@ def _validateDate(value):
         True
         >>> field._validateDate("2010-11-26/2010-11-25")
         True
+
+    Huh! Do we have to fix that?
+
+        >>> field._validateDate("-384")
+        False
+
+        >>> field._validateDate("-0384")
+        True
+
     
-    Huh!
     """
-    if re.compile("^[0-9]{4}(-(0[1-9]|1[012]))?(-(0[1-9]|[12][0-9]|3[01]))?/?$").match(value) is not None:
+    if re.compile("^-?[0-9]{4}(-(0[1-9]|1[012]))?(-(0[1-9]|[12][0-9]|3[01]))?/?$").match(value) is not None:
         return True
-    if re.compile("^[0-9]{4}/[0-9]{4}$").match(value):
+    if re.compile("^-?[0-9]{4}/-?[0-9]{4}$").match(value):
         return True
-    if re.compile("^[0-9]{4}-(0[1-9]|1[012])/[0-9]{4}-(0[1-9]|1[012])$").match(value):
+    if re.compile("^-?[0-9]{4}-(0[1-9]|1[012])/-?[0-9]{4}-(0[1-9]|1[012])$").match(value):
         return True
-    if re.compile("^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])/[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$").match(value):
+    if re.compile("^-?[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])/-?[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$").match(value):
         return True
     return False
 
@@ -140,17 +148,20 @@ class Name(zope.schema.List):
     
     implements(ifield.IName)
 
-    def __init__(self, unique = False, format = None, long_description = None, **kw):
+    def __init__(self, unique = False, format = None, long_description = None, example = None, **kw):
         value_type = zope.schema.TextLine(
             title = _('zblx-nameitem-title',
                       u"Name"),
             required = True,
             )
-        self.format = format
+        if format:
+            self.format = format
+        if example:
+            self.example = example
         self.long_description = long_description
         super(Name, self).__init__(value_type = value_type, unique = unique, **kw)
             
-    format = _('zblx-field-name-format', u"LASTname, FIRSTname -- This is important for sorting the bibliograhy. Each name goes into a seperate line.")
+    format = _('zblx-field-name-format', u"LAST name, FIRST name -- This is important for sorting the bibliography. Each name goes into a seperate line.")
 
     example = _('zblx-field-name-example', u"Kant, Immanuel")
 
@@ -219,17 +230,19 @@ class Date(BiblatexField, zope.schema.TextLine):
     implements(ifield.IDate)
 
     def __init__(self, format = None, long_description = None, example = None, **kw):
-        self.format = format
+        if format:
+            self.format = format
         self.long_description = long_description
-        self.example = example        
+        if example:
+            self.example = example        
         super(Date, self).__init__(**kw)
 
     def constraint(self, value):
         return _validateDate(value)
 
-    format =  _('zblx-field-date-format', u"YYYY-MM-DD/YYYY-MM--DD where MM and DD is optional and the range seperator / is optional, too.")
+    format =  _('zblx-field-date-format', u"YYYY-MM-DD/YYYY-MM--DD. YYYY must always be 4 digits and may be preceded by a - (minus). MM and DD are optional and the range seperator / is optional, too.")
 
-    example = _('zblx-field-date-example', u"TODO")
+    example = _('zblx-field-date-example', u"'-0384/-0322', '0012' and '1790' are valid values, but '-384' is invalid. ")
 
 
 class Verbatim(BiblatexField, zope.schema.TextLine):

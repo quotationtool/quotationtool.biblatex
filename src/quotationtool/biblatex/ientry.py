@@ -331,13 +331,13 @@ annotator.'''),
 
     issuesubtitle = field.Literal(
         title = _('zblx-issuesubtitle-tit', u'Issue Subtitle'),
-        description = _('zblx-issuesubtitle-desc', u'''TODO'''),
+        description = _('zblx-issuesubtitle-desc', u'''The subtitle of a specific issue of a journal or other periodical.'''),
         required = False,
         )
 
     issuetitle = field.Literal(
         title = _('zblx-issuetitle-tit', u'Issue Title'),
-        description = _('zblx-issuetitle-desc', u'''TODO'''),
+        description = _('zblx-issuetitle-desc', u'''The title of a specific issue of a journal or other periodical.'''),
         required = False,
         )
     
@@ -349,13 +349,13 @@ annotator.'''),
     
     journalsubtitle = field.Literal(
         title = _('zblx-journalsubtitle-tit', u'Journal Subtitle'),
-        description = _('zblx-journalsubtitle-desc', u'''TODO'''),
+        description = _('zblx-journalsubtitle-desc', u'''The subtitle of a journal, a newspaper, or some other periodical.'''),
         required = False,
         )
     
     journaltitle = field.Literal(
         title = _('zblx-journaltitle-tit', u'Journal Title'),
-        description = _('zblx-journaltitle-desc', u'''TODO'''),
+        description = _('zblx-journaltitle-desc', u'''The name of a journal, a newspaper, or some other periodical.'''),
         required = False,
         )
     
@@ -381,25 +381,25 @@ annotator.'''),
 
     location = field.Literal(
         title = _('zblx-location-tit', u'Location'),
-        description = _('zblx-location-desc', u'''TODO'''),
+        description = _('zblx-location-desc', u'''The place(s) of publication, i. e., the location of the publisher or institution, depending on the entry type.'''),
         required = False,
         )
     
     mainsubtitle = field.Literal(
         title = _('zblx-mainsubtitle-tit', u'Main Subtitle'),
-        description = _('zblx-mainsubtitle-desc', u'''TODO'''),
+        description = _('zblx-mainsubtitle-desc', u'''The subtitle related to the maintitle. See also subtitle.'''),
         required = False,
         )
     
     maintitle = field.Literal(
         title = _('zblx-maintitle-tit', u'Main Title'),
-        description = _('zblx-maintitle-desc', u'''TODO'''),
+        description = _('zblx-maintitle-desc', u'''The main title of a multi-volume book, such as 'Collected Works'. If the title or booktitle field indicates the title of a single volume which is part of multi-volume book, the title of the complete work is given in this field.'''),
         required = False,
         )
     
     maintitleaddon = field.Literal(
         title = _('zblx-maintitleaddon-tit', u'Main Title Addon'),
-        description = _('zblx-maintitleaddon-desc', u'''TODO'''),
+        description = _('zblx-maintitleaddon-desc', u'''An annex to the maintitle, to be printed in a different font.'''),
         required = False,
         )
     
@@ -418,13 +418,14 @@ annotator.'''),
     
     note = field.Literal(
         title = _('zblx-note-tit', u'Note'),
-        description = _('zblx-note-desc', u'''TODO'''),
+        description = _('zblx-note-desc', u'''Miscellaneous bibliographic data which does not fit into any other field. The note field may be used to record bibliographic data in a free format. Publication facts such as 'Reprint of the edition London 1831' are typical candidates for the note field. See also addendum.
+'''),
         required = False,
         )
     
     number = field.Literal(
         title = _('zblx-number-tit', u'Number'),
-        description = _('zblx-number-desc', u'''TODO'''),
+        description = _('zblx-number-desc', u'''The number of a journal or the volume/number of a book in a series. See also issue. With @patent entries, this is the number or record token of a patent or patent request.'''),
         required = False,
         )
     
@@ -436,13 +437,13 @@ annotator.'''),
     
     origdate = field.Date(
         title = _('zblx-origdate-tit', u'Original Date'),
-        description = _('zblx-origdate-desc', u'''TODO'''),
+        description = _('zblx-origdate-desc', u'''Publication date of the original edition.'''),
         required = False,
         )
     
     origlanguage = field.Key(
         title = _('zblx-origlanguage-tit', u'Original Language'),
-        description = _('zblx-origlanguage-desc', u'''TODO'''),
+        description = _('zblx-origlanguage-desc', u'''If the work is a translation, the language of the original work. See also language.'''),
         required = False,
         vocabulary = 'quotationtool.biblatex.Language',
         default = None,
@@ -450,25 +451,25 @@ annotator.'''),
     
     origlocation = field.Literal(
         title = _('zblx-origlocation-tit', u'Original Location'),
-        description = _('zblx-origlocation-desc', u'''TODO'''),
+        description = _('zblx-origlocation-desc', u'''If the work is a translation, a reprint, or something similar, the location of the original edition. Not used by the standard bibliography styles.'''),
         required = False,
         )
     
     origpublisher = field.Literal(
         title = _('zblx-origpublisher-tit', u'Original Publisher'),
-        description = _('zblx-origpublisher-desc', u'''TODO'''),
+        description = _('zblx-origpublisher-desc', u'''If the work is a translation, a reprint, or something similar, the publisher of the original edition. Not used by the standard bibliography styles.'''),
         required = False,
         )
     
     origtitle = field.Literal(
         title = _('zblx-origtitle-tit', u'Original Title'),
-        description = _('zblx-origtitle-desc', u'''TODO'''),
+        description = _('zblx-origtitle-desc', u'''If the work is a translation, the title of the original work.'''),
         required = False,
         )
     
     pages = field.Range(
         title = _('zblx-pages-tit', u'Pages'),
-        description = _('zblx-pages-desc', u'''TODO'''),
+        description = _('zblx-pages-desc', u'''One or more page numbers or page ranges. If the work is published as part of another one, such as an article in a journal or a collection, this field holds the relevant page range in that other work. It may also be used to limit the reference to a specific part of a work (a chapter in a book, for example).'''),
         required = False,
         )
     
@@ -494,7 +495,7 @@ annotator.'''),
     
     publisher = field.Literal(
         title = _('zblx-publisher-tit', u'Publisher'),
-        description = _('zblx-publisher-desc', u'''TODO'''),
+        description = _('zblx-publisher-desc', u'''The name(s) of the publisher(s).'''),
         required = False,
         )
     
@@ -514,7 +515,7 @@ annotator.'''),
     
     series = field.Literal(
         title = _('zblx-series-tit', u'Series'),
-        description = _('zblx-series-desc', u'''TODO'''),
+        description = _('zblx-series-desc', u'''The name of a publication series, such as 'Studies in ...', or the number of a journal series. Books in a publication series are usually numbered. The number or'''),
         required = False,
         )
     
@@ -566,19 +567,19 @@ annotator.'''),
     
     subtitle = field.Literal(
         title = _('zblx-subtitle-tit', u'Subtitle'),
-        description = _('zblx-subtitle-desc', u'''TODO'''),
+        description = _('zblx-subtitle-desc', u'''The subtitle of the work.'''),
         required = False,
         )
     
     title = field.Literal(
         title = _('zblx-title-tit', u"Title"),
-        description = _('zblx-title-desc', u""),
+        description = _('zblx-title-desc', u"The title of the work."),
         required = False,
         )
 
     titleaddon = field.Literal(
         title = _('zblx-titleaddon-tit', u'Title Addon'),
-        description = _('zblx-titleaddon-desc', u'''TODO'''),
+        description = _('zblx-titleaddon-desc', u'''An annex to the title, to be printed in a different font.'''),
         required = False,
         )
     
@@ -600,14 +601,14 @@ annotator.'''),
     
     url = field.Verbatim(
         title = _('zblx-url-tit', u'URL'),
-        description = _('zblx-url-desc', u'''TODO'''),
+        description = _('zblx-url-desc', u'''The URL of an online publication.'''),
         required = False,
         constraint = re.compile('^(http://)?[a-zA-Z0-9].*').match
         )
     
     urldate = field.Date(
         title = _('zblx-urldate-tit', u'URL Date'),
-        description = _('zblx-urldate-desc', u'''TODO'''),
+        description = _('zblx-urldate-desc', u'''The access date of the address specified in the URL field.'''),
         required = False,
         )
     
@@ -624,13 +625,13 @@ annotator.'''),
         )
     volume = field.Literal(
         title = _('zblx-volume-tit', u'Volume'),
-        description = _('zblx-volume-desc', u'''TODO'''),
+        description = _('zblx-volume-desc', u'''The volume of a multi-volume book or a periodical. See also part.'''),
         required = False,
         )
     
     volumes = field.Literal(
         title = _('zblx-volumes-tit', u'Volumes'),
-        description = _('zblx-volumes-desc', u'''TODO'''),
+        description = _('zblx-volumes-desc', u'''The total number of volumes of a multi-volume work. Depending on the entry type, this field refers to title or maintitle.'''),
         required = False,
         )
     
@@ -679,7 +680,7 @@ annotator.'''),
     
     hyphenation = field.Key(
         title = _('zblx-hyphenation-tit', u'Hyphenation'),
-        description = _('zblx-hyphenation-desc', u'''TODO'''),
+        description = _('zblx-hyphenation-desc', u'''The language of the bibliography entry.'''),
         required = False,
         vocabulary = 'quotationtool.biblatex.Hyphenation',
         default = None,
