@@ -10,16 +10,17 @@ ${bibtex}
 \usepackage[utf8]{inputenc}
 ${tex4ht}
 \usepackage[T1]{fontenc}
-\usepackage[english,${language}]{babel}
+\usepackage[${language}]{babel}
 \usepackage[babel]{csquotes}
 \usepackage[${style}]{biblatex}
 \bibliography{entries}
+\defbibenvironment{bibliography}{${bibtag}}{${bibtag}}{}
 \begin{document}
 
 ${citetag}\cite{${key}}${citetag}
 
 ${citeagaintag}\cite{${key}}${citeagaintag}
 
-${bibtag}\printbibliography ${bibtag}
+\printbibliography
 
 \end{document}

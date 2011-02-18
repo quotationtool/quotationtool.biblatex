@@ -37,6 +37,14 @@
       />
 
   <zope:view
+      name="citation"
+      type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      for="..interfaces.IBiblatexEntry"
+      factory=".view.CitationView"
+      permission="zope.View"
+      />
+
+  <zope:view
       name="year"
       type="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
       for="..interfaces.IBiblatexEntry"

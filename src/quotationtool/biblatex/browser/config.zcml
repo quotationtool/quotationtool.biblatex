@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="quotationtool">
+
+  <browser:viewlet
+      name="quotationtool.biblatex.browser.config.RunLatexViewlet"
+      for="*"
+      manager="quotationtool.bibliography.interfaces.IConfigurationManager"
+      class=".config.RunLatexViewlet"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="quotationtool.bibliography.ManageBibliography"
+      weight="900"
+      />
+
+</configure>

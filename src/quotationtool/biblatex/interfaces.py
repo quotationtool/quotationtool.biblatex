@@ -268,7 +268,7 @@ class IBibliographyBibtexRepresentation(zope.interface.Interface):
         """
 
 
-class IBibliographyConfiguration(zope.interface.Interface):
+class IBiblatexConfiguration(zope.interface.Interface):
     """ Stores some configuration values. """
     
     babel_languages = zope.schema.Tuple(
@@ -281,7 +281,7 @@ class IBibliographyConfiguration(zope.interface.Interface):
             title = _('',
                       u"Language"),
             required = True,
-            vocabulary = 'quotationtool.biblatex.Hyphentation',
+            vocabulary = 'quotationtool.biblatex.Hyphenation',
             default = 'english',
             ),
         default = ('english',),
@@ -313,50 +313,27 @@ class IBibliographyConfiguration(zope.interface.Interface):
         default = 'english',
         )
 
-    cite_style = zope.schema.TextLine(
+    default_style = zope.schema.TextLine(
         title = _('',
-                  u"Citation Style"),
+                  u"Default Citation and Bibliography Style"),
         description = _('',
-                      u"The default citation style. There must be a cbx file which LaTeX can find."),
+                      u"The default citation style and default bibliography style. There must be a cbx and a bbx file which LaTeX can find."),
         required = True,
-        default = u"verbose",
+        default = u"style=verbose",
         )
 
-    bib_style = zope.schema.TextLine(
+    styles = zope.schema.Tuple(
         title = _('',
-                  u"Bibliography Style"),
-    description = _('',
-                    u"The default bibliography style. There must be a bbx file which LaTeX can find."),
-        required = True,
-        default = u"verbose",
-        )
-
-    bib_styles = zope.schema.Tuple(
-        title = _('',
-                  u"Available Bibliograhy Styles"),
+                  u"Available Styles"),
         description = _('',
-                        u"All the Bibliography Styles that the users will be able to use. There must be bbx files that LaTeX can find."),
+                        u"All the Bibliography Styles that the users will be able to use. There must be bbx and cbx files that LaTeX can find."),
         value_type = zope.schema.TextLine(
             title= _('',
                      u"Style"),
             required = True,
             ),
         required = True,
-        default = (u"verbose",),
-        )
-
-    cite_styles = zope.schema.Tuple(
-        title = _('',
-                  u"Available Citation Styles"),
-        description = _('',
-                        u"All the Citation Styles that the users will be able to use. There must be cbx files that LaTeX can find."),
-        value_type = zope.schema.TextLine(
-            title= _('',
-                     u"Style"),
-            required = True,
-            ),
-        required = True,
-        default = (u"verbose",),
+        default = (u"style=verbose",),
         )
 
 

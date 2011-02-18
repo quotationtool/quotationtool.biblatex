@@ -48,6 +48,12 @@
   <!-- components related to generation (latexing) of formatted
        strings -->
 
+  <utility
+      component=".configuration.defaultConfig"
+      provides=".interfaces.IBiblatexConfiguration"
+      name=""
+      />
+
   <adapter
       for=".interfaces.IBiblatexEntry"
       provides=".interfaces.IEntryBibtexRepresentation"

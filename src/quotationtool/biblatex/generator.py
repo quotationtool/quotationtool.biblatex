@@ -4,6 +4,8 @@ import string
 import codecs
 import zope.interface
 import tempfile, shutil
+import zope.component
+from zope.app.component.hooks import getSite
 
 import interfaces
 
@@ -122,6 +124,17 @@ class BiblatexEntryGenerator(object):
 
     def __init__(self, context):
         self.context = context
+        # get the configuration
+        config = zope.component.queryUtility(
+            interfaces.IBiblatexConfiguration,
+            context = getSite(),
+            )
+        if not config is None:
+            self.language = u''
+            for lang in config.babel_languages:
+                self.language += lang + u','
+            if config.babel_languages:
+                self.language = self.language[:-1]
 
     def __del__(self):
         # remove temporary files
@@ -134,7 +147,8 @@ class BiblatexEntryGenerator(object):
             raise Exception("generator already setup. Call tearDown() before setting up again!")
         # set up language and style
         if language is not None:
-            self.language = language
+            # the last language is the one used by babel
+            self.language = self.language + u',' + language
         else:
             pass # TODO
         if style is not None:
@@ -257,7 +271,13 @@ class BiblatexEntryGenerator(object):
                         'r', 'utf8')
         html = f.read()
         f.close()
-        self.bib = html.split(self.bibtag)[1]
+        bib = html.split(self.bibtag)[1]
+        if bib.startswith(u"<a"):
+            # get rid of label anchor
+            endtag = bib.find("</a>")
+            self.bib = bib[endtag+4:]
+        else:
+            self.bib = bib
         self.cite = html.split(self.citetag)[1]
         self.citeagain = html.split(self.citeagaintag)[1]
 

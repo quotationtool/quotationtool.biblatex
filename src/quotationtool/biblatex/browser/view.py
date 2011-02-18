@@ -27,6 +27,16 @@ class BibliographyView(BrowserView):
         language = getDefaultLanguage(self.context)
         style = getDefaultStyle(self.context)
         rf = interfaces.IReadFormatted(self.context)
+        return rf.getBibliographicEntry(language, style)
+
+    
+class CitationView(BibliographyView):
+    """ Used for citations, where firstname precedes lastname."""
+
+    def formatted(self):
+        language = getDefaultLanguage(self.context)
+        style = getDefaultStyle(self.context)
+        rf = interfaces.IReadFormatted(self.context)
         return rf.getCitation(language, style)
 
 

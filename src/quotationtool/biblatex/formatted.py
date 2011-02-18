@@ -58,11 +58,23 @@ class FormattedString(Persistent):
 
 
 def getDefaultLanguage(context):
-    return u'english' # TODO
+    config = zope.component.queryUtility(
+        interfaces.IBiblatexConfiguration,
+        context = context)
+    if config:
+        return config.default_language
+    else:
+        return u'english'
 
 
 def getDefaultStyle(context):
-    return u'style=verbose' #TODO
+    config = zope.component.queryUtility(
+        interfaces.IBiblatexConfiguration,
+        context = context)
+    if config:
+        return config.default_style
+    else:
+        return u'style=verbose'
 
 
 class WriteFormatted(object):
@@ -237,11 +249,18 @@ def setFormattedStrings(object, event):
     entry = interfaces.IBiblatexEntry(object) # assert a biblatex entry object
     generator = interfaces.IFormattedEntryGenerator(entry)
     writer = interfaces.IWriteFormatted(entry)
-    # TODO somehow we have to get languages and styles
-    for language in (None,):
-        for style in (None,):
+    config = zope.component.queryUtility(
+        interfaces.IBiblatexConfiguration, 
+        context = object)
+    if config:
+        languages = config.languages
+        styles = config.styles
+    else:
+        languages = styles = (None,)
+    for language in languages:
+        for style in styles:
             #raise Exception(u"language: %s, style: %s" % (language, style))
-            generator.setUp()#language = language, style = style)
+            generator.setUp(language = language, style = style)
             generator.generate()
             writer.setBibliographicEntry(generator.getBibliographicEntry(), language, style)
             writer.setCitation(generator.getCitation(), language, style)

@@ -18,13 +18,13 @@ takes some parameters to set language and style.
 >>> g.setUp(language = 'ngerman', style = 'style=verbose')
 >>> g.generate()
 >>> g.getCitation()
-u'...Adelung...'
+u'Johann Christoph Adelung. <span ...'
 
 >>> g.getBibliographicEntry()
-u'...'
+u'Adelung, Johann Christoph. <span ...'
 
 >>> g.getCitationAgain()
-u'...'
+u'Adelung, <span ...'
 
 After getting the formatted strings it is recommended to tear down the
 generator in order to delete temporary files or call __del__:
