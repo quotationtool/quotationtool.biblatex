@@ -14,4 +14,14 @@
       weight="100"
       />
 
+  <browser:viewlet
+      name="quotationtool.biblatex.browser.diags.WhoAmIDiags"
+      for="*"
+      manager="quotationtool.skin.interfaces.IDiagnostics"
+      class=".diags.WhoAmIDiags"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="zope.View"
+      weight="200"
+      />
+
 </configure>

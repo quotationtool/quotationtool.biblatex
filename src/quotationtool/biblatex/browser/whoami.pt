@@ -1,0 +1,8 @@
+<div class="diagnostic-info" i18n:domain="quotationtool">
+  
+  <h2 translate="">System User of the Running Instance</h2>
+
+  <div>$ whoami</div>
+  <div tal:content="view/whoami"/>
+
+</div>

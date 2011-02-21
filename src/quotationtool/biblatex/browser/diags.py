@@ -29,3 +29,24 @@ class SystemPathDiags(ViewletBase):
         pr.wait()
         return pr.stdout.read() + pr.stderr.read()
         
+
+class WhoAmIDiags(ViewletBase):
+    """ A viewlet that shows the user of the running instance."""
+
+    template = ViewPageTemplateFile('whoami.pt')
+
+    def render(self):
+        return self.template()
+
+    def whoami(self):
+        pr = subprocess.Popen(
+            'whoami',
+            stdin=file(os.devnull, 'r'),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            close_fds=True,
+            shell=True,
+            env={'PATH': os.getenv('PATH')},
+            )
+        pr.wait()
+        return pr.stdout.read() + pr.stderr.read()
