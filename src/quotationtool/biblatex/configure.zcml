@@ -29,6 +29,37 @@
       for=".interfaces.IBiblatexEntry"
       provides="quotationtool.bibliography.interfaces.IBibliographyCatalog"
       />
+
+  <adapter
+      factory=".indexer.AuthorFieldIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="author-field"
+      />
+  <adapter
+      factory=".indexer.AuthorFullTextIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="author-fulltext"
+      />
+  <adapter
+      factory=".indexer.TitleFieldIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="title-field"
+      />
+  <adapter
+      factory=".indexer.TitleFullTextIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="title-fulltext"
+      />
+  <adapter
+      factory=".indexer.YearFieldIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="year-field"
+      />
+  <adapter
+      factory=".indexer.AnyIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="any-fulltext"
+      />
   
   <!-- entry types -->
 

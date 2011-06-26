@@ -66,6 +66,7 @@ setup(
         #'zope.app.authentication',
         'zope.traversing',
         'zope.app.generations',
+        'z3c.indexer',
 
         # for browser submodule
         'z3c.template',
@@ -78,8 +79,8 @@ setup(
         'z3c.formui',
         'z3c.form',
         'z3c.wizard',
-        #'zc.resourcelibrary',
         'z3c.menu.ready2go',
+        'z3c.table',
 
         'zope.app.pagetemplate',
         'zope.viewlet',
