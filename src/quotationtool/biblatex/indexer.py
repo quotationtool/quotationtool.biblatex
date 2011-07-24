@@ -3,6 +3,7 @@ import zope.component
 from z3c.indexer.indexer import ValueIndexer, MultiIndexer
 
 from quotationtool.biblatex.ientry import IEntry
+from quotationtool.biblatex.ifield import IDate, ILiteral
 
 
 class BiblatexFieldIndexer(ValueIndexer):
@@ -44,16 +45,67 @@ class TitleFullTextIndexer(TitleFieldIndexer):
     indexName = 'title-fulltext'
 
 
-class YearFieldIndexer(ValueIndexer):
+class YearSetIndexer(ValueIndexer):
+    """ An value indexer for the year set-index. It writes each year
+    between the lower and upper bound of a date field to the
+    index. Also puts literal fields to the index, if they can be
+    casted to integers.
     
-    indexName = "year-field"
+    >>> from quotationtool.biblatex.indexer import YearSetIndexer
+    >>> from quotationtool.biblatex.biblatexentry import BiblatexEntry
+    >>> book = BiblatexEntry()
+    >>> book.origdate = u"-0384/-0322"
+    >>> YearSetIndexer(book).value
+    (-384, -383, -382, ..., -324, -323, -322) 
+
+    >>> book.date = u"1995/1997"
+    >>> YearSetIndexer(book).value
+    (-384, -383, -382, ..., -324, -323, -322, 1995, 1996, 1997)
+
+    >>> book.date = u"1995/1991"
+    >>> YearSetIndexer(book).value
+    (-384, -383, -382, ..., -324, -323, -322)
+
+    >>> book.date = None
+    >>> book.year = u"2000"
+    >>> YearSetIndexer(book).value
+    (-384, -383, -382, ..., -324, -323, -322, 2000)
+ 
+    >>> book.year = u'MM'
+    >>> YearSetIndexer(book).value
+    (-384, -383, -382, ..., -324, -323, -322)
+
+
+    """
     
+    indexName = 'year-set'
+
+    year_attributes = ('origdate', 'date', 'eventdate', 'year', 'sortyear')
+
     @property
     def value(self):
-        for attr in ('origdate', 'date', 'year'):
+        years = ()
+        for attr in self.year_attributes:
             val = getattr(self.context, attr, u"")
             if val:
-                return val
+                if IDate.providedBy(IEntry[attr]):
+                    lower, upper = IEntry[attr].extractYears(val)
+                    years += tuple(lower+i for i in range(upper-lower+1))
+                if ILiteral.providedBy(IEntry[attr]):
+                    try:
+                        years += (int(val.strip()),)
+                    except Exception:
+                        pass
+        return years
+
+
+class OrigYearSetIndexer(YearSetIndexer):
+    """ A value indexer that only indexes the years in the range of
+    the origdate attribute. Year of edition is left."""
+
+    indexName = 'origyear-set'
+
+    year_attributes = ('origdate', 'eventdate')
 
 
 class AnyIndexer(BiblatexFieldIndexer):

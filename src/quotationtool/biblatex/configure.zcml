@@ -25,10 +25,14 @@
   </class>    
 
   <adapter
+      factory=".key.EntryKeyChooser"
+      />
+
+  <!--adapter
       factory=".catalog.BibliographyCatalogAdapter"
       for=".interfaces.IBiblatexEntry"
       provides="quotationtool.bibliography.interfaces.IBibliographyCatalog"
-      />
+      /-->
 
   <adapter
       factory=".indexer.AuthorFieldIndexer"
@@ -51,9 +55,14 @@
       name="title-fulltext"
       />
   <adapter
-      factory=".indexer.YearFieldIndexer"
+      factory=".indexer.YearSetIndexer"
       for=".interfaces.IBiblatexEntry"
-      name="year-field"
+      name="year-set"
+      />
+  <adapter
+      factory=".indexer.OrigYearSetIndexer"
+      for=".interfaces.IBiblatexEntry"
+      name="origyear-set"
       />
   <adapter
       factory=".indexer.AnyIndexer"

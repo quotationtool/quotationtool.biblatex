@@ -36,3 +36,18 @@ class RunLatexViewlet(ViewletForm):
             if interfaces.IBiblatexEntry.providedBy(entry):
                 setFormattedStrings(entry, object())
 
+
+class BiblatexConfigViewlet(ViewletForm):
+
+    label = _('biblatexconfig-label', u"BibLaTeX Configuration")
+
+    mode = DISPLAY_MODE
+
+    fields = field.Fields(interfaces.IBiblatexConfiguration)
+
+    def getContent(self):
+        config = zope.component.queryUtility(
+            interfaces.IBiblatexConfiguration,
+            context=self.context,
+            )
+        return config

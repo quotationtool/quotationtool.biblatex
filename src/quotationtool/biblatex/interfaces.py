@@ -272,13 +272,13 @@ class IBiblatexConfiguration(zope.interface.Interface):
     """ Stores some configuration values. """
     
     babel_languages = zope.schema.Tuple(
-        title = _('',
+        title = _('ibiblatexconfiguration-babellanguages-title',
                   u"Babel Languages"),
-        description = _('',
+        description = _('ibiblatexconfiguration-babellanguages-desc',
                         u"Languages available to the babel latex package."),
         required = True,
         value_type = zope.schema.Choice(
-            title = _('',
+            title = _('ibiblatexconfiguration-babellanguages-language-title',
                       u"Language"),
             required = True,
             vocabulary = 'quotationtool.biblatex.Hyphenation',
@@ -288,13 +288,13 @@ class IBiblatexConfiguration(zope.interface.Interface):
         )
 
     languages = zope.schema.Tuple(
-        title = _('',
+        title = _('ibiblatexconfiguration-languages-title',
                   u"Formatting Languages"),
-        description = _('',
+        description = _('ibiblatexconfiguration-languages-desc',
                         u"All languages in which the formatted bibliography will be available to the user."),
         required = True,
         value_type = zope.schema.Choice(
-            title = _('',
+            title = _('ibiblatexconfiguration-languages-language-title',
                       u"Language"),
             required = True,
             vocabulary = 'quotationtool.biblatex.Hyphenation',
@@ -304,9 +304,9 @@ class IBiblatexConfiguration(zope.interface.Interface):
         )
 
     default_language = zope.schema.Choice(
-        title = _('',
+        title = _('ibiblatexconfiguration-defaultlanguage-title',
                   u"Language"),
-        description = _('',
+        description = _('ibiblatexconfiguration-defaultlanguage-desc',
                         u"The default language of the bibliography"),
         required = True,
         vocabulary = 'quotationtool.biblatex.Hyphenation',
@@ -314,21 +314,21 @@ class IBiblatexConfiguration(zope.interface.Interface):
         )
 
     default_style = zope.schema.TextLine(
-        title = _('',
+        title = _('ibiblatexconfiguration-defaultstyle-title',
                   u"Default Citation and Bibliography Style"),
-        description = _('',
+        description = _('ibiblatexconfiguration-defaultstyle-desc',
                       u"The default citation style and default bibliography style. There must be a cbx and a bbx file which LaTeX can find."),
         required = True,
         default = u"style=verbose",
         )
 
     styles = zope.schema.Tuple(
-        title = _('',
+        title = _('ibiblatexconfiguration-styles-title',
                   u"Available Styles"),
-        description = _('',
+        description = _('ibiblatexconfiguration-styles-desc',
                         u"All the Bibliography Styles that the users will be able to use. There must be bbx and cbx files that LaTeX can find."),
         value_type = zope.schema.TextLine(
-            title= _('',
+            title= _('ibiblatexconfiguration-styles-style-title',
                      u"Style"),
             required = True,
             ),

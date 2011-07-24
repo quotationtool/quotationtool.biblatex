@@ -14,4 +14,14 @@
       weight="900"
       />
 
+  <browser:viewlet
+      name="quotationtool.biblatex.browser.config.BiblatexConfigViewlet"
+      for="*"
+      manager="quotationtool.bibliography.interfaces.IConfigurationManager"
+      class=".config.BiblatexConfigViewlet"
+      layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
+      permission="quotationtool.bibliography.ManageBibliography"
+      weight="800"
+      />
+
 </configure>

@@ -71,7 +71,9 @@ def escape(stringv):
         # we first remove escapes and then escape again using the fast
         # builtin functions
         temp = stringv.replace("\x5c"+t, t)
-        return temp.replace(t, "\x5c"+t)
+        temp =  temp.replace(t, "\x5c"+t)
+
+    return temp
 
 
 class BiblatexField(object):
@@ -86,6 +88,7 @@ class BiblatexField(object):
             return escape(unicode(value))
         return None
 
+
 class EntryKey(BiblatexField, BibliographyEntryKey):
     """ A bibtex entry key.
 
@@ -99,7 +102,8 @@ class EntryKey(BiblatexField, BibliographyEntryKey):
         ...
         ConstraintNotSatisfied: Adelung.
 
-        >>> ref.validate(u'Lück')
+        >>> #ref.validate(u'Lück')
+        >>> ref.validate(u'L&uuml;ck')
         Traceback (most recent call last):
         ...
         ConstraintNotSatisfied: ...
@@ -243,6 +247,33 @@ class Date(BiblatexField, zope.schema.TextLine):
     format =  _('zblx-field-date-format', u"YYYY-MM-DD/YYYY-MM--DD. YYYY must always be 4 digits and may be preceded by a - (minus). MM and DD are optional and the range seperator / is optional, too.")
 
     example = _('zblx-field-date-example', u"'-0384/-0322', '0012' and '1790' are valid values, but '-384' is invalid. ")
+
+    def extractYears(self, value):
+        """ Return a tuple of two integers representing lower and
+        upper bounding year. If only one year is given, bounds equal.
+
+        >>> from quotationtool.biblatex.field import Date
+        >>> Date().extractYears('2010')
+        (2010, 2010)
+        >>> Date().extractYears('2010-12-31')
+        (2010, 2010)
+        >>> Date().extractYears('2010/2011')
+        (2010, 2011)
+        >>> Date().extractYears('2010-12-31/2011-12-31')
+        (2010, 2011)
+        >>> Date().extractYears('-0384/2011')
+        (-384, 2011)
+
+        >>> Date().extractYears('-384/-322')
+        Traceback (most recent call last):
+        ...
+        ValueError: Invalid BibLaTeX date format: -384/-322
+
+        """
+        if _validateDate(value) == False:
+            raise ValueError(u'Invalid BibLaTeX date format: %s' % value)
+        m = re.compile('(-?[0-9]{4})').findall(value)
+        return (int(m[0]), int(m[-1]))
 
 
 class Verbatim(BiblatexField, zope.schema.TextLine):
