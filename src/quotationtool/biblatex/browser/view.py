@@ -4,12 +4,14 @@ from zope.publisher.browser import BrowserView
 from z3c.pagelet.browser import BrowserPagelet
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18nmessageid import MessageFactory
+from zope.i18n import translate
 
 from quotationtool.biblatex import interfaces
 from quotationtool.biblatex.interfaces import IBiblatexEntry
 from quotationtool.biblatex.entrytypes import getRequiredTuple, getTuple, getEntryTypeSafely
 from quotationtool.biblatex.formatted import getDefaultLanguage, getDefaultStyle
 from quotationtool.skin.interfaces import ITabbedContentLayout
+from quotationtool.biblatex.ifield import IDate
 
 
 _ = MessageFactory('quotationtool')
@@ -83,15 +85,23 @@ class YearView(BrowserView):
     """ Show date or year. To be used in bibliography views."""
     
     def __call__(self):
-        date = getattr(self.context, 'date', None)
-        if date:
-            return IBiblatexEntry['date'].toUnicode(date)
-        else:
-            # maybe the old bibtex field 'year' is present
-            year = getattr(self.context, 'year', None)
+        rc = u""
+        for attr in ('date', 'year', 'eventdate'):
+            year = getattr(self.context, attr, None)
             if year:
-                return IBiblatexEntry['year'].toUnicode(year)
-        return u""
+                if IDate.providedBy(IBiblatexEntry[attr]):
+                    years = IBiblatexEntry[attr].extractYears(year)
+                    if years[0] != years[1]:
+                        i18n_string = _('year-range', u"$lower ... $upper",
+                                        mapping =  {'lower': unicode(years[0]), 
+                                                    'upper':unicode(years[1])})
+                        rc += translate(i18n_string, context=self.request) + u" "
+                    else:
+                        rc += unicode(years[0]) + u" "
+                else:
+                    rc += year
+                break
+        return rc
 
 
 class TitleView(BrowserView):
