@@ -55,7 +55,7 @@ class SimpleAddForm(form.AddForm):
     fields = field.Fields(interfaces.IBiblatexEntry).omit('options', '__name__', '__parent__')
 
     def create(self, data):
-        obj = BiblatexEntry()
+        obj = zope.component.createObject('quotationtool.biblatex.biblatexentry.BiblatexEntry')
         form.applyChanges(self, obj, data)
 
         # Grant the current user the Edit permission by assigning him
