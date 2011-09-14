@@ -10,7 +10,7 @@
       manager="quotationtool.skin.interfaces.IFlags"
       class=".flags.SchemaErrorFlag"
       layer="quotationtool.skin.interfaces.IQuotationtoolBrowserLayer"
-      permission="zope.View"
+      permission="quotationtool.bibliography.EditEntry"
       weight="10"
       />
 
