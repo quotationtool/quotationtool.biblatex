@@ -15,6 +15,9 @@
     <implements
 	interface="zope.annotation.interfaces.IAttributeAnnotatable"
 	/>
+    <implements
+	interface="quotationtool.bibliography.interfaces.IEntry"
+	/>
     <allow
 	interface=".interfaces.IBiblatexEntry"
 	/>
